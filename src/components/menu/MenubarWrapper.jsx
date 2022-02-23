@@ -1,10 +1,11 @@
 import { Navbar } from 'react-bootstrap';
 import ProjectTitleButton from './ProjectTitleButton';
 import Menubar from './Menubar';
+import React from 'react';
 
-function MenubarWrapper() {
+const MenubarWrapper = React.forwardRef(function (props, ref) {
   return (
-    <>
+    <div ref={ref}>
       <Navbar id="navbar" bg="light" expand="lg" className="px-4">
         <Navbar.Brand href="/">Flower App</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
@@ -13,8 +14,8 @@ function MenubarWrapper() {
         </Navbar.Collapse>
       </Navbar>
       <Menubar />
-    </>
+    </div>
   );
-}
+});
 
 export default MenubarWrapper;
