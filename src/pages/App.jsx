@@ -1,5 +1,13 @@
+import Footer from '../components/Footer';
+import MenubarWrapper from '../components/Menubar/MenubarWrapper';
+
 function App() {
-  return <p>HELLO!</p>;
+  return (
+    <>
+      <MenubarWrapper />
+      <Footer />
+    </>
+  );
 }
 
 export default App;

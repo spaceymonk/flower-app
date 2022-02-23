@@ -1,0 +1,9 @@
+#menubar a {
+  font-size: small;
+}
+
+#menubar .nav-link {
+  padding: 0;
+  margin: 5px 15px;
+  color: inherit;
+}
