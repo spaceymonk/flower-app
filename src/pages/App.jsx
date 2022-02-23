@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <MenubarWrapper ref={menubarRef} />
-      <Board height={boardHeight} />
+      <Board height={boardHeight} width={window.width} />
       <Footer ref={footerRef} />
     </>
   );
