@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap as filledMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap as emptyMap } from '@fortawesome/free-regular-svg-icons';
 
-function Board({ height, width }) {
+function Board({ height, width, showToast }) {
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
   const [minimapToggled, setMinimapToggled] = React.useState(true);
   const handleMinimapVisibility = () => {

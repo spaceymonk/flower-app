@@ -39,7 +39,7 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
   );
 }
 
-function ProjectTitleButton({ className }) {
+function ProjectTitleButton({ className, showToast }) {
   const titleRef = React.useRef(null);
   const [modalActive, setModalActive] = React.useState(false);
 
@@ -49,7 +49,12 @@ function ProjectTitleButton({ className }) {
     if (ProjectService.validateTitle(titleRef.current.value)) {
       ProjectService.data.title = titleRef.current.value;
       handleModalClose();
-    } else alert(T.projectTitle.error.notValid);
+    } else {
+      showToast({
+        title: 'Error',
+        body: T.projectTitle.error.notValid,
+      });
+    }
   };
 
   return (
