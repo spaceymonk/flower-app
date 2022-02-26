@@ -35,7 +35,7 @@ function App() {
     <>
       <MenubarWrapper ref={menubarRef} showToast={showToast} />
       <Toolbar ref={toolbarRef} showToast={showToast} />
-      <Board width={window.width} height={boardHeight} showToast={showToast} />
+      <Board height={boardHeight} showToast={showToast} />
       <Footer ref={footerRef} />
       <ToastContainer className="pb-5 px-1" position="bottom-center" style={{ zIndex: '1060' }}>
         {toastList
