@@ -1,8 +1,8 @@
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container, Card } from 'react-bootstrap';
-import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
+import Footer from '../components/common/Footer';
+import Navbar from '../components/common/Navbar';
 import T from '../services/MessageConstants';
 
 function NotFound() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Footer from '../components/Footer';
+import Footer from '../components/common/Footer';
 import MenubarWrapper from '../components/menu/MenubarWrapper';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import BoardWrapper from '../components/board/BoardWrapper';

@@ -1,4 +1,4 @@
-import T from '../services/MessageConstants';
+import T from '../../services/MessageConstants';
 import {Navbar as BsNavbar} from 'react-bootstrap';
 
 function Navbar(props) {
