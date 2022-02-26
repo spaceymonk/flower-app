@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap as filledMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap as emptyMap } from '@fortawesome/free-regular-svg-icons';
 import { ProjectService } from '../../services/ProjectService';
+import { nodeTypes } from '../blocks';
 
 function Board({ height, showToast }) {
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
@@ -24,6 +25,7 @@ function Board({ height, showToast }) {
       <ReactFlow
         defaultNodes={ProjectService.data.nodes}
         defaultEdges={ProjectService.data.edges}
+        nodeTypes={nodeTypes}
         snapToGrid
         snapGrid={[25, 25]}
       >

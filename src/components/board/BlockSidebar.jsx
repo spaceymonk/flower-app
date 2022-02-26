@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, Offcanvas, Tooltip } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
-import { CreateButton as StatementBlockCreateButton } from '../blocks/StatementBlock';
+import { StatementBlockCreateButton } from '../blocks';
 
 function BlockSidebar({ showToast }) {
   const [sidebarActive, setSidebarActive] = React.useState(false);

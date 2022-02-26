@@ -1,0 +1,24 @@
+.node {
+  border: 1px solid #505050;
+  border-radius: 0.25rem;
+  background: #f7f7f7;
+  color: #101010;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+}
+
+.node:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.handle {
+  border-radius: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.node-statement {
+  min-width: 150px;
+  min-height: 50px;
+  max-width: 300px;
+}

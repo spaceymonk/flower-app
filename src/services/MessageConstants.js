@@ -6,10 +6,14 @@ const T = {
   },
   blocks: {
     errorTxt: 'Block creation failed!',
+    defaultTxt: 'Enter some text...',
     statement: {
       title: 'Statement Block',
       description: 'A statement block, lets you write any number of data definitions, declarations, and statements.',
-      toastMsg: 'Statement Block Created',
+      toastMsg: {
+        title: 'Statement Block Created',
+        body: 'Block placed on the leftmost corner.',
+      },
     },
   },
   projectTitle: {
