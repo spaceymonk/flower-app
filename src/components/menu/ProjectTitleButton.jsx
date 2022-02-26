@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
+import { Button, Modal, InputGroup, FormControl, Tooltip } from 'react-bootstrap';
 import { ProjectService } from '../../services/ProjectService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import T from '../../services/MessageConstants';
+import CustomOverlay from '../common/CustomOverlay';
 
 function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
   return (
@@ -42,12 +43,8 @@ function ProjectTitleButton({ className }) {
   const titleRef = React.useRef(null);
   const [modalActive, setModalActive] = React.useState(false);
 
-  const handleModalClose = () => {
-    setModalActive(false);
-  };
-  const handleModalOpen = () => {
-    setModalActive(true);
-  };
+  const handleModalClose = () => setModalActive(false);
+  const handleModalOpen = () => setModalActive(true);
   const handleSave = () => {
     if (ProjectService.validateTitle(titleRef.current.value)) {
       ProjectService.data.title = titleRef.current.value;
@@ -58,9 +55,11 @@ function ProjectTitleButton({ className }) {
   return (
     <>
       <ProjectTitleModal show={modalActive} titleRef={titleRef} onSave={handleSave} onClose={handleModalClose} />
-      <Button variant="outline-dark" size="sm" className={`border-0 ${className}`} onClick={handleModalOpen}>
-        {ProjectService.data.title}
-      </Button>
+      <CustomOverlay overlay={<Tooltip>{T.projectTitle.tooltip}</Tooltip>}>
+        <Button variant="outline-dark" size="sm" className={`border-0 ${className}`} onClick={handleModalOpen}>
+          {ProjectService.data.title}
+        </Button>
+      </CustomOverlay>
     </>
   );
 }

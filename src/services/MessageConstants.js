@@ -3,18 +3,19 @@ const T = {
     name: 'Flower App',
   },
   projectTitle: {
+    tooltip: 'Click to change project title',
     inputTxt: 'Enter new project title',
     error: {
       notValid: 'Please enter a valid title!',
     },
   },
-  sidebar: {
-    watchTab: {
-      title: 'Watches',
-    },
-    blockTab: {
-      title: 'Blocks',
-    },
+  blockSidebar: {
+    title: 'Blocks',
+    tooltip: 'Add blocks to flowchart',
+  },
+  watchesSidebar: {
+    title: 'Watches',
+    tooltip: 'Open watchlist',
   },
   menubar: {
     file: {

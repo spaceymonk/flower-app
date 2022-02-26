@@ -13,7 +13,7 @@ function WatchSidebar() {
 
   return (
     <>
-      <CustomOverlay placement="bottom" overlay={<Tooltip>Open watchlist</Tooltip>}>
+      <CustomOverlay placement="bottom" overlay={<Tooltip>{T.watchesSidebar.tooltip}</Tooltip>}>
         <Button onClick={handleSidebarOpen}>
           <FontAwesomeIcon icon={faGlasses} />
         </Button>
@@ -21,7 +21,7 @@ function WatchSidebar() {
 
       <Offcanvas show={sidebarActive} onHide={handleSidebarClose} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>{T.sidebar.watchTab.title}</Offcanvas.Title>
+          <Offcanvas.Title>{T.watchesSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta esse unde totam, iusto rerum necessitatibus

@@ -12,7 +12,7 @@ function BlockSidebar() {
 
   return (
     <>
-      <CustomOverlay overlay={<Tooltip>Add blocks to flowchart</Tooltip>}>
+      <CustomOverlay overlay={<Tooltip>{T.blockSidebar.tooltip}</Tooltip>}>
         <Button onClick={handleSidebarOpen}>
           <FontAwesomeIcon icon={faAdd} />
         </Button>
@@ -20,7 +20,7 @@ function BlockSidebar() {
 
       <Offcanvas show={sidebarActive} onHide={handleSidebarClose} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>{T.sidebar.blockTab.title}</Offcanvas.Title>
+          <Offcanvas.Title>{T.blockSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta esse unde totam, iusto rerum necessitatibus
