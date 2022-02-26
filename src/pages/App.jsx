@@ -8,6 +8,9 @@ import { ToastContainer, Toast } from 'react-bootstrap';
 import Board from '../components/board/Board';
 import Toolbar from '../components/board/Toolbar';
 import { v4 as uuid } from 'uuid';
+import { ReactFlowProvider } from 'react-flow-renderer';
+import Moment from 'moment';
+import T from '../services/MessageConstants';
 
 function App() {
   const [toastList, setToastList] = React.useState([]);
@@ -25,6 +28,7 @@ function App() {
 
   function showToast(toast) {
     toast.key = uuid();
+    if (!toast.subtitle) toast.subtitle = Moment().format(T.app.dateFormat);
     setToastList(toastList.concat(toast));
   }
   function closeToast(key) {
@@ -32,7 +36,7 @@ function App() {
   }
 
   return (
-    <>
+    <ReactFlowProvider>
       <MenubarWrapper ref={menubarRef} showToast={showToast} />
       <Toolbar ref={toolbarRef} showToast={showToast} />
       <Board height={boardHeight} showToast={showToast} />
@@ -46,14 +50,14 @@ function App() {
                 <Toast.Header>
                   <FontAwesomeIcon icon={faInfoCircle} />
                   <strong className="me-auto ms-2">{t.title}</strong>
-                  <small>{t.subtitle}</small>
+                  <small className="text-end">{t.subtitle}</small>
                 </Toast.Header>
-                <Toast.Body>{t.body}</Toast.Body>
+                {t.body && <Toast.Body>{t.body}</Toast.Body>}
               </Toast>
             );
           })}
       </ToastContainer>
-    </>
+    </ReactFlowProvider>
   );
 }
 

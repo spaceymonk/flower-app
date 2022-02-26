@@ -3,3 +3,16 @@
 body {
   font-family: 'Roboto Mono', monospace;
 }
+
+.clickable {
+  cursor: pointer;
+  transition: filter .1s ease-in-out;
+}
+
+.clickable:hover {
+  filter: brightness(95%);
+}
+
+.clickable:active {
+  filter: brightness(85%);
+}

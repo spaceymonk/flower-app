@@ -4,6 +4,7 @@ import { Background, MiniMap, Controls, ControlButton } from 'react-flow-rendere
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap as filledMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap as emptyMap } from '@fortawesome/free-regular-svg-icons';
+import { ProjectService } from '../../services/ProjectService';
 
 function Board({ height, showToast }) {
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
@@ -20,7 +21,12 @@ function Board({ height, showToast }) {
 
   return (
     <div style={{ height: height + 'px', width: '100%' }}>
-      <ReactFlow snapToGrid snapGrid={[25, 25]}>
+      <ReactFlow
+        defaultNodes={ProjectService.data.nodes}
+        defaultEdges={ProjectService.data.edges}
+        snapToGrid
+        snapGrid={[25, 25]}
+      >
         <Background />
         <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />
         <Controls showInteractive={false} showZoom={false}>

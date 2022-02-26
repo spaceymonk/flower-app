@@ -30,7 +30,7 @@ const Toolbar = React.forwardRef(function (props, ref) {
           </CustomOverlay>
         </ButtonGroup>
         <ButtonGroup size="sm" className="ms-auto">
-          <BlockSidebar />
+          <BlockSidebar showToast={props.showToast} />
           <WatchSidebar />
         </ButtonGroup>
       </ButtonToolbar>

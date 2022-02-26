@@ -1,6 +1,16 @@
+/* eslint-disable no-multi-str */
 const T = {
   app: {
     name: 'Flower App',
+    dateFormat: 'HH:mm:ss',
+  },
+  blocks: {
+    errorTxt: 'Block creation failed!',
+    statement: {
+      title: 'Statement Block',
+      description: 'A statement block, lets you write any number of data definitions, declarations, and statements.',
+      toastMsg: 'Statement Block Created',
+    },
   },
   projectTitle: {
     tooltip: 'Click to change project title',

@@ -4,8 +4,9 @@ import React from 'react';
 import { Button, Offcanvas, Tooltip } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
+import { CreateButton as StatementBlockCreateButton } from '../blocks/StatementBlock';
 
-function BlockSidebar() {
+function BlockSidebar({ showToast }) {
   const [sidebarActive, setSidebarActive] = React.useState(false);
   const handleSidebarClose = () => setSidebarActive(false);
   const handleSidebarOpen = () => setSidebarActive(true);
@@ -23,8 +24,7 @@ function BlockSidebar() {
           <Offcanvas.Title>{T.blockSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta esse unde totam, iusto rerum necessitatibus
-          aperiam expedita dolor aspernatur voluptas?
+          <StatementBlockCreateButton className="mb-3" showToast={showToast} />
         </Offcanvas.Body>
       </Offcanvas>
     </>

@@ -3,6 +3,8 @@ import generateProjectName from 'project-name-generator';
 export class ProjectService {
   static data = {
     title: generateProjectName().dashed,
+    nodes: [],
+    edges: [],
   };
 
   static validateTitle(title) {
