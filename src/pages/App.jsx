@@ -1,8 +1,8 @@
 import React from 'react';
 import Footer from '../components/Footer';
 import MenubarWrapper from '../components/menu/MenubarWrapper';
-import Board from '../components/board/Board';
 import useWindowDimensions from '../hooks/useWindowDimensions';
+import BoardWrapper from '../components/board/BoardWrapper';
 
 function App() {
   const [boardHeight, setBoardHeight] = React.useState(0);
@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <MenubarWrapper ref={menubarRef} />
-      <Board height={boardHeight} width={window.width} />
+      <BoardWrapper height={boardHeight} width={window.width} />
       <Footer ref={footerRef} />
     </>
   );

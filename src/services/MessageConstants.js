@@ -8,6 +8,14 @@ const T = {
       notValid: 'Please enter a valid title!',
     },
   },
+  sidebar: {
+    watchTab: {
+      title: 'Watches',
+    },
+    blockTab: {
+      title: 'Blocks',
+    },
+  },
   menubar: {
     file: {
       _: 'File',
@@ -16,7 +24,7 @@ const T = {
   notFound: {
     title: 'Requested page could not found!',
     text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, totam?',
-    homepage: 'Homepage'
+    homepage: 'Homepage',
   },
 };
 
