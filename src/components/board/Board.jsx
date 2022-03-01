@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap as filledMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap as emptyMap } from '@fortawesome/free-regular-svg-icons';
 import { ProjectService } from '../../services/ProjectService';
-import { nodeTypes } from '../blocks';
+import { nodeTypes, BlockModalContainer } from '../blocks';
 
 function Board({ height, showToast }) {
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
@@ -20,22 +20,29 @@ function Board({ height, showToast }) {
     }
   };
 
+  const [dblClkNode, setDblClkNode] = React.useState(null);
+  function handleNodeDoubleClick(event, node) {
+    setDblClkNode(node);
+  }
+
   return (
-    <div style={{ height: height + 'px', width: '100%' }}>
-      <ReactFlow
-        defaultNodes={ProjectService.data.nodes}
-        defaultEdges={ProjectService.data.edges}
-        nodeTypes={nodeTypes}
-        snapToGrid
-        snapGrid={[25, 25]}
-      >
-        <Background />
-        <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />
-        <Controls showInteractive={false} showZoom={false}>
-          <ControlButton onClick={handleMinimapVisibility}>{minimapIcon}</ControlButton>
-        </Controls>
-      </ReactFlow>
-    </div>
+    <>
+      <div style={{ height: height + 'px', width: '100%' }}>
+        <ReactFlow
+          defaultNodes={ProjectService.data.nodes}
+          defaultEdges={ProjectService.data.edges}
+          nodeTypes={nodeTypes}
+          onNodeDoubleClick={handleNodeDoubleClick}
+        >
+          <Background />
+          <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />
+          <Controls showInteractive={false} showZoom={false}>
+            <ControlButton onClick={handleMinimapVisibility}>{minimapIcon}</ControlButton>
+          </Controls>
+        </ReactFlow>
+      </div>
+      <BlockModalContainer node={dblClkNode} />
+    </>
   );
 }
 

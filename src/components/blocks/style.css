@@ -5,14 +5,27 @@
   color: #101010;
   padding: 0.5rem;
   font-size: 0.7rem;
+  box-sizing: border-box;
 }
 
 .node:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
+.node:hover > .handle {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
 .handle {
   border-radius: 50%;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: blueviolet
+}
+
+.hande:hover {
   width: 0.5rem;
   height: 0.5rem;
 }

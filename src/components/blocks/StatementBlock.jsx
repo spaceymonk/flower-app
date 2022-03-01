@@ -6,17 +6,32 @@ import { useReactFlow, Handle, Position } from 'react-flow-renderer';
 import { v4 as uuid } from 'uuid';
 import T from '../../services/MessageConstants';
 
-export function NodeModal({ show, onSave, onClose, textAreaRef }) {
+export function NodeModal({ show, onSave, onClose, node }) {
+  const textAreaRef = React.useRef(null);
+
+  function handleSave() {
+    node.data.text = textAreaRef.current.value;
+    onSave(node);
+  }
+
   return (
     <Modal show={show} size="md" centered>
       <Modal.Body>
         <Form.Group className="mb-3">
-          <Form.Label>Details</Form.Label>
-          <Form.Control as="textarea" rows={3} ref={textAreaRef} />
+          <Form.Label>{T.blocks.statement.label}</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            ref={textAreaRef}
+            defaultValue={node?.data?.text}
+            onKeyDown={(event) => {
+              if (event.ctrlKey && event.key === 'Enter') handleSave();
+            }}
+          />
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="success" size="sm" onClick={onSave}>
+        <Button variant="success" size="sm" onClick={handleSave}>
           Save
         </Button>
         <Button variant="secondary" size="sm" onClick={onClose}>
@@ -32,12 +47,12 @@ export function NodeComponent({ data }) {
 
   return (
     <div className="d-flex node node-statement">
-      <Handle type="target" position={Position.Top} className="handle" style={{ backgroundColor: 'blueviolet' }} />
+      <Handle type="target" position={Position.Top} className="handle" />
       <div className="align-self-center" style={{ whiteSpace: 'pre-wrap' }}>
         {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}
         {processed}
       </div>
-      <Handle type="source" position={Position.Bottom} className="handle" style={{ backgroundColor: 'blueviolet' }} />
+      <Handle type="source" position={Position.Bottom} className="handle" />
     </div>
   );
 }
@@ -77,6 +92,6 @@ function create(pos) {
     id: uuid(),
     type: 'statement',
     position: pos,
-    data: {},
+    data: { text: undefined },
   };
 }

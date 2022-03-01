@@ -10,6 +10,7 @@ const T = {
     statement: {
       title: 'Statement Block',
       description: 'A statement block, lets you write any number of data definitions, declarations, and statements.',
+      label: 'Statements:',
       toastMsg: {
         title: 'Statement Block Created',
         body: 'Block placed on the leftmost corner.',
