@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------------------- */
+/*                                BASE CLASSES                                */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------ generic node ------------------------------ */
 .node {
   border: 1px solid #505050;
   border-radius: 0.25rem;
@@ -7,31 +12,66 @@
   font-size: 0.7rem;
   box-sizing: border-box;
 }
-
 .node:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
+/* ----------------------------- generic handle ----------------------------- */
 .node:hover > .handle {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   width: 0.5rem;
   height: 0.5rem;
 }
-
 .handle {
   border-radius: 50%;
   width: 0.4rem;
   height: 0.4rem;
-  background-color: blueviolet
+  background-color: blueviolet;
 }
-
 .hande:hover {
   width: 0.5rem;
   height: 0.5rem;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                               BLOCK SPECIFIC                               */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------- node-statement ----------------------------- */
 .node-statement {
   min-width: 150px;
   min-height: 50px;
   max-width: 300px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ------------------------------ node-decision ----------------------------- */
+.node-decision {
+  padding: 0;
+  min-width: 150px;
+}
+.decision-fields {
+  color: white;
+  font-size: 0.9rem;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  padding: 0.3rem;
+  font-weight: bold;
+  width: 17%;
+}
+.decision-fields.false {
+  background-color: red;
+}
+.decision-fields.true {
+  background-color: green;
+}
+.node-decision .header {
+  color: black;
+  background-color: #e0e0e0;
+  width: 100%;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.1rem;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { faCode } from '@fortawesome/free-solid-svg-icons';
+import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Button, Modal, Form } from 'react-bootstrap';
 import { useReactFlow, Handle, Position } from 'react-flow-renderer';
@@ -18,7 +18,7 @@ export function NodeModal({ show, onSave, onClose, node }) {
     <Modal show={show} size="md" centered>
       <Modal.Body>
         <Form.Group className="mb-3">
-          <Form.Label>{T.blocks.statement.label}</Form.Label>
+          <Form.Label>{T.blocks.decision.label}</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
@@ -46,13 +46,19 @@ export function NodeComponent({ data }) {
   const processed = data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <div className="d-flex node node-statement">
+    <div className="d-flex node node-decision">
       <Handle type="target" position={Position.Top} className="handle" />
-      <div>
-        {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}
-        {processed}
+      <div className="decision-fields false">F</div>
+      <div className='w-100'>
+        <div className="header">IF</div>
+        <div className="text-center p-2">
+          {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}
+          {processed}
+        </div>
       </div>
-      <Handle type="source" position={Position.Bottom} className="handle" />
+      <div className="decision-fields true">T</div>
+      <Handle id="false" type="source" position={Position.Left} className="handle" />
+      <Handle id="true" type="source" position={Position.Right} className="handle " />
     </div>
   );
 }
@@ -66,7 +72,7 @@ export function CreateButton({ className, showToast }) {
       const pos = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
       const node = create(pos);
       setNodes(getNodes().concat(node));
-      showToast(T.blocks.statement.toastMsg);
+      showToast(T.blocks.decision.toastMsg);
     } catch {
       showToast({ title: T.blocks.errorTxt });
     }
@@ -76,12 +82,12 @@ export function CreateButton({ className, showToast }) {
     <Card className={'small user-select-none clickable ' + className} onClick={handleClick}>
       <Card.Header>
         <Card.Title className="d-flex justify-content-between align-items-center">
-          <FontAwesomeIcon icon={faCode} />
-          {T.blocks.statement.title}
+          <FontAwesomeIcon icon={faCodeBranch} />
+          {T.blocks.decision.title}
         </Card.Title>
       </Card.Header>
       <Card.Body>
-        <Card.Text className="text-muted">{T.blocks.statement.description}</Card.Text>
+        <Card.Text className="text-muted">{T.blocks.decision.description}</Card.Text>
       </Card.Body>
     </Card>
   );
@@ -90,7 +96,7 @@ export function CreateButton({ className, showToast }) {
 function create(pos) {
   return {
     id: uuid(),
-    type: 'statement',
+    type: 'decision',
     position: pos,
     data: { text: undefined },
   };

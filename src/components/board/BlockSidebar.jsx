@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, Offcanvas, Tooltip } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
-import { StatementBlockCreateButton } from '../blocks';
+import { DecisionBlockCreateButton, StatementBlockCreateButton } from '../blocks';
 
 function BlockSidebar({ showToast }) {
   const [sidebarActive, setSidebarActive] = React.useState(false);
@@ -25,6 +25,7 @@ function BlockSidebar({ showToast }) {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <StatementBlockCreateButton className="mb-3" showToast={showToast} />
+          <DecisionBlockCreateButton className="mb-3" showToast={showToast} />
         </Offcanvas.Body>
       </Offcanvas>
     </>

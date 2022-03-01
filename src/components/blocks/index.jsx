@@ -1,9 +1,14 @@
 import './style.css';
+import { NodeComponent as DecisionBlockNC } from './DecisionBlock';
 import { NodeComponent as StatementBlockNC } from './StatementBlock';
-export { CreateButton as StatementBlockCreateButton } from '../blocks/StatementBlock';
-export { NodeModal as StatementBlockModal } from '../blocks/StatementBlock';
-export { BlockModalContainer } from '../blocks/BlockModalContainer';
+
+export { BlockModalContainer } from './BlockModalContainer';
+export { CreateButton as StatementBlockCreateButton } from './StatementBlock';
+export { NodeModal as StatementBlockModal } from './StatementBlock';
+export { CreateButton as DecisionBlockCreateButton } from './DecisionBlock';
+export { NodeModal as DecisionBlockModal } from './DecisionBlock';
 
 export const nodeTypes = {
   statement: StatementBlockNC,
+  decision : DecisionBlockNC,
 };
