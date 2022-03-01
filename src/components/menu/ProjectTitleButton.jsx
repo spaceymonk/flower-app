@@ -18,6 +18,7 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
             size="sm"
             ref={titleRef}
             autoFocus
+            defaultValue={ProjectService.data.title}
             placeholder={T.projectTitle.inputTxt}
             aria-label={T.projectTitle.inputTxt}
             aria-describedby="filename-input"
@@ -61,7 +62,7 @@ function ProjectTitleButton({ className, showToast }) {
     <>
       <ProjectTitleModal show={modalActive} titleRef={titleRef} onSave={handleSave} onClose={handleModalClose} />
       <CustomOverlay overlay={<Tooltip>{T.projectTitle.tooltip}</Tooltip>}>
-        <Button variant="outline-dark" size="sm" className={`border-0 ${className}`} onClick={handleModalOpen}>
+        <Button variant="outline-dark" size="sm" className={`border-0 text-truncate ${className}`} onClick={handleModalOpen} style={{maxWidth: '80%'}}>
           {ProjectService.data.title}
         </Button>
       </CustomOverlay>
