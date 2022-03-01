@@ -4,17 +4,18 @@ import { DecisionBlockModal, StatementBlockModal } from '.';
 
 export function BlockModalContainer({ node }) {
   const { setNodes } = useReactFlow();
-  const [statementModal, setStatementModal] = React.useState(false);
-  const [decisionModal, setDecisionModal] = React.useState(false);
+  const [activeModal, setActiveModal] = React.useState('');
+  const [showModal, setShowModal] = React.useState(false);
 
   React.useEffect(() => {
-    setStatementModal(node?.type === 'statement');
-    setDecisionModal(node?.type === 'decision');
+    if (node) {
+      setActiveModal(node.type);
+      setShowModal(true);
+    }
   }, [node]);
 
   function handleSave(updatedNode) {
-    setStatementModal(false);
-    setDecisionModal(false);
+    setShowModal(false);
     setNodes((nodes) => nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n)));
   }
 
@@ -22,15 +23,15 @@ export function BlockModalContainer({ node }) {
     <div>
       <StatementBlockModal
         node={node}
-        show={statementModal}
+        show={showModal && activeModal === 'statement'}
         onSave={handleSave}
-        onClose={() => setStatementModal(false)}
+        onClose={() => setShowModal(false)}
       />
       <DecisionBlockModal
         node={node}
-        show={decisionModal}
+        show={showModal && activeModal === 'decision'}
         onSave={handleSave}
-        onClose={() => setDecisionModal(false)}
+        onClose={() => setShowModal(false)}
       />
     </div>
   );
