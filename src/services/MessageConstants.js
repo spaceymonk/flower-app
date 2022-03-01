@@ -3,6 +3,8 @@ const T = {
   app: {
     name: 'Flower App',
     dateFormat: 'HH:mm:ss',
+    saveTxt: 'Save',
+    cancelTxt: 'Cancel',
   },
   blocks: {
     errorTxt: 'Block creation failed!',
@@ -38,6 +40,15 @@ const T = {
       description: 'Marks the end of the flow. This is the exit point of the program and there can be only be one.',
       toastMsg: {
         title: 'Stop Block Created',
+        body: 'Block placed on the leftmost corner.',
+      },
+    },
+    load: {
+      title: 'Load Block',
+      description: 'A load block lets you get input from the user.',
+      label: 'Variables:',
+      toastMsg: {
+        title: 'Load Block Created',
         body: 'Block placed on the leftmost corner.',
       },
     },

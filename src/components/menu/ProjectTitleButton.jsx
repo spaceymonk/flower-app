@@ -29,10 +29,10 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="success" size="sm" onClick={onSave}>
-          Save
+          {T.app.saveTxt}
         </Button>
         <Button variant="secondary" size="sm" onClick={onClose}>
-          Cancel
+          {T.app.cancelTxt}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -32,10 +32,10 @@ export function NodeModal({ show, onSave, onClose, node }) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="success" size="sm" onClick={handleSave}>
-          Save
+          {T.app.saveTxt}
         </Button>
         <Button variant="secondary" size="sm" onClick={onClose}>
-          Cancel
+          {T.app.cancelTxt}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -49,7 +49,7 @@ export function NodeComponent({ data }) {
     <div className="d-flex node node-decision">
       <Handle type="target" position={Position.Top} className="handle" />
       <div className="decision-fields false">F</div>
-      <div className='w-100'>
+      <div className="w-100">
         <div className="header">IF</div>
         <div className="text-center p-2">
           {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}

@@ -32,10 +32,10 @@ export function NodeModal({ show, onSave, onClose, node }) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="success" size="sm" onClick={handleSave}>
-          Save
+          {T.app.saveTxt}
         </Button>
         <Button variant="secondary" size="sm" onClick={onClose}>
-          Cancel
+          {T.app.cancelTxt}
         </Button>
       </Modal.Footer>
     </Modal>
