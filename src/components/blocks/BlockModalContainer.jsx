@@ -1,6 +1,6 @@
 import React from 'react';
 import { useReactFlow } from 'react-flow-renderer';
-import { DecisionBlockModal, StatementBlockModal } from '.';
+import { DecisionBlockModal, LoadBlockkModal, StatementBlockModal, StoreBlockModal } from '.';
 
 export function BlockModalContainer({ node }) {
   const { setNodes } = useReactFlow();
@@ -32,6 +32,18 @@ export function BlockModalContainer({ node }) {
         show={showModal && activeModal === 'decision'}
         onSave={handleSave}
         onClose={() => setShowModal(false)}
+      />
+      <LoadBlockkModal
+        node={node}
+        show={showModal && activeModal === 'load'}
+        onSave={handleSave}
+        onClose={() => setShowModal(false)}
+      />
+      <StoreBlockModal
+      node={node}
+      show={showModal && activeModal === 'store'}
+      onSave={handleSave}
+      onClose={() => setShowModal(false)}
       />
     </div>
   );

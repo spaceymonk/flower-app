@@ -52,6 +52,15 @@ const T = {
         body: 'Block placed on the leftmost corner.',
       },
     },
+    store: {
+      title: 'Store Block',
+      description: 'A store block lets you print out the given variables to display.',
+      label: 'Variables:',
+      toastMsg: {
+        title: 'Store Block Created',
+        body: 'Block placed on the leftmost corner.',
+      },
+    },
   },
   projectTitle: {
     tooltip: 'Click to change project title',

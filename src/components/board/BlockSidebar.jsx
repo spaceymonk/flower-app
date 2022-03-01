@@ -9,6 +9,8 @@ import {
   StatementBlockCreateButton,
   StartBlockCreateButton,
   StopBlockCreateButton,
+  LoadBlockCreateButton,
+  StoreBlockCreateButton,
 } from '../blocks';
 
 function BlockSidebar({ showToast }) {
@@ -33,6 +35,8 @@ function BlockSidebar({ showToast }) {
           <StopBlockCreateButton className="mb-3" showToast={showToast} />
           <StatementBlockCreateButton className="mb-3" showToast={showToast} />
           <DecisionBlockCreateButton className="mb-3" showToast={showToast} />
+          <LoadBlockCreateButton className="mb-3" showToast={showToast} />
+          <StoreBlockCreateButton className="mb-3" showToast={showToast} />
         </Offcanvas.Body>
       </Offcanvas>
     </>
