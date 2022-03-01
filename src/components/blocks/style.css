@@ -75,3 +75,19 @@
   text-align: center;
   padding: 0.1rem;
 }
+
+/* ------------------------------- node-start ------------------------------- */
+.node-sentinel {
+  width: 150px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  background-color: #e0e0e0;
+}
+.node-sentinel .content {
+  color: black;
+  width: 100%;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+}

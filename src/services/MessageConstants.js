@@ -25,6 +25,22 @@ const T = {
         body: 'Block placed on the leftmost corner.',
       },
     },
+    start: {
+      title: 'Start Block',
+      description: 'Marks the start of the flow. This is the main entry point of the program and there can be only be one.',
+      toastMsg: {
+        title: 'Start Block Created',
+        body: 'Block placed on the leftmost corner.',
+      },
+    },
+    stop: {
+      title: 'Stop Block',
+      description: 'Marks the end of the flow. This is the exit point of the program and there can be only be one.',
+      toastMsg: {
+        title: 'Stop Block Created',
+        body: 'Block placed on the leftmost corner.',
+      },
+    },
   },
   projectTitle: {
     tooltip: 'Click to change project title',
