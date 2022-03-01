@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, Toast } from 'react-bootstrap';
 import Board from '../components/board/Board';
 import Toolbar from '../components/board/Toolbar';
-import { v4 as uuid } from 'uuid';
+import { v1 as uuid } from 'uuid';
 import { ReactFlowProvider } from 'react-flow-renderer';
 import Moment from 'moment';
 import T from '../services/MessageConstants';
@@ -29,10 +29,10 @@ function App() {
   function showToast(toast) {
     toast.key = uuid();
     if (!toast.subtitle) toast.subtitle = Moment().format(T.app.dateFormat);
-    setToastList(toastList.concat(toast));
+    setToastList((list) => [...list, toast]);
   }
   function closeToast(key) {
-    setToastList(toastList.filter((t) => t.key !== key));
+    setToastList((list) => list.filter((t) => t.key !== key));
   }
 
   return (
