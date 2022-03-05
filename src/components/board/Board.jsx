@@ -1,11 +1,12 @@
 import React from 'react';
-import ReactFlow from 'react-flow-renderer';
+import ReactFlow, { useReactFlow } from 'react-flow-renderer';
 import { Background, MiniMap, Controls, ControlButton } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap as filledMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap as emptyMap } from '@fortawesome/free-regular-svg-icons';
 import { ProjectService } from '../../services/ProjectService';
 import { nodeTypes, BlockModalContainer } from '../blocks';
+import { BlockService } from '../../services/BlockService';
 
 function Board({ height, showToast }) {
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
@@ -24,6 +25,8 @@ function Board({ height, showToast }) {
   function handleNodeDoubleClick(event, node) {
     setDblClkNode(node);
   }
+
+  BlockService.instance(useReactFlow());
 
   return (
     <>

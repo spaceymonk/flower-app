@@ -9,57 +9,38 @@ const T = {
   blocks: {
     errorTxt: 'Block creation failed!',
     defaultTxt: 'Enter some text...',
+    toastMsg: {
+      title: 'Block Created',
+      body: 'Block placed on the leftmost corner.',
+    },
     statement: {
       title: 'Statement Block',
       description: 'A statement block lets you write any number of data definitions, declarations, and statements.',
       label: 'Statements:',
-      toastMsg: {
-        title: 'Statement Block Created',
-        body: 'Block placed on the leftmost corner.',
-      },
+      
     },
     decision: {
       title: 'Decision Block',
       description: 'A decision block lets you define alternative flows for the main flow.',
       label: 'Expression:',
-      toastMsg: {
-        title: 'Decision Block Created',
-        body: 'Block placed on the leftmost corner.',
-      },
     },
     start: {
       title: 'Start Block',
       description: 'Marks the start of the flow. This is the main entry point of the program and there can be only be one.',
-      toastMsg: {
-        title: 'Start Block Created',
-        body: 'Block placed on the leftmost corner.',
-      },
     },
     stop: {
       title: 'Stop Block',
       description: 'Marks the end of the flow. This is the exit point of the program and there can be only be one.',
-      toastMsg: {
-        title: 'Stop Block Created',
-        body: 'Block placed on the leftmost corner.',
-      },
     },
     load: {
       title: 'Load Block',
       description: 'A load block lets you get input from the user.',
       label: 'Variables:',
-      toastMsg: {
-        title: 'Load Block Created',
-        body: 'Block placed on the leftmost corner.',
-      },
     },
     store: {
       title: 'Store Block',
       description: 'A store block lets you print out the given variables to display.',
       label: 'Variables:',
-      toastMsg: {
-        title: 'Store Block Created',
-        body: 'Block placed on the leftmost corner.',
-      },
     },
   },
   projectTitle: {
