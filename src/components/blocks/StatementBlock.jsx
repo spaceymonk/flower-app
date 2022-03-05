@@ -49,7 +49,7 @@ export function NodeComponent({ data }) {
   );
 }
 
-export function CreateButton({ className, showToast }) {
+export function CreateButton({ className }) {
   function create(pos) {
     return {
       id: uuid(),
@@ -62,7 +62,6 @@ export function CreateButton({ className, showToast }) {
   return (
     <BaseCreateButton
       className={className}
-      showToast={showToast}
       onCreate={create}
       title={T.blocks.statement.title}
       description={T.blocks.statement.description}

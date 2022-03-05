@@ -8,7 +8,7 @@ import { ProjectService } from '../../services/ProjectService';
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import { BlockService } from '../../services/BlockService';
 
-function Board({ height, showToast }) {
+function Board({ height }) {
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
   const [minimapToggled, setMinimapToggled] = React.useState(true);
   const handleMinimapVisibility = () => {

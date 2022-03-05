@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
+import { AppContext } from '../../pages/App';
 
 function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
   return (
@@ -40,9 +41,10 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
   );
 }
 
-function ProjectTitleButton({ className, showToast }) {
+function ProjectTitleButton({ className }) {
   const titleRef = React.useRef(null);
   const [modalActive, setModalActive] = React.useState(false);
+  const { showToast } = React.useContext(AppContext);
 
   const handleModalClose = () => setModalActive(false);
   const handleModalOpen = () => setModalActive(true);
@@ -62,7 +64,13 @@ function ProjectTitleButton({ className, showToast }) {
     <>
       <ProjectTitleModal show={modalActive} titleRef={titleRef} onSave={handleSave} onClose={handleModalClose} />
       <CustomOverlay overlay={<Tooltip>{T.projectTitle.tooltip}</Tooltip>}>
-        <Button variant="outline-dark" size="sm" className={`border-0 text-truncate ${className}`} onClick={handleModalOpen} style={{maxWidth: '80%'}}>
+        <Button
+          variant="outline-dark"
+          size="sm"
+          className={`border-0 text-truncate ${className}`}
+          onClick={handleModalOpen}
+          style={{ maxWidth: '80%' }}
+        >
           {ProjectService.data.title}
         </Button>
       </CustomOverlay>

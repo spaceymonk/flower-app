@@ -3,6 +3,8 @@ import T from '../../services/MessageConstants';
 import { useReactFlow } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BlockService } from '../../services/BlockService';
+import { AppContext } from '../../pages/App';
+import React from 'react';
 
 export function BaseNodeModal({ show, children, onSave, onClose }) {
   return (
@@ -20,7 +22,8 @@ export function BaseNodeModal({ show, children, onSave, onClose }) {
   );
 }
 
-export function BaseCreateButton({ className, showToast, onCreate, title, description, icon }) {
+export function BaseCreateButton({ className, onCreate, title, description, icon }) {
+  const { showToast } = React.useContext(AppContext);
   const { getViewport } = useReactFlow();
 
   function handleClick() {

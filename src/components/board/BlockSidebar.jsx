@@ -13,7 +13,7 @@ import {
   StoreBlockCreateButton,
 } from '../blocks';
 
-function BlockSidebar({ showToast }) {
+function BlockSidebar() {
   const [sidebarActive, setSidebarActive] = React.useState(false);
   const handleSidebarClose = () => setSidebarActive(false);
   const handleSidebarOpen = () => setSidebarActive(true);
@@ -31,12 +31,12 @@ function BlockSidebar({ showToast }) {
           <Offcanvas.Title>{T.blockSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <StartBlockCreateButton className="mb-3" showToast={showToast} />
-          <StopBlockCreateButton className="mb-3" showToast={showToast} />
-          <StatementBlockCreateButton className="mb-3" showToast={showToast} />
-          <DecisionBlockCreateButton className="mb-3" showToast={showToast} />
-          <LoadBlockCreateButton className="mb-3" showToast={showToast} />
-          <StoreBlockCreateButton className="mb-3" showToast={showToast} />
+          <StartBlockCreateButton className="mb-3" />
+          <StopBlockCreateButton className="mb-3" />
+          <StatementBlockCreateButton className="mb-3" />
+          <DecisionBlockCreateButton className="mb-3" />
+          <LoadBlockCreateButton className="mb-3" />
+          <StoreBlockCreateButton className="mb-3" />
         </Offcanvas.Body>
       </Offcanvas>
     </>
