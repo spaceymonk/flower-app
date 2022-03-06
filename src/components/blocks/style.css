@@ -11,10 +11,12 @@
   background: #f7f7f7;
   color: #101010;
   font-size: 0.7rem;
-  box-sizing: border-box;
 }
 .node:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+.selected > .node {
+    border-width: 3px;
 }
 
 /* --------------------------------- handle --------------------------------- */

@@ -36,6 +36,8 @@ function Board({ height }) {
           defaultEdges={ProjectService.data.edges}
           nodeTypes={nodeTypes}
           onNodeDoubleClick={handleNodeDoubleClick}
+          deleteKeyCode="Delete"
+          multiSelectionKeyCode="Control"
         >
           <Background />
           <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />
