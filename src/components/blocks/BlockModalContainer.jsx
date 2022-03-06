@@ -1,5 +1,12 @@
 import React from 'react';
-import { DecisionBlockModal, LoadBlockkModal, StatementBlockModal, StoreBlockModal } from '.';
+import {
+  DecisionBlockModal,
+  LoadBlockkModal,
+  StartBlockModal,
+  StatementBlockModal,
+  StoreBlockModal,
+  StopBlockModal,
+} from '.';
 
 export function BlockModalContainer({ node }) {
   const [activeModal, setActiveModal] = React.useState('');
@@ -19,6 +26,8 @@ export function BlockModalContainer({ node }) {
       <DecisionBlockModal node={node} show={showModal && activeModal === 'decision'} onClose={handleClose} />
       <LoadBlockkModal node={node} show={showModal && activeModal === 'load'} onClose={handleClose} />
       <StoreBlockModal node={node} show={showModal && activeModal === 'store'} onClose={handleClose} />
+      <StartBlockModal node={node} show={showModal && activeModal === 'start'} onClose={handleClose} />
+      <StopBlockModal node={node} show={showModal && activeModal === 'stop'} onClose={handleClose} />
     </div>
   );
 }

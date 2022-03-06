@@ -17,7 +17,7 @@ export function NodeModal({ show, onClose, node }) {
   }
 
   return (
-    <BaseNodeModal show={show} onSave={handleSave} onClose={onClose}>
+    <BaseNodeModal show={show} onSave={handleSave} onClose={onClose} node={node}>
       <Form.Group className="mb-3">
         <Form.Label>{T.blocks.store.label}</Form.Label>
         <Form.Control

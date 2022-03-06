@@ -5,17 +5,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BlockService } from '../../services/BlockService';
 import { AppContext } from '../../pages/App';
 import React from 'react';
+import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-export function BaseNodeModal({ show, children, onSave, onClose }) {
+export function BaseNodeModal({ show, children, onSave, onClose, node }) {
+  function handleDelete() {
+    BlockService.instance().removeNodes(node);
+    onClose();
+  }
+
   return (
     <Modal show={show} size="md" centered>
-      <Modal.Body>{children}</Modal.Body>
+      {node && <Modal.Header className='overflow-auto'>
+        <strong className='me-5 me-sm-auto'>{node.type.toUpperCase()}</strong>
+        <em className="text-muted text-nowrap small">{node.id}</em>
+      </Modal.Header>}
+      {children && <Modal.Body>{children}</Modal.Body>}
       <Modal.Footer>
-        <Button variant="success" size="sm" onClick={onSave}>
-          {T.app.saveTxt}
+        <Button variant="danger" size="sm" onClick={handleDelete} className="me-auto">
+          <FontAwesomeIcon icon={faTrashCan} className="me-2" />
+          {T.app.deleteTxt}
         </Button>
+        {onSave && (
+          <Button variant="success" size="sm" onClick={onSave}>
+            <FontAwesomeIcon icon={faSave} className="me-2" /> {T.app.saveTxt}
+          </Button>
+        )}
         <Button variant="secondary" size="sm" onClick={onClose}>
-          {T.app.cancelTxt}
+          <FontAwesomeIcon icon={faCancel} className="me-2" /> {T.app.cancelTxt}
         </Button>
       </Modal.Footer>
     </Modal>

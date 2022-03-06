@@ -1,6 +1,7 @@
 export class BlockService {
-  constructor({ setNodes }) {
+  constructor({ setNodes, getNodes }) {
     this.setNodes = setNodes;
+    this.getNodes = getNodes;
   }
 
   static instance(args) {
@@ -17,5 +18,9 @@ export class BlockService {
 
   addNodes(createdNode) {
     this.setNodes((nodes) => [...nodes, createdNode]);
+  }
+
+  removeNodes(removedNode) {
+    this.setNodes((nodes) => nodes.filter((n) => n.id !== removedNode.id));
   }
 }

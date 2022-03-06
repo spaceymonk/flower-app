@@ -5,6 +5,7 @@ const T = {
     dateFormat: 'HH:mm:ss',
     saveTxt: 'Save',
     cancelTxt: 'Cancel',
+    deleteTxt: 'Delete',
   },
   blocks: {
     errorTxt: 'Block creation failed!',
