@@ -3,7 +3,18 @@
 }
 
 #menubar .nav-link {
-  padding: 0;
-  margin: 5px 15px;
+  padding: 0px 1px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 15px;
   color: inherit;
+}
+
+#menubar .nav-link:hover {
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.4);
+}
+
+#menubar .nav-item.show > .nav-link {
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.1);
 }
