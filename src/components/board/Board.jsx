@@ -8,6 +8,11 @@ import { ProjectService } from '../../services/ProjectService';
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import { BlockService } from '../../services/BlockService';
 
+const alertUser = (e) => {
+  e.preventDefault();
+  e.returnValue = 'hello!';
+};
+
 function Board({ height }) {
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
   const [minimapToggled, setMinimapToggled] = React.useState(true);
@@ -26,14 +31,22 @@ function Board({ height }) {
     setDblClkNode(node);
   }
 
+  React.useEffect(() => {
+    window.addEventListener('beforeunload', alertUser);
+    return () => {
+      window.removeEventListener('beforeunload', alertUser);
+    };
+  }, []);
+
   BlockService.instance(useReactFlow());
 
   return (
     <>
       <div style={{ height: height + 'px', width: '100%' }}>
         <ReactFlow
-          defaultNodes={ProjectService.data.nodes}
-          defaultEdges={ProjectService.data.edges}
+          defaultNodes={ProjectService.data.defaultNodes}
+          defaultEdges={ProjectService.data.defaultEdges}
+          fitView={true}
           nodeTypes={nodeTypes}
           onNodeDoubleClick={handleNodeDoubleClick}
           deleteKeyCode="Delete"
