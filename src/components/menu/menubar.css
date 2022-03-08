@@ -11,10 +11,10 @@
 }
 
 #menubar .nav-link:hover {
-  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
 
 #menubar .nav-item.show > .nav-link {
-  font-weight: bold;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4) inset;
   background-color: rgba(0, 0, 0, 0.1);
 }

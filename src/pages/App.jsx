@@ -12,6 +12,16 @@ import T from '../services/MessageConstants';
 import { CustomToast } from '../components/common/CustomToast';
 import generateProjectName from 'project-name-generator';
 
+class Initial {
+  constructor() {
+    this.title = window.localStorage.getItem('title') || generateProjectName().dashed;
+    this.defaultNodes = JSON.parse(window.localStorage.getItem('nodes')) || [];
+    this.defaultEdges = JSON.parse(window.localStorage.getItem('edges')) || [];
+    this.inputParams = window.localStorage.getItem('inputParams') || '';
+  }
+}
+
+export const initials = new Initial();
 export const AppContext = React.createContext();
 
 function App() {
@@ -40,15 +50,10 @@ function App() {
     setToastList((list) => list.filter((t) => t.key !== key));
   }
 
-  const initialTitle = window.localStorage.getItem('title') || generateProjectName().dashed;
-  const initialDefaultNodes = JSON.parse(window.localStorage.getItem('nodes')) || [];
-  const initialDefaultEdges = JSON.parse(window.localStorage.getItem('edges')) || [];
-  const initialInputParams = window.localStorage.getItem('inputParams') || '';
-
-  const [title, setTitle] = React.useState(initialTitle);
-  const [defaultNodes, setDefaultNodes] = React.useState(initialDefaultNodes);
-  const [defaultEdges, setDefaultEdges] = React.useState(initialDefaultEdges);
-  const [inputParams, setInputParams] = React.useState(initialInputParams);
+  const [title, setTitle] = React.useState(initials.title);
+  const [defaultNodes, setDefaultNodes] = React.useState(initials.defaultNodes);
+  const [defaultEdges, setDefaultEdges] = React.useState(initials.defaultEdges);
+  const [inputParams, setInputParams] = React.useState(initials.inputParams);
 
   return (
     <AppContext.Provider

@@ -4,6 +4,7 @@ export class BlockService {
     this.getNodes = getNodes;
     this.getEdges = getEdges;
     this.setEdges = setEdges;
+    this.fitView = fitView;
   }
 
   static instance(args) {
