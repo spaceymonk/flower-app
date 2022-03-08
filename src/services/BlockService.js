@@ -1,8 +1,9 @@
 export class BlockService {
-  constructor({ setNodes, getNodes, getEdges }) {
+  constructor({ setNodes, getNodes, getEdges, setEdges, fitView }) {
     this.setNodes = setNodes;
     this.getNodes = getNodes;
     this.getEdges = getEdges;
+    this.setEdges = setEdges;
   }
 
   static instance(args) {

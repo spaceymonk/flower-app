@@ -2,12 +2,17 @@ import { faFolder } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
+import { AppContext } from '../../../pages/App';
+import { ProjectService } from '../../../services/ProjectService';
 
 export function OpenModal({ show, onClose }) {
-  const [path, setPath] = React.useState('');
+  const { setTitle, setInputParams, showToast } = React.useContext(AppContext);
+  const [file, setFile] = React.useState();
 
   function handleOpen() {
-    console.log(path);
+    ProjectService.open({ setTitle, setInputParams }, file);
+    showToast({ title: 'Project opened, do not forget to save!' });
+    onClose();
   }
 
   return (
@@ -21,7 +26,7 @@ export function OpenModal({ show, onClose }) {
         <Container>
           <Form.Group controlId="formFile">
             <Form.Label>Select from computer...</Form.Label>
-            <Form.Control type="file" onChange={(event) => setPath(event.target.value)} />
+            <Form.Control type="file" accept=".json" onChange={(event) => setFile(event.target.files[0])} />
           </Form.Group>
         </Container>
       </Modal.Body>

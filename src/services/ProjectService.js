@@ -7,7 +7,7 @@ export class ProjectService {
     return true;
   }
 
-  static save({title, inputParams},callback) {
+  static save({ title, inputParams }, callback) {
     const nodes = BlockService.instance().getNodes();
     const edges = BlockService.instance().getEdges();
     window.localStorage.clear();
@@ -18,7 +18,7 @@ export class ProjectService {
     if (callback) callback();
   }
 
-  static download({title, inputParams}) {
+  static download({ title, inputParams }) {
     const payload = {
       nodes: BlockService.instance().getNodes(),
       edges: BlockService.instance().getEdges(),
@@ -27,11 +27,24 @@ export class ProjectService {
     };
     const element = document.createElement('a');
     const file = new Blob([JSON.stringify(payload, null, 2)], {
-      type: 'text/plain',
+      type: 'application/json',
     });
     element.href = URL.createObjectURL(file);
     element.download = title;
     document.body.appendChild(element);
     element.click();
+  }
+
+  static open({ setTitle, setInputParams }, file) {
+    const handleFileRead = (e) => {
+      const content = JSON.parse(fileReader.result);
+      BlockService.instance().setEdges(content.edges);
+      BlockService.instance().setNodes(content.nodes);
+      setTitle(content.title);
+      setInputParams(content.inputParams);
+    };
+    const fileReader = new FileReader();
+    fileReader.onloadend = handleFileRead;
+    fileReader.readAsText(file);
   }
 }
