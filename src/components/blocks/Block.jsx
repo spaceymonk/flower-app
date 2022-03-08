@@ -3,9 +3,9 @@ import T from '../../services/MessageConstants';
 import { useReactFlow } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BlockService } from '../../services/BlockService';
-import { AppContext } from '../../pages/App';
 import React from 'react';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { AppContext } from '../../pages/App';
 
 export function BaseNodeModal({ show, children, onSave, onClose, node }) {
   function handleDelete() {

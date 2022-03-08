@@ -2,13 +2,14 @@ import { faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
-import { ProjectService } from '../../../services/ProjectService';
+import { AppContext } from '../../../pages/App';
 
 export function InputSelectModal({ show, onClose }) {
+  const { getInputParams, setInputParams } = React.useContext(AppContext);
   const textRef = React.useRef();
 
   const handleSave = () => {
-    ProjectService.data.inputParams = textRef.current.value;
+    setInputParams(textRef.current.value);
     onClose();
   };
 
@@ -26,8 +27,12 @@ export function InputSelectModal({ show, onClose }) {
             as="textarea"
             ref={textRef}
             rows={6}
-            defaultValue={ProjectService.data.inputParams}
-            placeholder="Input parameters" />
+            defaultValue={getInputParams()}
+            onKeyDown={(event) => {
+              if (event.ctrlKey && event.key === 'Enter') handleSave();
+            }}
+            placeholder="Input parameters"
+          />
         </Container>
       </Modal.Body>
       <Modal.Footer>

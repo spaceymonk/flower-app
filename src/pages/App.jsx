@@ -10,6 +10,7 @@ import { ReactFlowProvider } from 'react-flow-renderer';
 import Moment from 'moment';
 import T from '../services/MessageConstants';
 import { CustomToast } from '../components/common/CustomToast';
+import generateProjectName from 'project-name-generator';
 
 export const AppContext = React.createContext();
 
@@ -19,13 +20,16 @@ function App() {
   const toolbarRef = React.useRef(null);
   const menubarRef = React.useRef(null);
   const footerRef = React.useRef(null);
-  const window = useWindowDimensions();
+  const windowDim = useWindowDimensions();
 
   React.useEffect(() => {
     setBoardHeight(
-      window.height - menubarRef.current.clientHeight - footerRef.current.clientHeight - toolbarRef.current.clientHeight
+      windowDim.height -
+        menubarRef.current.clientHeight -
+        footerRef.current.clientHeight -
+        toolbarRef.current.clientHeight
     );
-  }, [window.height]);
+  }, [windowDim.height]);
 
   function showToast(toast) {
     toast.key = uuid();
@@ -36,8 +40,30 @@ function App() {
     setToastList((list) => list.filter((t) => t.key !== key));
   }
 
+  const initialTitle = window.localStorage.getItem('title') || generateProjectName().dashed;
+  const initialDefaultNodes = JSON.parse(window.localStorage.getItem('nodes')) || [];
+  const initialDefaultEdges = JSON.parse(window.localStorage.getItem('edges')) || [];
+  const initialInputParams = window.localStorage.getItem('inputParams') || '';
+
+  const [title, setTitle] = React.useState(initialTitle);
+  const [defaultNodes, setDefaultNodes] = React.useState(initialDefaultNodes);
+  const [defaultEdges, setDefaultEdges] = React.useState(initialDefaultEdges);
+  const [inputParams, setInputParams] = React.useState(initialInputParams);
+
   return (
-    <AppContext.Provider value={{ showToast: showToast }}>
+    <AppContext.Provider
+      value={{
+        showToast: showToast,
+        getTitle: () => title,
+        setTitle: setTitle,
+        getDefaultNodes: () => defaultNodes,
+        setDefaultNodes: setDefaultNodes,
+        getDefaultEdges: () => defaultEdges,
+        setDefaultEdges: setDefaultEdges,
+        getInputParams: () => inputParams,
+        setInputParams: setInputParams,
+      }}
+    >
       <ReactFlowProvider>
         <MenubarWrapper ref={menubarRef} />
         <Toolbar ref={toolbarRef} />

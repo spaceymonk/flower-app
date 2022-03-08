@@ -1,11 +1,18 @@
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
+import { AppContext } from '../../../pages/App';
 import { ProjectService } from '../../../services/ProjectService';
 
 export function DownloadMenuItem() {
+  const { getTitle, getInputParams } = React.useContext(AppContext);
+
   function handleClick() {
-    ProjectService.download();
+    ProjectService.download({
+      title: getTitle(),
+      inputParams: getInputParams(),
+    });
   }
   return (
     <NavDropdown.Item onClick={handleClick}>

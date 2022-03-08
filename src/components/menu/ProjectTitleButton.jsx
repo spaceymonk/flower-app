@@ -7,7 +7,7 @@ import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
 import { AppContext } from '../../pages/App';
 
-function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
+function ProjectTitleModal({ show, onSave, onClose, titleRef, value }) {
   return (
     <Modal show={show} size="md" centered>
       <Modal.Body>
@@ -19,7 +19,7 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
             size="sm"
             ref={titleRef}
             autoFocus
-            defaultValue={ProjectService.data.title}
+            defaultValue={value}
             placeholder={T.projectTitle.inputTxt}
             aria-label={T.projectTitle.inputTxt}
             aria-describedby="filename-input"
@@ -42,15 +42,15 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef }) {
 }
 
 function ProjectTitleButton({ className }) {
+  const { getTitle, setTitle, showToast } = React.useContext(AppContext);
   const titleRef = React.useRef(null);
   const [modalActive, setModalActive] = React.useState(false);
-  const { showToast } = React.useContext(AppContext);
 
   const handleModalClose = () => setModalActive(false);
   const handleModalOpen = () => setModalActive(true);
   const handleSave = () => {
     if (ProjectService.validateTitle(titleRef.current.value)) {
-      ProjectService.data.title = titleRef.current.value;
+      setTitle(titleRef.current.value);
       handleModalClose();
     } else {
       showToast({
@@ -62,7 +62,13 @@ function ProjectTitleButton({ className }) {
 
   return (
     <>
-      <ProjectTitleModal show={modalActive} titleRef={titleRef} onSave={handleSave} onClose={handleModalClose} />
+      <ProjectTitleModal
+        show={modalActive}
+        titleRef={titleRef}
+        onSave={handleSave}
+        onClose={handleModalClose}
+        value={getTitle()}
+      />
       <CustomOverlay overlay={<Tooltip>{T.projectTitle.tooltip}</Tooltip>}>
         <Button
           variant="outline-dark"
@@ -71,7 +77,7 @@ function ProjectTitleButton({ className }) {
           onClick={handleModalOpen}
           style={{ maxWidth: '80%' }}
         >
-          {ProjectService.data.title}
+          {getTitle()}
         </Button>
       </CustomOverlay>
     </>

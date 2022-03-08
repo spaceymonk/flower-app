@@ -4,16 +4,18 @@ import { Background, MiniMap, Controls, ControlButton } from 'react-flow-rendere
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap as filledMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap as emptyMap } from '@fortawesome/free-regular-svg-icons';
-import { ProjectService } from '../../services/ProjectService';
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import { BlockService } from '../../services/BlockService';
+import { AppContext } from '../../pages/App';
 
 const alertUser = (e) => {
   e.preventDefault();
-  e.returnValue = 'hello!';
+  e.returnValue = '';
 };
 
 function Board({ height }) {
+  BlockService.instance(useReactFlow());
+
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
   const [minimapToggled, setMinimapToggled] = React.useState(true);
   const handleMinimapVisibility = () => {
@@ -38,14 +40,13 @@ function Board({ height }) {
     };
   }, []);
 
-  BlockService.instance(useReactFlow());
-
+  const { getDefaultEdges, getDefaultNodes } = React.useContext(AppContext);
   return (
     <>
       <div style={{ height: height + 'px', width: '100%' }}>
         <ReactFlow
-          defaultNodes={ProjectService.data.defaultNodes}
-          defaultEdges={ProjectService.data.defaultEdges}
+          defaultNodes={getDefaultNodes()}
+          defaultEdges={getDefaultEdges()}
           fitView={true}
           nodeTypes={nodeTypes}
           onNodeDoubleClick={handleNodeDoubleClick}

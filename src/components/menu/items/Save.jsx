@@ -6,9 +6,15 @@ import { AppContext } from '../../../pages/App';
 import { ProjectService } from '../../../services/ProjectService';
 
 export function SaveMenuItem() {
-  const {showToast} = React.useContext(AppContext);
+  const { showToast, getTitle, getInputParams } = React.useContext(AppContext);
   function handleClick() {
-    ProjectService.save(()=>showToast({title:'Changes Saved!'}));
+    ProjectService.save(
+      {
+        title: getTitle(),
+        inputParams: getInputParams(),
+      },
+      () => showToast({ title: 'Changes Saved!' })
+    );
   }
   return (
     <NavDropdown.Item onClick={handleClick}>
