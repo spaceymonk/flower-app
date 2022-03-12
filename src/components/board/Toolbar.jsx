@@ -11,10 +11,15 @@ import { SimulationService } from '../../services/SimulationService';
 const Toolbar = React.forwardRef(function (props, ref) {
   const { setRunning, isRunning } = React.useContext(AppContext);
   const [contToggled, setContToggle] = React.useState(false);
-  
+
   const handlePlayBtn = () => {
+    const cleaner = () => {
+      setRunning(false);
+      setContToggle(false);
+    };
     setRunning(true);
-    SimulationService.instance().start(() => setRunning(false));
+    setContToggle(false);
+    SimulationService.instance().start(cleaner);
   };
   const handleStopBtn = () => {
     setRunning(false);
@@ -43,7 +48,7 @@ const Toolbar = React.forwardRef(function (props, ref) {
           </CustomOverlay>
 
           <CustomOverlay overlay={<Tooltip>Next Block</Tooltip>}>
-            <Button variant="secondary" disabled={!isRunning()} onClick={handleNextBtn}>
+            <Button variant="secondary" disabled={!isRunning() || contToggled} onClick={handleNextBtn}>
               <FontAwesomeIcon icon={faArrowDown} />
             </Button>
           </CustomOverlay>

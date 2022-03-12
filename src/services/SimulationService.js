@@ -12,7 +12,7 @@ export class SimulationService {
   constructor() {
     this.speedInMs = 500;
     this.isRunning = false;
-    this.nextBlock = false;
+    this.jumpNextBlock = false;
     this.action = SimulationActions.none;
   }
 
@@ -26,14 +26,20 @@ export class SimulationService {
   start(callback) {
     console.log('[simulation] start');
     this.action = SimulationActions.debug;
-    this.nextBlock = false;
-    this.run(callback);
+    this.jumpNextBlock = false;
+    try {
+      this.run(callback);
+    } catch (e) {
+      console.error(e);
+      this.stop();
+      callback();
+    }
   }
 
   next() {
     if (this.isRunning) {
       console.log('[simulation] next');
-      this.nextBlock = true;
+      this.jumpNextBlock = true;
     }
   }
 
@@ -42,7 +48,7 @@ export class SimulationService {
       console.log('[simulation] continue');
       if (this.action === SimulationActions.continue) {
         this.action = SimulationActions.debug;
-        this.nextBlock = false;
+        this.jumpNextBlock = false;
       } else {
         this.action = SimulationActions.continue;
       }
@@ -58,14 +64,14 @@ export class SimulationService {
 
   run(callback) {
     this.isRunning = true;
-    const parser = new Parser(BlockService.instance().getNodes());
+    const parser = new Parser(BlockService.instance().getNodes(), BlockService.instance().getEdges());
     const x = () => {
       if (this.action !== SimulationActions.stop && parser.hasNext()) {
-        if (this.action === SimulationActions.debug && this.nextBlock) {
-          this.nextBlock = false;
-          parser.next();
+        if (this.action === SimulationActions.debug && this.jumpNextBlock) {
+          this.jumpNextBlock = false;
+          parser.parse();
         } else if (this.action === SimulationActions.continue) {
-          parser.next();
+          parser.parse();
         }
         setTimeout(x, this.speedInMs);
       } else {
