@@ -2,7 +2,7 @@ import { OverlayTrigger } from 'react-bootstrap';
 
 function CustomOverlay({overlay, children}) {
   return (
-    <OverlayTrigger placement="bottom" delay={{ show: 250, hide: 400 }} overlay={overlay}>
+    <OverlayTrigger placement="bottom" delay={{ show: 0, hide: 0 }} overlay={overlay}>
       {children}
     </OverlayTrigger>
   );

@@ -54,10 +54,13 @@ function App() {
   const [defaultNodes, setDefaultNodes] = React.useState(initials.defaultNodes);
   const [defaultEdges, setDefaultEdges] = React.useState(initials.defaultEdges);
   const [inputParams, setInputParams] = React.useState(initials.inputParams);
+  const [isRunning, setRunning] = React.useState(false);
 
   return (
     <AppContext.Provider
       value={{
+        isRunning: () => isRunning,
+        setRunning: setRunning,
         showToast: showToast,
         getTitle: () => title,
         setTitle: setTitle,
