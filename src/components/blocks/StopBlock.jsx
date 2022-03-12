@@ -12,7 +12,7 @@ export function NodeModal({ show, onClose, node }) {
 export function NodeComponent() {
   return (
     <div className="d-flex node node-sentinel">
-      <Handle id="false" type="target" position={Position.Top} className="handle" />
+      <Handle type="target" position={Position.Top} className="handle" />
       <div className="content">STOP</div>
     </div>
   );

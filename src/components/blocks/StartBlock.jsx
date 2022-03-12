@@ -13,7 +13,7 @@ export function NodeComponent() {
   return (
     <div className="d-flex node node-sentinel">
       <div className="content">START</div>
-      <Handle id="false" type="source" position={Position.Bottom} className="handle" />
+      <Handle type="source" position={Position.Bottom} className="handle" />
     </div>
   );
 }
