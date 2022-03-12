@@ -12,8 +12,10 @@ import {
   LoadBlockCreateButton,
   StoreBlockCreateButton,
 } from '../blocks';
+import { AppContext } from '../../pages/App';
 
 function BlockSidebar() {
+  const { isRunning } = React.useContext(AppContext);
   const [sidebarActive, setSidebarActive] = React.useState(false);
   const handleSidebarClose = () => setSidebarActive(false);
   const handleSidebarOpen = () => setSidebarActive(true);
@@ -21,7 +23,7 @@ function BlockSidebar() {
   return (
     <>
       <CustomOverlay overlay={<Tooltip>{T.blockSidebar.tooltip}</Tooltip>}>
-        <Button onClick={handleSidebarOpen}>
+        <Button onClick={handleSidebarOpen} disabled={isRunning()}>
           <FontAwesomeIcon icon={faAdd} />
         </Button>
       </CustomOverlay>

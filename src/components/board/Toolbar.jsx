@@ -1,4 +1,4 @@
-import { faArrowDown, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faForwardStep, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ButtonToolbar, ButtonGroup, Button, Tooltip } from 'react-bootstrap';
@@ -9,13 +9,8 @@ import { AppContext } from '../../pages/App';
 
 const Toolbar = React.forwardRef(function (props, ref) {
   const { setRunning, isRunning } = React.useContext(AppContext);
-
-  function handlePlayBtn() {
-    setRunning(true);
-  }
-  function handleStopBtn() {
-    setRunning(false);
-  }
+  const handlePlayBtn = () => setRunning(true);
+  const handleStopBtn = () => setRunning(false);
 
   return (
     <div ref={ref} className="overflow-auto">
@@ -24,6 +19,12 @@ const Toolbar = React.forwardRef(function (props, ref) {
           <CustomOverlay overlay={<Tooltip>Run/Debug</Tooltip>}>
             <Button variant="success" disabled={isRunning()} onClick={handlePlayBtn}>
               <FontAwesomeIcon icon={faPlay} />
+            </Button>
+          </CustomOverlay>
+
+          <CustomOverlay overlay={<Tooltip>Continue</Tooltip>}>
+            <Button variant="secondary" disabled={!isRunning()}>
+              <FontAwesomeIcon icon={faForwardStep} />
             </Button>
           </CustomOverlay>
 

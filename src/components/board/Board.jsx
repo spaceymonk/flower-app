@@ -16,6 +16,8 @@ const alertUser = (e) => {
 function Board({ height }) {
   BlockService.instance(useReactFlow());
 
+  const { isRunning } = React.useContext(AppContext);
+
   const [minimapIcon, setMinimapIcon] = React.useState(<FontAwesomeIcon icon={filledMap} />);
   const [minimapToggled, setMinimapToggled] = React.useState(true);
   const handleMinimapVisibility = () => {
@@ -40,6 +42,22 @@ function Board({ height }) {
     };
   }, []);
 
+  const [nodesDraggable, setNodesDraggable] = React.useState(true);
+  const [nodesConnectable, setNodesConnectable] = React.useState(true);
+  const [elementsSelectable, setElementsSelectable] = React.useState(true);
+
+  React.useEffect(() => {
+    if (isRunning()) {
+      setNodesDraggable(false);
+      setNodesConnectable(false);
+      setElementsSelectable(false);
+    } else {
+      setNodesDraggable(true);
+      setNodesConnectable(true);
+      setElementsSelectable(true);
+    }
+  }, [isRunning]);
+
   const { getDefaultEdges, getDefaultNodes } = React.useContext(AppContext);
   return (
     <>
@@ -52,6 +70,9 @@ function Board({ height }) {
           onNodeDoubleClick={handleNodeDoubleClick}
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
+          nodesDraggable={nodesDraggable}
+          nodesConnectable={nodesConnectable}
+          elementsSelectable={elementsSelectable}
         >
           <Background />
           <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />

@@ -4,9 +4,11 @@ import React from 'react';
 import { Button, Offcanvas, Tooltip } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
+import { AppContext } from '../../pages/App';
 
 
 function WatchSidebar() {
+  const {isRunning} = React.useContext(AppContext);
   const [sidebarActive, setSidebarActive] = React.useState(false);
   const handleSidebarClose = () => setSidebarActive(false);
   const handleSidebarOpen = () => setSidebarActive(true);
@@ -14,7 +16,7 @@ function WatchSidebar() {
   return (
     <>
       <CustomOverlay placement="bottom" overlay={<Tooltip>{T.watchesSidebar.tooltip}</Tooltip>}>
-        <Button onClick={handleSidebarOpen}>
+        <Button onClick={handleSidebarOpen} disabled={!isRunning()}>
           <FontAwesomeIcon icon={faGlasses} />
         </Button>
       </CustomOverlay>
