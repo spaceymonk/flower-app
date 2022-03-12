@@ -1,4 +1,4 @@
-import { faArrowDown, faForwardStep, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faForwardStep, faPause, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ButtonToolbar, ButtonGroup, Button, Tooltip } from 'react-bootstrap';
@@ -6,11 +6,25 @@ import BlockSidebar from './BlockSidebar';
 import WatchSidebar from './WatchSidebar';
 import CustomOverlay from '../common/CustomOverlay';
 import { AppContext } from '../../pages/App';
+import { SimulationService } from '../../services/SimulationService';
 
 const Toolbar = React.forwardRef(function (props, ref) {
   const { setRunning, isRunning } = React.useContext(AppContext);
-  const handlePlayBtn = () => setRunning(true);
-  const handleStopBtn = () => setRunning(false);
+  const [contToggled, setContToggle] = React.useState(false);
+  
+  const handlePlayBtn = () => {
+    setRunning(true);
+    SimulationService.instance().start(() => setRunning(false));
+  };
+  const handleStopBtn = () => {
+    setRunning(false);
+    SimulationService.instance().stop();
+  };
+  const handleContinueBtn = () => {
+    setContToggle(!contToggled);
+    SimulationService.instance().continue();
+  };
+  const handleNextBtn = () => SimulationService.instance().next();
 
   return (
     <div ref={ref} className="overflow-auto">
@@ -22,14 +36,14 @@ const Toolbar = React.forwardRef(function (props, ref) {
             </Button>
           </CustomOverlay>
 
-          <CustomOverlay overlay={<Tooltip>Continue</Tooltip>}>
-            <Button variant="secondary" disabled={!isRunning()}>
-              <FontAwesomeIcon icon={faForwardStep} />
+          <CustomOverlay overlay={<Tooltip>Continue/Pause</Tooltip>}>
+            <Button variant="secondary" disabled={!isRunning()} onClick={handleContinueBtn}>
+              <FontAwesomeIcon icon={contToggled ? faPause : faForwardStep} />
             </Button>
           </CustomOverlay>
 
           <CustomOverlay overlay={<Tooltip>Next Block</Tooltip>}>
-            <Button variant="secondary" disabled={!isRunning()}>
+            <Button variant="secondary" disabled={!isRunning()} onClick={handleNextBtn}>
               <FontAwesomeIcon icon={faArrowDown} />
             </Button>
           </CustomOverlay>

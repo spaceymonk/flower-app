@@ -26,4 +26,11 @@ export class BlockService {
   removeNodes(removedNode) {
     this.setNodes((nodes) => nodes.filter((n) => n.id !== removedNode.id));
   }
+
+  findByBlockType(type) {
+    for (let node in this.getNodes) {
+      if (node.type === type) return node;
+    }
+    return null;
+  }
 }
