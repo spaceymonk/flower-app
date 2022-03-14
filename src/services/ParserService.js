@@ -1,4 +1,9 @@
 import { BlockService } from './BlockService';
+import MultipleStartError from './exceptions/MultipleStartError';
+import MultipleStopError from './exceptions/MultipleStopError';
+import NoStartError from './exceptions/NoStartError';
+import NoStopError from './exceptions/NoStopError';
+import NotConnectedError from './exceptions/NotConnectedError';
 
 export class Parser {
   constructor(nodes, edges) {
@@ -15,29 +20,27 @@ export class Parser {
       const n = this.nodes[i];
       if (n.type === 'start') {
         startBlockCount += 1;
-        if (startBlockCount > 1) throw Error('There are multiple START blocks!');
+        if (startBlockCount > 1) throw new MultipleStartError();
         this.setCurrentNode(n);
       }
       if (n.type === 'stop') {
         stopBlockCount += 1;
-        if (stopBlockCount > 1) throw Error('There are multiple STOP blocks!');
+        if (stopBlockCount > 1) throw new MultipleStopError();
       }
 
       if (n.handleBounds.source) {
         const x = this.edges.find((e) => e.source === n.id);
-        if (!x || n.handleBounds.source.length === x.length)
-          throw Error('Source Connectors not matching for block: ' + n.id);
+        if (!x || n.handleBounds.source.length === x.length) throw new NotConnectedError(n.id);
       }
 
       if (n.handleBounds.target) {
         const x = this.edges.find((e) => e.target === n.id);
-        if (!x || n.handleBounds.target.length === x.length)
-          throw Error('Target Connectors not matching for block: ' + n.id);
+        if (!x || n.handleBounds.target.length === x.length) throw new NotConnectedError(n.id);
       }
     }
 
-    if (startBlockCount === 0) throw Error('There are no START block!');
-    if (stopBlockCount === 0) throw Error('There are no STOP block!');
+    if (startBlockCount === 0) throw new NoStartError();
+    if (stopBlockCount === 0) throw new NoStopError();
   }
 
   parse() {

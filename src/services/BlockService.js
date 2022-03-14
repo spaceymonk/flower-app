@@ -31,9 +31,11 @@ export class BlockService {
     this.setNodes((nodes) =>
       nodes.map((n) => {
         // todo
+        n.data.glow = false;
         n.selected = false;
         if (n.id === nodeId) {
-          n.data.selected = true;
+          n.data.glow = true;
+          n.selected = true;
         }
         return n;
       })

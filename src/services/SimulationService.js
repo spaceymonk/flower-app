@@ -1,4 +1,7 @@
+import { toast } from 'react-toastify';
+
 import { BlockService } from './BlockService';
+import NotConnectedError from './exceptions/NotConnectedError';
 import { Parser } from './ParserService';
 
 const SimulationActions = Object.freeze({
@@ -24,13 +27,15 @@ export class SimulationService {
   }
 
   start(callback) {
-    console.log('[simulation] start');
     this.action = SimulationActions.debug;
     this.jumpNextBlock = false;
     try {
       this.run(callback);
     } catch (e) {
-      console.error(e);
+      if (e instanceof NotConnectedError) {
+        BlockService.instance().highlightNode(e.blockId);
+      }
+      toast.error(e.message);
       this.stop();
       callback();
     }
@@ -65,6 +70,7 @@ export class SimulationService {
   run(callback) {
     this.isRunning = true;
     const parser = new Parser(BlockService.instance().getNodes(), BlockService.instance().getEdges());
+    toast.info('Simulation started!');
     const x = () => {
       if (this.action !== SimulationActions.stop && parser.hasNext()) {
         if (this.action === SimulationActions.debug && this.jumpNextBlock) {
@@ -75,8 +81,9 @@ export class SimulationService {
         }
         setTimeout(x, this.speedInMs);
       } else {
-        console.log('[simulation] finish');
+        toast.info('Simulation ended!');
         this.isRunning = false;
+        BlockService.instance().highlightNode();
         callback();
       }
     };

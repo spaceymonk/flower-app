@@ -7,7 +7,7 @@ export class ProjectService {
     return true;
   }
 
-  static save({ title, inputParams }, callback) {
+  static save({ title, inputParams }) {
     const nodes = BlockService.instance().getNodes();
     const edges = BlockService.instance().getEdges();
     window.localStorage.clear();
@@ -15,7 +15,6 @@ export class ProjectService {
     window.localStorage.setItem('edges', JSON.stringify(edges));
     window.localStorage.setItem('title', title);
     window.localStorage.setItem('inputParams', inputParams);
-    if (callback) callback();
   }
 
   static download({ title, inputParams }) {
