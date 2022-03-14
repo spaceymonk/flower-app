@@ -4,17 +4,20 @@ import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
 import { AppContext } from '../../../pages/App';
 import { ProjectService } from '../../../services/ProjectService';
+import { toast } from 'react-toastify';
 
 export function SaveMenuItem() {
-  const { showToast, getTitle, getInputParams } = React.useContext(AppContext);
+  const { getTitle, getInputParams } = React.useContext(AppContext);
   function handleClick() {
-    ProjectService.save(
-      {
+    try {
+      ProjectService.save({
         title: getTitle(),
         inputParams: getInputParams(),
-      },
-      () => showToast({ title: 'Changes Saved!' })
-    );
+      });
+    toast.success('Changes saved!');
+  } catch (e) {
+      toast.error('Something went wrong! ' + e.message);
+    }
   }
   return (
     <NavDropdown.Item onClick={handleClick}>

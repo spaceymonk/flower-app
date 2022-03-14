@@ -2,15 +2,13 @@ import React from 'react';
 import Footer from '../components/common/Footer';
 import MenubarWrapper from '../components/menu/MenubarWrapper';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { ToastContainer } from 'react-bootstrap';
 import Board from '../components/board/Board';
 import Toolbar from '../components/board/Toolbar';
-import { v1 as uuid } from 'uuid';
 import { ReactFlowProvider } from 'react-flow-renderer';
-import Moment from 'moment';
-import T from '../services/MessageConstants';
-import { CustomToast } from '../components/common/CustomToast';
 import generateProjectName from 'project-name-generator';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 class Initial {
   constructor() {
@@ -25,7 +23,6 @@ export const initials = new Initial();
 export const AppContext = React.createContext();
 
 function App() {
-  const [toastList, setToastList] = React.useState([]);
   const [boardHeight, setBoardHeight] = React.useState(1);
   const toolbarRef = React.useRef(null);
   const menubarRef = React.useRef(null);
@@ -41,15 +38,6 @@ function App() {
     );
   }, [windowDim.height]);
 
-  function showToast(toast) {
-    toast.key = uuid();
-    if (!toast.subtitle) toast.subtitle = Moment().format(T.app.dateFormat);
-    setToastList((list) => [...list, toast]);
-  }
-  function closeToast(key) {
-    setToastList((list) => list.filter((t) => t.key !== key));
-  }
-
   const [title, setTitle] = React.useState(initials.title);
   const [defaultNodes, setDefaultNodes] = React.useState(initials.defaultNodes);
   const [defaultEdges, setDefaultEdges] = React.useState(initials.defaultEdges);
@@ -61,7 +49,6 @@ function App() {
       value={{
         isRunning: () => isRunning,
         setRunning: setRunning,
-        showToast: showToast,
         getTitle: () => title,
         setTitle: setTitle,
         getDefaultNodes: () => defaultNodes,
@@ -77,13 +64,18 @@ function App() {
         <Toolbar ref={toolbarRef} />
         <Board height={boardHeight} />
         <Footer ref={footerRef} />
-        <ToastContainer className="pb-5 px-1" position="bottom-center" style={{ zIndex: '1060' }}>
-          {toastList
-            .filter((t, i) => i < 2)
-            .map((t) => (
-              <CustomToast key={t.key} toast={t} onClose={closeToast} />
-            ))}
-        </ToastContainer>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick={true}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          limit={2}
+        />
       </ReactFlowProvider>
     </AppContext.Provider>
   );

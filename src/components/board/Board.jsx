@@ -61,7 +61,7 @@ function Board({ height }) {
   const { getDefaultEdges, getDefaultNodes } = React.useContext(AppContext);
   return (
     <>
-      <div style={{ height: height + 'px', width: '100%' }}>
+      <div id="board" style={{ height: height + 'px', width: '100%' }}>
         <ReactFlow
           defaultNodes={getDefaultNodes()}
           defaultEdges={getDefaultEdges()}
@@ -73,6 +73,7 @@ function Board({ height }) {
           nodesDraggable={nodesDraggable}
           nodesConnectable={nodesConnectable}
           elementsSelectable={elementsSelectable}
+          onPaneClick={() => BlockService.instance().highlightNode()}
         >
           <Background />
           <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />

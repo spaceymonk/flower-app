@@ -5,7 +5,7 @@ import { Handle, Position } from 'react-flow-renderer';
 import { v4 as uuid } from 'uuid';
 import T from '../../services/MessageConstants';
 import { BlockService } from '../../services/BlockService';
-import { BaseNodeModal, BaseCreateButton } from './Block';
+import { BaseNodeModal, BaseCreateButton, BaseNodeComponent } from './Block';
 
 export function NodeModal({ show, onClose, node }) {
   const textAreaRef = React.useRef(null);
@@ -34,11 +34,11 @@ export function NodeModal({ show, onClose, node }) {
   );
 }
 
-export function NodeComponent({ data }) {
-  const processed = data.text; //todo: handle special keywords by bolding them etc.
+export function NodeComponent(node) {
+  const processed = node.data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <div className="d-flex node">
+    <BaseNodeComponent node={node}>
       <Handle type="target" position={Position.Top} className="handle" />
       <div className="w-100">
         <div className="header">LOAD</div>
@@ -48,7 +48,7 @@ export function NodeComponent({ data }) {
         </div>
       </div>
       <Handle type="source" position={Position.Bottom} className="handle" />
-    </div>
+    </BaseNodeComponent>
   );
 }
 

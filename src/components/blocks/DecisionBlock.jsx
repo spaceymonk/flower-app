@@ -3,7 +3,7 @@ import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuid } from 'uuid';
 import T from '../../services/MessageConstants';
 import { BlockService } from '../../services/BlockService';
-import { BaseCreateButton, BaseNodeModal } from './Block';
+import { BaseCreateButton, BaseNodeComponent, BaseNodeModal } from './Block';
 import { Form } from 'react-bootstrap';
 import { Handle, Position } from 'react-flow-renderer';
 
@@ -34,11 +34,11 @@ export function NodeModal({ show, onClose, node }) {
   );
 }
 
-export function NodeComponent({ data }) {
-  const processed = data.text; //todo: handle special keywords by bolding them etc.
+export function NodeComponent(node) {
+  const processed = node.data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <div className="d-flex node node-decision">
+    <BaseNodeComponent className="node-decision" node={node}>
       <Handle type="target" position={Position.Top} className="handle" />
       <div className="decision-fields false">F</div>
       <div className="w-100">
@@ -51,7 +51,7 @@ export function NodeComponent({ data }) {
       <div className="decision-fields true">T</div>
       <Handle id="false" type="source" position={Position.Left} className="handle" />
       <Handle id="true" type="source" position={Position.Right} className="handle " />
-    </div>
+    </BaseNodeComponent>
   );
 }
 

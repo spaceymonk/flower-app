@@ -6,6 +6,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
 import { AppContext } from '../../pages/App';
+import { toast } from 'react-toastify';
 
 function ProjectTitleModal({ show, onSave, onClose, titleRef, value }) {
   return (
@@ -42,7 +43,7 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef, value }) {
 }
 
 function ProjectTitleButton({ className }) {
-  const { getTitle, setTitle, showToast } = React.useContext(AppContext);
+  const { getTitle, setTitle } = React.useContext(AppContext);
   const titleRef = React.useRef(null);
   const [modalActive, setModalActive] = React.useState(false);
 
@@ -53,10 +54,7 @@ function ProjectTitleButton({ className }) {
       setTitle(titleRef.current.value);
       handleModalClose();
     } else {
-      showToast({
-        title: 'Error',
-        body: T.projectTitle.error.notValid,
-      });
+      toast.error(T.projectTitle.error.notValid);
     }
   };
 

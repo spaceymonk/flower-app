@@ -5,16 +5,22 @@ import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
 import { AppContext, initials } from '../../../pages/App';
 import { BlockService } from '../../../services/BlockService';
 import { ProjectService } from '../../../services/ProjectService';
+import { toast } from 'react-toastify';
 
 export function OpenModal({ show, onClose }) {
-  const { setTitle, setInputParams, showToast } = React.useContext(AppContext);
-  const [file, setFile] = React.useState();
+  const { setTitle, setInputParams } = React.useContext(AppContext);
+  const [file, setFile] = React.useState(null);
 
   function handleOpen() {
-    ProjectService.open({ setTitle, setInputParams }, file);
-    BlockService.instance().fitView();
-    showToast({ title: 'Project opened, do not forget to save!' });
-    onClose();
+    try {
+      ProjectService.open({ setTitle, setInputParams }, file);
+      BlockService.instance().fitView();
+      setFile(null);
+      onClose();
+      toast.success('Project opened, do not forget to save!');
+    } catch (e) {
+      toast.error('File could not be opened!', e.message);
+    }
   }
   function handleRestoreCheckpoint() {
     setTitle(initials.title);

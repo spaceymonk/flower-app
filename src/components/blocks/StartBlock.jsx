@@ -3,18 +3,18 @@ import { faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
 import { v4 as uuid } from 'uuid';
 import T from '../../services/MessageConstants';
-import { BaseCreateButton, BaseNodeModal } from './Block';
+import { BaseCreateButton, BaseNodeComponent, BaseNodeModal } from './Block';
 
 export function NodeModal({ show, onClose, node }) {
   return <BaseNodeModal show={show} onClose={onClose} node={node} />;
 }
 
-export function NodeComponent() {
+export function NodeComponent(node) {
   return (
-    <div className="d-flex node node-sentinel">
+    <BaseNodeComponent className="node-sentinel" node={node}>
       <div className="content">START</div>
       <Handle type="source" position={Position.Bottom} className="handle" />
-    </div>
+    </BaseNodeComponent>
   );
 }
 

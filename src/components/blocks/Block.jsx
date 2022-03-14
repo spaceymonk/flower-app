@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BlockService } from '../../services/BlockService';
 import React from 'react';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { AppContext } from '../../pages/App';
+import { toast } from 'react-toastify';
 
 export function BaseNodeModal({ show, children, onSave, onClose, node }) {
   function handleDelete() {
@@ -15,10 +15,12 @@ export function BaseNodeModal({ show, children, onSave, onClose, node }) {
 
   return (
     <Modal show={show} size="md" centered>
-      {node && <Modal.Header className='overflow-auto'>
-        <strong className='me-5 me-sm-auto'>{node.type.toUpperCase()}</strong>
-        <em className="text-muted text-nowrap small">{node.id}</em>
-      </Modal.Header>}
+      {node && (
+        <Modal.Header className="overflow-auto">
+          <strong className="me-5 me-sm-auto">{node.type.toUpperCase()}</strong>
+          <em className="text-muted text-nowrap small">{node.id}</em>
+        </Modal.Header>
+      )}
       {children && <Modal.Body>{children}</Modal.Body>}
       <Modal.Footer>
         <Button variant="danger" size="sm" onClick={handleDelete} className="me-auto">
@@ -38,8 +40,12 @@ export function BaseNodeModal({ show, children, onSave, onClose, node }) {
   );
 }
 
+export function BaseNodeComponent({ node, ...props }) {
+  const style = node && node.data && node.data.glow ? { filter: 'brightness(.5)' } : {};
+  return <div {...props} className={`d-flex node ${props.className}`} style={style} />;
+}
+
 export function BaseCreateButton({ className, onCreate, title, description, icon }) {
-  const { showToast } = React.useContext(AppContext);
   const { getViewport } = useReactFlow();
 
   function handleClick() {
@@ -48,9 +54,9 @@ export function BaseCreateButton({ className, onCreate, title, description, icon
       const pos = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
       const node = onCreate(pos);
       BlockService.instance().addNodes(node);
-      showToast(T.blocks.toastMsg);
+      toast.success(T.blocks.creationSuccess);
     } catch {
-      showToast({ title: T.blocks.errorTxt });
+      toast.error(T.blocks.creationFailed);
     }
   }
 

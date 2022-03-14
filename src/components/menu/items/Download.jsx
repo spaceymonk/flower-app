@@ -4,6 +4,7 @@ import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
 import { AppContext } from '../../../pages/App';
 import { ProjectService } from '../../../services/ProjectService';
+import { toast } from 'react-toastify';
 
 export function DownloadMenuItem() {
   const { getTitle, getInputParams } = React.useContext(AppContext);
@@ -13,6 +14,7 @@ export function DownloadMenuItem() {
       title: getTitle(),
       inputParams: getInputParams(),
     });
+    toast.info('The download should begin shortly...');
   }
   return (
     <NavDropdown.Item onClick={handleClick}>
