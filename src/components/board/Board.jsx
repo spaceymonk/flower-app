@@ -73,7 +73,9 @@ function Board({ height }) {
           nodesDraggable={nodesDraggable}
           nodesConnectable={nodesConnectable}
           elementsSelectable={elementsSelectable}
-          onPaneClick={() => BlockService.instance().highlightNode()}
+          onPaneClick={() => {
+            if (!isRunning) BlockService.instance().highlightNode();
+          }}
         >
           <Background />
           <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />
