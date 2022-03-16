@@ -16,7 +16,7 @@
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.2",
     "react-dom": "^17.0.2",
-    "react-flow-renderer": "^10.0.0-next.43",
+    "react-flow-renderer": "^10.0.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-toastify": "^8.2.0",
