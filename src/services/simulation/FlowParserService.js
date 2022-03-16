@@ -1,11 +1,11 @@
-import { BlockService } from './BlockService';
-import MultipleStartError from './exceptions/MultipleStartError';
-import MultipleStopError from './exceptions/MultipleStopError';
-import NoStartError from './exceptions/NoStartError';
-import NoStopError from './exceptions/NoStopError';
-import NotConnectedError from './exceptions/NotConnectedError';
+import { BlockService } from '../BlockService';
+import MultipleStartError from '../exceptions/MultipleStartError';
+import MultipleStopError from '../exceptions/MultipleStopError';
+import NoStartError from '../exceptions/NoStartError';
+import NoStopError from '../exceptions/NoStopError';
+import NotConnectedError from '../exceptions/NotConnectedError';
 
-export class Parser {
+export class FlowParser {
   constructor(nodes, edges) {
     this.nodes = nodes;
     this.edges = edges;

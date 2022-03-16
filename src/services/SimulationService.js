@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 import { BlockService } from './BlockService';
 import NotConnectedError from './exceptions/NotConnectedError';
-import { Parser } from './ParserService';
+import { FlowParser } from './simulation/FlowParserService';
 
 const SimulationActions = Object.freeze({
   none: 0,
@@ -69,7 +69,7 @@ export class SimulationService {
 
   run(callback) {
     this.isRunning = true;
-    const parser = new Parser(BlockService.instance().getNodes(), BlockService.instance().getEdges());
+    const parser = new FlowParser(BlockService.instance().getNodes(), BlockService.instance().getEdges());
     toast.info('Simulation started!');
     const x = () => {
       if (this.action !== SimulationActions.stop && parser.hasNext()) {
