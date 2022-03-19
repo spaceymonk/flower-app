@@ -1,3 +1,4 @@
+import InitialValues from '../config/InitialValues';
 import { BlockService } from './BlockService';
 
 export class ProjectService {
@@ -15,6 +16,7 @@ export class ProjectService {
     window.localStorage.setItem('edges', JSON.stringify(edges));
     window.localStorage.setItem('title', title);
     window.localStorage.setItem('inputParams', inputParams);
+    InitialValues.refresh();
   }
 
   static download({ title, inputParams }) {
@@ -34,14 +36,19 @@ export class ProjectService {
     element.click();
   }
 
-  static open({ setTitle, setInputParams }, file) {
+  static load({ setTitle, setInputParams }, edges, nodes, title, inputParams) {
+    BlockService.instance().setEdges(edges);
+    BlockService.instance().setNodes(nodes);
+    setTitle(title);
+    setInputParams(inputParams);
+  }
+
+  static open(setters, file) {
     const handleFileRead = (e) => {
       const content = JSON.parse(fileReader.result);
-      BlockService.instance().setEdges(content.edges);
-      BlockService.instance().setNodes(content.nodes);
-      setTitle(content.title);
-      setInputParams(content.inputParams);
+      ProjectService.load(setters, content.edges, content.nodes, content.title, content.inputParams);
     };
+
     const fileReader = new FileReader();
     fileReader.onloadend = handleFileRead;
     fileReader.readAsText(file);

@@ -25,10 +25,13 @@ export function OpenModal({ show, onClose }) {
     }
   }
   function handleRestoreCheckpoint() {
-    setTitle(InitialValues.title);
-    BlockService.instance().setNodes(InitialValues.defaultNodes);
-    BlockService.instance().setEdges(InitialValues.defaultEdges);
-    setInputParams(InitialValues.inputParams);
+    ProjectService.load(
+      { setTitle, setInputParams },
+      InitialValues.defaultEdges,
+      InitialValues.defaultNodes,
+      InitialValues.title,
+      InitialValues.inputParams
+    );
     BlockService.instance().fitView();
     onClose();
   }
