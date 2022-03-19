@@ -1,38 +1,9 @@
 import React from 'react';
 import { faCode } from '@fortawesome/free-solid-svg-icons';
-import { Form } from 'react-bootstrap';
 import { Handle, Position } from 'react-flow-renderer';
 import { v4 as uuid } from 'uuid';
 import T from '../../services/MessageConstants';
-import { BlockService } from '../../services/BlockService';
-import { BaseNodeModal, BaseCreateButton, BaseNodeComponent } from './Block';
-
-export function NodeModal({ show, onClose, node }) {
-  const textAreaRef = React.useRef(null);
-
-  function handleSave() {
-    node.data.text = textAreaRef.current.value;
-    BlockService.instance().updateNodes(node);
-    onClose();
-  }
-
-  return (
-    <BaseNodeModal show={show} onSave={handleSave} onClose={onClose} node={node}>
-      <Form.Group className="mb-3">
-        <Form.Label>{T.blocks.statement.label}</Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={3}
-          ref={textAreaRef}
-          defaultValue={node?.data?.text}
-          onKeyDown={(event) => {
-            if (event.ctrlKey && event.key === 'Enter') handleSave();
-          }}
-        />
-      </Form.Group>
-    </BaseNodeModal>
-  );
-}
+import { NodeCreateButton, BaseNodeComponent } from './Block';
 
 export function NodeComponent(node) {
   const processed = node.data.text; //todo: handle special keywords by bolding them etc.
@@ -60,7 +31,7 @@ export function CreateButton({ className }) {
   }
 
   return (
-    <BaseCreateButton
+    <NodeCreateButton
       className={className}
       onCreate={create}
       title={T.blocks.statement.title}

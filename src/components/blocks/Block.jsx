@@ -1,51 +1,17 @@
-import { Card, Button, Modal } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import { useReactFlow } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BlockService } from '../../services/BlockService';
 import React from 'react';
-import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
-
-export function BaseNodeModal({ show, children, onSave, onClose, node }) {
-  function handleDelete() {
-    BlockService.instance().removeNodes(node);
-    onClose();
-  }
-
-  return (
-    <Modal show={show} size="md" centered>
-      {node && (
-        <Modal.Header className="overflow-auto">
-          <strong className="me-5 me-sm-auto">{node.type.toUpperCase()}</strong>
-          <em className="text-muted text-nowrap small">{node.id}</em>
-        </Modal.Header>
-      )}
-      {children && <Modal.Body>{children}</Modal.Body>}
-      <Modal.Footer>
-        <Button variant="danger" size="sm" onClick={handleDelete} className="me-auto">
-          <FontAwesomeIcon icon={faTrashCan} className="me-2" />
-          {T.app.deleteTxt}
-        </Button>
-        {onSave && (
-          <Button variant="success" size="sm" onClick={onSave}>
-            <FontAwesomeIcon icon={faSave} className="me-2" /> {T.app.saveTxt}
-          </Button>
-        )}
-        <Button variant="secondary" size="sm" onClick={onClose}>
-          <FontAwesomeIcon icon={faCancel} className="me-2" /> {T.app.cancelTxt}
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
 
 export function BaseNodeComponent({ node, ...props }) {
   const style = node && node.data && node.data.glow ? { filter: 'brightness(.5)' } : {};
   return <div {...props} className={`d-flex node ${props.className}`} style={style} />;
 }
 
-export function BaseCreateButton({ className, onCreate, title, description, icon }) {
+export function NodeCreateButton({ className, onCreate, title, description, icon }) {
   const { getViewport } = useReactFlow();
 
   function handleClick() {

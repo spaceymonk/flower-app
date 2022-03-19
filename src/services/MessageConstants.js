@@ -11,15 +11,14 @@ const T = {
     defaultTxt: 'Enter some text...',
     creationFailed: 'Block creation failed!',
     creationSuccess: 'Block placed on the leftmost corner.',
+    label: 'Code',
     statement: {
       title: 'Statement Block',
       description: 'A statement block lets you write any number of data definitions, declarations, and statements.',
-      label: 'Statements:',
     },
     decision: {
       title: 'Decision Block',
       description: 'A decision block lets you define alternative flows for the main flow.',
-      label: 'Expression:',
     },
     start: {
       title: 'Start Block',
@@ -33,12 +32,10 @@ const T = {
     load: {
       title: 'Load Block',
       description: 'A load block lets you get input from the user.',
-      label: 'Variables:',
     },
     store: {
       title: 'Store Block',
       description: 'A store block lets you print out the given variables to display.',
-      label: 'Variables:',
     },
   },
   projectTitle: {

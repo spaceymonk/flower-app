@@ -95,3 +95,16 @@
   font-weight: bold;
   text-align: center;
 }
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    MODAL                                   */
+/* -------------------------------------------------------------------------- */
+
+.node-modal {
+  font-family: 'Roboto Mono', monospace;
+
+}
+.node-modal textarea {
+  height: 15vh!important;
+}
