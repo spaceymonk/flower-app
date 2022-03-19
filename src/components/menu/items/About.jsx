@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
 import { Modal, Button, Container } from 'react-bootstrap';
+import useToggle from '../../../hooks/useToggle';
 
 export function AboutModal({ show, onClose }) {
   return (
@@ -39,11 +40,11 @@ export function AboutModal({ show, onClose }) {
 }
 
 export function AboutMenuItem() {
-  const [show, setShow] = React.useState(false);
+  const [show, toggleShow] = useToggle();
   return (
     <>
-      <AboutModal show={show} onClose={() => setShow(false)} />
-      <NavDropdown.Item onClick={() => setShow(true)}>
+      <AboutModal show={show} onClose={toggleShow} />
+      <NavDropdown.Item onClick={toggleShow}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faStar} /> About
       </NavDropdown.Item>
     </>

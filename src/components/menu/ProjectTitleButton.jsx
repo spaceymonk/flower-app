@@ -7,6 +7,7 @@ import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
 import { AppContext } from '../../pages/App';
 import { toast } from 'react-toastify';
+import useToggle from '../../hooks/useToggle';
 
 function ProjectTitleModal({ show, onSave, onClose, titleRef, value }) {
   return (
@@ -45,14 +46,11 @@ function ProjectTitleModal({ show, onSave, onClose, titleRef, value }) {
 function ProjectTitleButton({ className }) {
   const { getTitle, setTitle } = React.useContext(AppContext);
   const titleRef = React.useRef(null);
-  const [modalActive, setModalActive] = React.useState(false);
-
-  const handleModalClose = () => setModalActive(false);
-  const handleModalOpen = () => setModalActive(true);
+  const [showModal, toggleModal] = useToggle();
   const handleSave = () => {
     if (ProjectService.validateTitle(titleRef.current.value)) {
       setTitle(titleRef.current.value);
-      handleModalClose();
+      toggleModal();
     } else {
       toast.error(T.projectTitle.error.notValid);
     }
@@ -61,10 +59,10 @@ function ProjectTitleButton({ className }) {
   return (
     <>
       <ProjectTitleModal
-        show={modalActive}
+        show={showModal}
         titleRef={titleRef}
         onSave={handleSave}
-        onClose={handleModalClose}
+        onClose={toggleModal}
         value={getTitle()}
       />
       <CustomOverlay overlay={<Tooltip>{T.projectTitle.tooltip}</Tooltip>}>
@@ -72,7 +70,7 @@ function ProjectTitleButton({ className }) {
           variant="outline-dark"
           size="sm"
           className={`border-0 text-truncate ${className}`}
-          onClick={handleModalOpen}
+          onClick={toggleModal}
           style={{ maxWidth: '80%' }}
         >
           {getTitle()}

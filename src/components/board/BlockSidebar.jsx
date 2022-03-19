@@ -13,22 +13,21 @@ import {
   StoreBlockCreateButton,
 } from '../blocks';
 import { AppContext } from '../../pages/App';
+import useToggle from '../../hooks/useToggle';
 
 function BlockSidebar() {
   const { isRunning } = React.useContext(AppContext);
-  const [sidebarActive, setSidebarActive] = React.useState(false);
-  const handleSidebarClose = () => setSidebarActive(false);
-  const handleSidebarOpen = () => setSidebarActive(true);
+  const [showSidebar, toggleSidebar] = useToggle();
 
   return (
     <>
       <CustomOverlay overlay={<Tooltip>{T.blockSidebar.tooltip}</Tooltip>}>
-        <Button onClick={handleSidebarOpen} disabled={isRunning()}>
+        <Button onClick={toggleSidebar} disabled={isRunning()}>
           <FontAwesomeIcon icon={faAdd} />
         </Button>
       </CustomOverlay>
 
-      <Offcanvas show={sidebarActive} onHide={handleSidebarClose} placement="end">
+      <Offcanvas show={showSidebar} onHide={toggleSidebar} placement="end">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>{T.blockSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>

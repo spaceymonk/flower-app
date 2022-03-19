@@ -2,6 +2,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Table, Button } from 'react-bootstrap';
+import useToggle from '../../../hooks/useToggle';
 
 export function StatisticsModal({ show, onClose }) {
   return (
@@ -26,12 +27,11 @@ export function StatisticsModal({ show, onClose }) {
 }
 
 export const StatisticsMenuItem = () => {
-  const [show, setShow] = React.useState(false);
-
+  const [show, toggleShow] = useToggle();
   return (
     <>
-      <StatisticsModal show={show} onClose={() => setShow(false)} />
-      <NavDropdown.Item onClick={() => setShow(true)}>
+      <StatisticsModal show={show} onClose={toggleShow} />
+      <NavDropdown.Item onClick={toggleShow}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faInfoCircle} /> Statistics
       </NavDropdown.Item>
     </>

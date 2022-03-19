@@ -2,10 +2,12 @@ import { faFolder, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
-import { AppContext, initials } from '../../../pages/App';
+import { AppContext } from '../../../pages/App';
+import InitialValues from '../../../config/InitialValues';
 import { BlockService } from '../../../services/BlockService';
 import { ProjectService } from '../../../services/ProjectService';
 import { toast } from 'react-toastify';
+import useToggle from '../../../hooks/useToggle';
 
 export function OpenModal({ show, onClose }) {
   const { setTitle, setInputParams } = React.useContext(AppContext);
@@ -23,10 +25,10 @@ export function OpenModal({ show, onClose }) {
     }
   }
   function handleRestoreCheckpoint() {
-    setTitle(initials.title);
-    BlockService.instance().setNodes(initials.defaultNodes);
-    BlockService.instance().setEdges(initials.defaultEdges);
-    setInputParams(initials.inputParams);
+    setTitle(InitialValues.title);
+    BlockService.instance().setNodes(InitialValues.defaultNodes);
+    BlockService.instance().setEdges(InitialValues.defaultEdges);
+    setInputParams(InitialValues.inputParams);
     BlockService.instance().fitView();
     onClose();
   }
@@ -66,11 +68,11 @@ export function OpenModal({ show, onClose }) {
 }
 
 export function OpenMenuItem() {
-  const [show, setShow] = React.useState(false);
+  const [show, toggleShow] = useToggle();
   return (
     <>
-      <OpenModal show={show} onClose={() => setShow(false)} />
-      <NavDropdown.Item onClick={() => setShow(true)}>
+      <OpenModal show={show} onClose={toggleShow} />
+      <NavDropdown.Item onClick={toggleShow}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faFolder} /> Open
       </NavDropdown.Item>
     </>

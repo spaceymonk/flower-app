@@ -2,6 +2,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Button } from 'react-bootstrap';
+import useToggle from '../../../hooks/useToggle';
 
 export const FindModal = ({ show, onClose }) => {
   function handleFind() {}
@@ -29,11 +30,11 @@ export const FindModal = ({ show, onClose }) => {
 };
 
 export function FindMenuItem() {
-  const [show, setShow] = React.useState(false);
+  const [show, toggleShow] = useToggle();
   return (
     <>
-      <FindModal show={show} onClose={() => setShow(false)} />
-      <NavDropdown.Item onClick={() => setShow(true)}>
+      <FindModal show={show} onClose={toggleShow} />
+      <NavDropdown.Item onClick={toggleShow}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faSearch} /> Find
       </NavDropdown.Item>
     </>

@@ -2,6 +2,7 @@ import { faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
+import useToggle from '../../../hooks/useToggle';
 import { AppContext } from '../../../pages/App';
 
 export function InputSelectModal({ show, onClose }) {
@@ -48,11 +49,11 @@ export function InputSelectModal({ show, onClose }) {
 }
 
 export function InputSelectMenuItem() {
-  const [show, setShow] = React.useState(false);
+  const [show, toggleShow] = useToggle();
   return (
     <>
-      <InputSelectModal show={show} onClose={() => setShow(false)} />
-      <NavDropdown.Item onClick={() => setShow(true)}>
+      <InputSelectModal show={show} onClose={toggleShow} />
+      <NavDropdown.Item onClick={toggleShow}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faEnvelopeOpenText} /> Input Parameters
       </NavDropdown.Item>
     </>

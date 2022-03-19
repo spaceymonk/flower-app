@@ -6,24 +6,23 @@ import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
 import { AppContext } from '../../pages/App';
 import { v1 as uuid } from 'uuid';
+import useToggle from '../../hooks/useToggle';
 
 function WatchSidebar() {
   const { isRunning } = React.useContext(AppContext);
-  const [sidebarActive, setSidebarActive] = React.useState(false);
-  const handleSidebarClose = () => setSidebarActive(false);
-  const handleSidebarOpen = () => setSidebarActive(true);
+  const [showSidbar, toggleSidebar] = useToggle();
 
   const [watchList, setWatchList] = React.useState([]);
 
   return (
     <>
       <CustomOverlay placement="bottom" overlay={<Tooltip>{T.watchesSidebar.tooltip}</Tooltip>}>
-        <Button onClick={handleSidebarOpen} disabled={!isRunning()}>
+        <Button onClick={toggleSidebar} disabled={!isRunning()}>
           <FontAwesomeIcon icon={faGlasses} />
         </Button>
       </CustomOverlay>
 
-      <Offcanvas show={sidebarActive} onHide={handleSidebarClose} placement="end">
+      <Offcanvas show={showSidbar} onHide={toggleSidebar} placement="end">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>{T.watchesSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>

@@ -2,6 +2,7 @@ import { faFileExport } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Button, Container } from 'react-bootstrap';
+import useToggle from '../../../hooks/useToggle';
 
 export function ExportModal({ show, onClose }) {
   function handleExport() { }
@@ -29,11 +30,11 @@ export function ExportModal({ show, onClose }) {
 }
 
 export function ExportMenuItem() {
-  const [show, setShow] = React.useState(false);
+  const [show, toggleShow] = useToggle();
   return (
     <>
-      <ExportModal show={show} onClose={() => setShow(false)} />
-      <NavDropdown.Item onClick={() => setShow(true)}>
+      <ExportModal show={show} onClose={toggleShow} />
+      <NavDropdown.Item onClick={toggleShow}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faFileExport} /> Export
       </NavDropdown.Item>
     </>
