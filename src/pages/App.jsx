@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import useAlert from '../hooks/useAlert';
 import { AppProvider } from '../providers/AppProvider';
+import { SimulationProvider } from '../providers/SimulationProvider';
 
 function App() {
   const [boardHeight, setBoardHeight] = React.useState(1);
@@ -30,24 +31,26 @@ function App() {
 
   return (
     <AppProvider>
-      <ReactFlowProvider>
-        <MenubarWrapper ref={menubarRef} />
-        <Toolbar ref={toolbarRef} />
-        <Board height={boardHeight} />
-        <Footer ref={footerRef} />
-        <ToastContainer
-          position="bottom-center"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          limit={2}
-        />
-      </ReactFlowProvider>
+      <SimulationProvider>
+        <ReactFlowProvider>
+          <MenubarWrapper ref={menubarRef} />
+          <Toolbar ref={toolbarRef} />
+          <Board height={boardHeight} />
+          <Footer ref={footerRef} />
+          <ToastContainer
+            position="bottom-center"
+            autoClose={5000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick={true}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            limit={2}
+          />
+        </ReactFlowProvider>
+      </SimulationProvider>
     </AppProvider>
   );
 }

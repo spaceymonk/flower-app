@@ -5,11 +5,11 @@ import { ButtonToolbar, ButtonGroup, Button, Tooltip } from 'react-bootstrap';
 import BlockSidebar from './BlockSidebar';
 import WatchSidebar from './WatchSidebar';
 import CustomOverlay from '../common/CustomOverlay';
-import { AppContext } from '../../providers/AppProvider';
 import { SimulationService } from '../../services/SimulationService';
+import { SimulationContext } from '../../providers/SimulationProvider';
 
 const Toolbar = React.forwardRef(function (props, ref) {
-  const { setRunning, isRunning } = React.useContext(AppContext);
+  const { setRunning, isRunning } = React.useContext(SimulationContext);
   const [contToggled, setContToggle] = React.useState(false);
 
   const handlePlayBtn = () => {

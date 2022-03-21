@@ -4,12 +4,12 @@ import React from 'react';
 import { Button, Offcanvas, Tooltip, Table, Form } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
-import { AppContext } from '../../providers/AppProvider';
 import { v1 as uuid } from 'uuid';
 import useToggle from '../../hooks/useToggle';
+import { SimulationContext } from '../../providers/SimulationProvider';
 
 function WatchSidebar() {
-  const { isRunning } = React.useContext(AppContext);
+  const { isRunning } = React.useContext(SimulationContext);
   const [showSidbar, toggleSidebar] = useToggle();
 
   const [watchList, setWatchList] = React.useState([]);

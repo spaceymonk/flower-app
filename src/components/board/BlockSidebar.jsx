@@ -12,11 +12,11 @@ import {
   LoadBlockCreateButton,
   StoreBlockCreateButton,
 } from '../blocks';
-import { AppContext } from '../../providers/AppProvider';
 import useToggle from '../../hooks/useToggle';
+import { SimulationContext } from '../../providers/SimulationProvider';
 
 function BlockSidebar() {
-  const { isRunning } = React.useContext(AppContext);
+  const { isRunning } = React.useContext(SimulationContext);
   const [showSidebar, toggleSidebar] = useToggle();
 
   return (

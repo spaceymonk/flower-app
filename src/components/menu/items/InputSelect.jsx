@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
-import { AppContext } from '../../providers/AppProvider';
+import { AppContext } from '../../../providers/AppProvider';
 
 export function InputSelectModal({ show, onClose }) {
   const { getInputParams, setInputParams } = React.useContext(AppContext);

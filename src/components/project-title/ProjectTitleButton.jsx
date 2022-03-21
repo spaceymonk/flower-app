@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Tooltip } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
-import { AppContext } from '../../pages/App';
+import { AppContext } from '../../providers/AppProvider';
 import { toast } from 'react-toastify';
 import useToggle from '../../hooks/useToggle';
 import ProjectTitleModal from './ProjectTitleModal';
