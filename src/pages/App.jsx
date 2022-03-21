@@ -8,6 +8,7 @@ import { ReactFlowProvider } from 'react-flow-renderer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import useAppContextInitials from '../hooks/project/useAppContextInitials';
+import useAlert from '../hooks/useAlert';
 
 export const AppContext = React.createContext();
 
@@ -28,6 +29,8 @@ function App() {
         toolbarRef.current.clientHeight
     );
   }, [windowDim.height]);
+
+  useAlert();
 
   return (
     <AppContext.Provider value={appContext}>
