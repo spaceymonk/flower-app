@@ -1,9 +1,9 @@
 import { BlockService } from '../BlockService';
-import MultipleStartError from '../exceptions/MultipleStartError';
-import MultipleStopError from '../exceptions/MultipleStopError';
-import NoStartError from '../exceptions/NoStartError';
-import NoStopError from '../exceptions/NoStopError';
-import NotConnectedError from '../exceptions/NotConnectedError';
+import MultipleStartError from '../../exceptions/MultipleStartError';
+import MultipleStopError from '../../exceptions/MultipleStopError';
+import NoStartError from '../../exceptions/NoStartError';
+import NoStopError from '../../exceptions/NoStopError';
+import NotConnectedError from '../../exceptions/NotConnectedError';
 
 export class FlowParser {
   constructor(nodes, edges) {

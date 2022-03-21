@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 
 import { BlockService } from './BlockService';
-import NotConnectedError from './exceptions/NotConnectedError';
+import NotConnectedError from '../exceptions/NotConnectedError';
 import { FlowParser } from './simulation/FlowParserService';
 
 const SimulationActions = Object.freeze({
