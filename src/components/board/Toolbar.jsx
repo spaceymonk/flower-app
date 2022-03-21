@@ -5,31 +5,28 @@ import { ButtonToolbar, ButtonGroup, Button, Tooltip } from 'react-bootstrap';
 import BlockSidebar from './BlockSidebar';
 import WatchSidebar from './WatchSidebar';
 import CustomOverlay from '../common/CustomOverlay';
-import { SimulationService } from '../../services/SimulationService';
 import { SimulationContext } from '../../providers/SimulationProvider';
+import useSimulation from '../../hooks/useSimulation';
+import useToggle from '../../hooks/useToggle';
 
 const Toolbar = React.forwardRef(function (props, ref) {
-  const { setRunning, isRunning } = React.useContext(SimulationContext);
-  const [contToggled, setContToggle] = React.useState(false);
+  const simulation = useSimulation();
+  const { isRunning } = React.useContext(SimulationContext);
+  const [pauseIcon, togglePauseIcon] = useToggle();
 
-  const handlePlayBtn = () => {
-    const cleaner = () => {
-      setRunning(false);
-      setContToggle(false);
-    };
-    setRunning(true);
-    setContToggle(false);
-    SimulationService.instance().start(cleaner);
-  };
-  const handleStopBtn = () => {
-    setRunning(false);
-    SimulationService.instance().stop();
-  };
+  const handlePlayBtn = () => simulation.start();
+  const handleStopBtn = () => simulation.stop();
+  const handleNextBtn = () => simulation.next();
   const handleContinueBtn = () => {
-    setContToggle(!contToggled);
-    SimulationService.instance().continue();
+    togglePauseIcon();
+    simulation.continueFn();
   };
-  const handleNextBtn = () => SimulationService.instance().next();
+
+  React.useEffect(() => {
+    if (!isRunning()) {
+      togglePauseIcon(false);
+    }
+  }, [isRunning, togglePauseIcon]);
 
   return (
     <div ref={ref} className="overflow-auto">
@@ -43,12 +40,12 @@ const Toolbar = React.forwardRef(function (props, ref) {
 
           <CustomOverlay overlay={<Tooltip>Continue/Pause</Tooltip>}>
             <Button variant="secondary" disabled={!isRunning()} onClick={handleContinueBtn}>
-              <FontAwesomeIcon icon={contToggled ? faPause : faForwardStep} />
+              <FontAwesomeIcon icon={pauseIcon ? faPause : faForwardStep} />
             </Button>
           </CustomOverlay>
 
           <CustomOverlay overlay={<Tooltip>Next Block</Tooltip>}>
-            <Button variant="secondary" disabled={!isRunning() || contToggled} onClick={handleNextBtn}>
+            <Button variant="secondary" disabled={!isRunning() || pauseIcon} onClick={handleNextBtn}>
               <FontAwesomeIcon icon={faArrowDown} />
             </Button>
           </CustomOverlay>

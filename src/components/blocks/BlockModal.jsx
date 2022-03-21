@@ -9,7 +9,7 @@ import useBlockService from '../../hooks/useBlockService';
 export function BaseModal({ show, children, onSave, onClose, node }) {
   const { removeNode } = useBlockService();
   function handleDelete() {
-    removeNode(node);
+    removeNode(node); //todo change parameter to id
     onClose();
   }
 

@@ -1,4 +1,3 @@
-import { BlockService } from '../BlockService';
 import MultipleStartError from '../../exceptions/MultipleStartError';
 import MultipleStopError from '../../exceptions/MultipleStopError';
 import NoStartError from '../../exceptions/NoStartError';
@@ -68,7 +67,7 @@ export class FlowParser {
   setCurrentNode(node) {
     if (node) {
       this.currentNode = node;
-      BlockService.instance().highlightNode(node.id);
+      // BlockService.instance().highlightNode(node.id);
     } else {
       throw Error('Next node is not available!');
     }
