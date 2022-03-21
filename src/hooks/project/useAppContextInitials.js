@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
-import InitialValues from '../config/InitialValues';
+import InitialValues from '../../config/InitialValues';
 
-const useAppContext = () => {
+const useAppContextInitials = () => {
   const [title, setTitle] = React.useState(InitialValues.title);
   const [defaultNodes, setDefaultNodes] = React.useState(InitialValues.defaultNodes);
   const [defaultEdges, setDefaultEdges] = React.useState(InitialValues.defaultEdges);
@@ -14,12 +15,10 @@ const useAppContext = () => {
     getTitle: () => title,
     setTitle: setTitle,
     getDefaultNodes: () => defaultNodes,
-    setDefaultNodes: setDefaultNodes,
     getDefaultEdges: () => defaultEdges,
-    setDefaultEdges: setDefaultEdges,
     getInputParams: () => inputParams,
     setInputParams: setInputParams,
   };
 };
 
-export default useAppContext;
+export default useAppContextInitials;

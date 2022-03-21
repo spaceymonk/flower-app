@@ -1,6 +1,6 @@
 import Navbar from '../common/Navbar';
 import {Navbar as BsNavbar} from 'react-bootstrap'
-import ProjectTitleButton from './ProjectTitleButton';
+import ProjectTitleButton from '../project-title/ProjectTitleButton';
 import Menubar from './Menubar';
 import React from 'react';
 

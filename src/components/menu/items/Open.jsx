@@ -2,38 +2,38 @@ import { faFolder, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
-import { AppContext } from '../../../pages/App';
 import InitialValues from '../../../config/InitialValues';
 import { BlockService } from '../../../services/BlockService';
-import { ProjectService } from '../../../services/ProjectService';
 import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
+import useOpen from '../../../hooks/project/useOpen';
+import useLoad from '../../../hooks/project/useLoad';
 
 export function OpenModal({ show, onClose }) {
-  const { setTitle, setInputParams } = React.useContext(AppContext);
   const [file, setFile] = React.useState(null);
+  const open = useOpen();
+  const load = useLoad();
 
   function handleOpen() {
     try {
-      ProjectService.open({ setTitle, setInputParams }, file);
+      open(file);
       BlockService.instance().fitView();
       setFile(null);
       onClose();
       toast.success('Project opened, do not forget to save!');
     } catch (e) {
-      toast.error('File could not be opened!', e.message);
+      toast.error('Project could not open!');
     }
   }
   function handleRestoreCheckpoint() {
-    ProjectService.load(
-      { setTitle, setInputParams },
-      InitialValues.defaultEdges,
-      InitialValues.defaultNodes,
-      InitialValues.title,
-      InitialValues.inputParams
-    );
-    BlockService.instance().fitView();
-    onClose();
+    try {
+      load(InitialValues.defaultEdges, InitialValues.defaultNodes, InitialValues.title, InitialValues.inputParams);
+      BlockService.instance().fitView();
+      onClose();
+      toast.success('Last save restored!');
+    } catch (e) {
+      toast.error('Something went wrong!');
+    }
   }
 
   return (

@@ -2,20 +2,17 @@ import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
-import { AppContext } from '../../../pages/App';
-import { ProjectService } from '../../../services/ProjectService';
 import { toast } from 'react-toastify';
+import useSave from '../../../hooks/project/useSave';
 
 export function SaveMenuItem() {
-  const { getTitle, getInputParams } = React.useContext(AppContext);
+  const save = useSave();
+
   function handleClick() {
     try {
-      ProjectService.save({
-        title: getTitle(),
-        inputParams: getInputParams(),
-      });
-    toast.success('Changes saved!');
-  } catch (e) {
+      save();
+      toast.success('Changes saved!');
+    } catch (e) {
       toast.error('Something went wrong! ' + e.message);
     }
   }

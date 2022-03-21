@@ -7,12 +7,12 @@ import Toolbar from '../components/board/Toolbar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import useAppContext from '../hooks/useAppContext';
+import useAppContextInitials from '../hooks/project/useAppContextInitials';
 
 export const AppContext = React.createContext();
 
 function App() {
-  const appContext = useAppContext();
+  const appContext = useAppContextInitials();
 
   const [boardHeight, setBoardHeight] = React.useState(1);
   const toolbarRef = React.useRef(null);
