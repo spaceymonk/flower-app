@@ -1,15 +1,12 @@
 import React from 'react';
-import ReactFlow, { useReactFlow } from 'react-flow-renderer';
+import ReactFlow from 'react-flow-renderer';
 import { Background, MiniMap, Controls, ControlButton } from 'react-flow-renderer';
 import { nodeTypes, BlockModalContainer } from '../blocks';
-import { BlockService } from '../../services/BlockService';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
 import usePaneLock from '../../hooks/usePaneLock';
 import InitialValues from '../../config/InitialValues';
 
 function Board({ height }) {
-  BlockService.instance(useReactFlow());
-
   const paneLockConfigs = usePaneLock();
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
 

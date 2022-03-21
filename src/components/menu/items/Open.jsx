@@ -3,21 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
 import InitialValues from '../../../config/InitialValues';
-import { BlockService } from '../../../services/BlockService';
 import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
 import useOpen from '../../../hooks/project/useOpen';
 import useLoad from '../../../hooks/project/useLoad';
+import { useReactFlow } from 'react-flow-renderer';
 
 export function OpenModal({ show, onClose }) {
   const [file, setFile] = React.useState(null);
   const open = useOpen();
   const load = useLoad();
+  const { fitView } = useReactFlow();
 
   function handleOpen() {
     try {
       open(file);
-      BlockService.instance().fitView();
+      fitView();
       setFile(null);
       onClose();
       toast.success('Project opened, do not forget to save!');
@@ -28,7 +29,7 @@ export function OpenModal({ show, onClose }) {
   function handleRestoreCheckpoint() {
     try {
       load(InitialValues.defaultEdges, InitialValues.defaultNodes, InitialValues.title, InitialValues.inputParams);
-      BlockService.instance().fitView();
+      fitView();
       onClose();
       toast.success('Last save restored!');
     } catch (e) {

@@ -1,17 +1,20 @@
 import React from 'react';
 import { SimulationContext } from '../providers/SimulationProvider';
-import { BlockService } from '../services/BlockService';
+import useBlockService from './useBlockService';
 
 const usePaneLock = () => {
   const { isRunning } = React.useContext(SimulationContext);
+  const { highlightNode } = useBlockService();
 
   const [nodesDraggable, setNodesDraggable] = React.useState(true);
   const [nodesConnectable, setNodesConnectable] = React.useState(true);
   const [elementsSelectable, setElementsSelectable] = React.useState(true);
 
   const onPaneClick = React.useCallback(() => {
-    if (!isRunning()) BlockService.instance().highlightNode();
-  }, [isRunning]);
+    if (!isRunning()) {
+      highlightNode(); // clear highlighs
+    }
+  }, [highlightNode, isRunning]);
 
   React.useEffect(() => {
     if (isRunning()) {

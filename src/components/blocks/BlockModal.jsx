@@ -1,14 +1,15 @@
 import { Button, Modal } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BlockService } from '../../services/BlockService';
 import React from 'react';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Form, FloatingLabel } from 'react-bootstrap';
+import useBlockService from '../../hooks/useBlockService';
 
 export function BaseModal({ show, children, onSave, onClose, node }) {
+  const { removeNode } = useBlockService();
   function handleDelete() {
-    BlockService.instance().removeNodes(node);
+    removeNode(node);
     onClose();
   }
 
@@ -40,11 +41,12 @@ export function BaseModal({ show, children, onSave, onClose, node }) {
 }
 
 export function BlockModal({ node, onClose, show }) {
+  const { updateNode } = useBlockService();
   const textAreaRef = React.useRef(null);
 
   function handleSave() {
     node.data.text = textAreaRef.current.value;
-    BlockService.instance().updateNodes(node);
+    updateNode(node.id, node);
     onClose();
   }
 
