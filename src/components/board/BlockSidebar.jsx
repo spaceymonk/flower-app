@@ -12,7 +12,7 @@ import {
   LoadBlockCreateButton,
   StoreBlockCreateButton,
 } from '../blocks';
-import { AppContext } from '../../pages/App';
+import { AppContext } from '../../providers/AppProvider';
 import useToggle from '../../hooks/useToggle';
 
 function BlockSidebar() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useReactFlow } from 'react-flow-renderer';
-import { AppContext } from '../../pages/App';
+import { AppContext } from '../../providers/AppProvider';
 
 const useDownload = () => {
   const { getNodes, getEdges } = useReactFlow();

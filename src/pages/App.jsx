@@ -7,14 +7,10 @@ import Toolbar from '../components/board/Toolbar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import useAppContextInitials from '../hooks/project/useAppContextInitials';
 import useAlert from '../hooks/useAlert';
-
-export const AppContext = React.createContext();
+import { AppProvider } from '../providers/AppProvider';
 
 function App() {
-  const appContext = useAppContextInitials();
-
   const [boardHeight, setBoardHeight] = React.useState(1);
   const toolbarRef = React.useRef(null);
   const menubarRef = React.useRef(null);
@@ -33,7 +29,7 @@ function App() {
   useAlert();
 
   return (
-    <AppContext.Provider value={appContext}>
+    <AppProvider>
       <ReactFlowProvider>
         <MenubarWrapper ref={menubarRef} />
         <Toolbar ref={toolbarRef} />
@@ -52,7 +48,7 @@ function App() {
           limit={2}
         />
       </ReactFlowProvider>
-    </AppContext.Provider>
+    </AppProvider>
   );
 }
 

@@ -5,7 +5,7 @@ import { ButtonToolbar, ButtonGroup, Button, Tooltip } from 'react-bootstrap';
 import BlockSidebar from './BlockSidebar';
 import WatchSidebar from './WatchSidebar';
 import CustomOverlay from '../common/CustomOverlay';
-import { AppContext } from '../../pages/App';
+import { AppContext } from '../../providers/AppProvider';
 import { SimulationService } from '../../services/SimulationService';
 
 const Toolbar = React.forwardRef(function (props, ref) {

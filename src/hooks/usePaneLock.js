@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppContext } from '../pages/App';
+import { AppContext } from '../providers/AppProvider';
 import { BlockService } from '../services/BlockService';
 
 const usePaneLock = () => {

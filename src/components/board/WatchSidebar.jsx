@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, Offcanvas, Tooltip, Table, Form } from 'react-bootstrap';
 import T from '../../services/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
-import { AppContext } from '../../pages/App';
+import { AppContext } from '../../providers/AppProvider';
 import { v1 as uuid } from 'uuid';
 import useToggle from '../../hooks/useToggle';
 
