@@ -3,7 +3,7 @@ import Footer from '../components/common/Footer';
 import MenubarWrapper from '../components/menu/MenubarWrapper';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import Board from '../components/board/Board';
-import Toolbar from '../components/board/Toolbar';
+import Toolbar from '../components/toolbar/Toolbar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';

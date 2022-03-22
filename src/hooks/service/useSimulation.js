@@ -1,10 +1,10 @@
 import React from 'react';
 import { useReactFlow } from 'react-flow-renderer';
 import { toast } from 'react-toastify';
-import NotConnectedError from '../exceptions/NotConnectedError';
-import { SimulationContext } from '../providers/SimulationProvider';
+import NotConnectedError from '../../exceptions/NotConnectedError';
+import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
-import { FlowParser } from '../services/simulation/FlowParserService';
+import { FlowParser } from '../../services/simulation/FlowParserService';
 
 const SimulationActions = Object.freeze({
   none: 0,
@@ -94,6 +94,7 @@ const useSimulation = () => {
     run,
     next,
     continueFn,
+    getSpeedInMs: () => speedInMsRef.current,
     setSpeedInMs: (val) => (speedInMsRef.current = val),
   };
 };

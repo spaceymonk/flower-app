@@ -4,7 +4,7 @@ import { useReactFlow } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import createNodeFactory from '../../services/createNodeFactory';
-import useBlockService from '../../hooks/useBlockService';
+import useBlockService from '../../hooks/service/useBlockService';
 
 function BlockCreateButton({ className, title, description, icon, type }) {
   const { getViewport } = useReactFlow();

@@ -1,6 +1,6 @@
 import React from 'react';
 import { SimulationContext } from '../providers/SimulationProvider';
-import useBlockService from './useBlockService';
+import useBlockService from './service/useBlockService';
 
 const usePaneLock = () => {
   const { isRunning } = React.useContext(SimulationContext);

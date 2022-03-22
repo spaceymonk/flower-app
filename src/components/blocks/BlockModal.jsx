@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Form, FloatingLabel } from 'react-bootstrap';
-import useBlockService from '../../hooks/useBlockService';
+import useBlockService from '../../hooks/service/useBlockService';
 
 export function BaseModal({ show, children, onSave, onClose, node }) {
   const { removeNode } = useBlockService();

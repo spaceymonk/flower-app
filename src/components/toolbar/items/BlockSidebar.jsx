@@ -2,8 +2,8 @@ import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Button, Offcanvas, Tooltip } from 'react-bootstrap';
-import T from '../../services/MessageConstants';
-import CustomOverlay from '../common/CustomOverlay';
+import T from '../../../services/MessageConstants';
+import CustomOverlay from '../../common/CustomOverlay';
 import {
   DecisionBlockCreateButton,
   StatementBlockCreateButton,
@@ -11,9 +11,9 @@ import {
   StopBlockCreateButton,
   LoadBlockCreateButton,
   StoreBlockCreateButton,
-} from '../blocks';
-import useToggle from '../../hooks/useToggle';
-import { SimulationContext } from '../../providers/SimulationProvider';
+} from '../../blocks';
+import useToggle from '../../../hooks/useToggle';
+import { SimulationContext } from '../../../providers/SimulationProvider';
 
 function BlockSidebar() {
   const { isRunning } = React.useContext(SimulationContext);
