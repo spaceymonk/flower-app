@@ -1,11 +1,9 @@
 import { AppContext } from '../../providers/AppProvider';
 import InitialValues from '../../config/InitialValues';
 import React from 'react';
-import { useReactFlow } from 'react-flow-renderer';
 
 const useSave = () => {
-  const { getTitle, getInputParams } = React.useContext(AppContext);
-  const { getNodes, getEdges } = useReactFlow();
+  const { getTitle, getInputParams, getNodes, getEdges } = React.useContext(AppContext);
   const save = React.useCallback(() => {
     const nodes = getNodes();
     const edges = getEdges();

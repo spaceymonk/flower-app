@@ -1,10 +1,8 @@
 import React from 'react';
-import { useReactFlow } from 'react-flow-renderer';
 import { AppContext } from '../../providers/AppProvider';
 
 const useDownload = () => {
-  const { getNodes, getEdges } = useReactFlow();
-  const { getTitle, getInputParams } = React.useContext(AppContext);
+  const { getTitle, getInputParams, getNodes, getEdges } = React.useContext(AppContext);
 
   const download = React.useCallback(() => {
     const payload = {

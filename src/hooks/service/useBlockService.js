@@ -1,5 +1,6 @@
 import React from 'react';
-import { useReactFlow } from 'react-flow-renderer';
+import { AppContext } from '../../providers/AppProvider';
+import { applyNodeChanges } from 'react-flow-renderer';
 
 export const GlowTypes = Object.freeze({
   NONE: 0,
@@ -8,7 +9,7 @@ export const GlowTypes = Object.freeze({
 });
 
 const useBlockService = () => {
-  const { setNodes } = useReactFlow();
+  const { setNodes } = React.useContext(AppContext);
 
   const updateNode = React.useCallback(
     (id, updatedNode) => {
@@ -40,11 +41,14 @@ const useBlockService = () => {
     [setNodes]
   );
 
+  const onNodesChange = React.useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
+
   return {
     updateNode,
     addNode,
     removeNode,
     highlightNode,
+    onNodesChange,
   };
 };
 

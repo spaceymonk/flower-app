@@ -1,15 +1,15 @@
 import React from 'react';
-import { useReactFlow } from 'react-flow-renderer';
 import MultipleStartError from '../../exceptions/MultipleStartError';
 import MultipleStopError from '../../exceptions/MultipleStopError';
 import NoStartError from '../../exceptions/NoStartError';
 import NoStopError from '../../exceptions/NoStopError';
 import NotConnectedError from '../../exceptions/NotConnectedError';
+import { AppContext } from '../../providers/AppProvider';
 import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
 
 const useFlowParser = () => {
-  const { getEdges, getNodes } = useReactFlow();
+  const { getEdges, getNodes } = React.useContext(AppContext);
   const { currentBlockRef } = React.useContext(SimulationContext);
   const { highlightNode } = useBlockService();
 
