@@ -1,10 +1,9 @@
 import React from 'react';
-import { useReactFlow } from 'react-flow-renderer';
 import { toast } from 'react-toastify';
 import NotConnectedError from '../../exceptions/NotConnectedError';
 import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
-import { FlowParser } from '../../services/simulation/FlowParserService';
+import useParser from './useParser';
 
 const SimulationActions = Object.freeze({
   none: 0,
@@ -18,9 +17,9 @@ const useSimulation = () => {
   const jumpNextBlockRef = React.useRef(false);
   const actionRef = React.useRef(SimulationActions.none);
 
+  const parser = useParser();
   const { highlightNode } = useBlockService();
   const { isRunning, setRunning } = React.useContext(SimulationContext);
-  const { getNodes, getEdges } = useReactFlow();
 
   const stop = React.useCallback(() => {
     if (isRunning()) {
@@ -31,7 +30,6 @@ const useSimulation = () => {
 
   const run = React.useCallback(() => {
     setRunning(true);
-    const parser = new FlowParser(getNodes(), getEdges());
     toast.info('Simulation started!');
     const simulationLoop = () => {
       console.log('[simualtion] timeout', actionRef.current);
@@ -51,22 +49,24 @@ const useSimulation = () => {
       }
     };
     simulationLoop();
-  }, [getEdges, getNodes, highlightNode, setRunning]);
+  }, [highlightNode, parser, setRunning]);
 
   const start = React.useCallback(() => {
     actionRef.current = SimulationActions.debug;
     jumpNextBlockRef.current = false;
     try {
+      parser.validate();
       run();
     } catch (e) {
       if (e instanceof NotConnectedError) {
         highlightNode(e.blockId, GlowTypes.ERROR);
       }
       toast.error(e.message);
+      console.error(e);
       setRunning(false);
       actionRef.current = SimulationActions.none;
     }
-  }, [highlightNode, run, setRunning]);
+  }, [highlightNode, parser, run, setRunning]);
 
   const next = React.useCallback(() => {
     if (isRunning()) {

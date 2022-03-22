@@ -6,7 +6,7 @@ export const SimulationProvider = (props) => {
   const [running, setRunning] = React.useState(false);
   const [watchList, setWatchList] = React.useState([]);
   const [variableTable, setVariableTable] = React.useState({});
-  const [currentBlock, setCurrentBlock] = React.useState(null);
+  const currentBlockRef = React.useRef(null);
 
   const value = {
     isRunning: () => running,
@@ -15,8 +15,7 @@ export const SimulationProvider = (props) => {
     setWatchList,
     getVariableTable: () => variableTable,
     setVariableTable,
-    getCurrentBlock: () => currentBlock,
-    setCurrentBlock,
+    currentBlockRef,
   };
   return <SimulationContext.Provider value={value}>{props.children}</SimulationContext.Provider>;
 };
