@@ -1,10 +1,10 @@
 import { Card } from 'react-bootstrap';
-import T from '../../services/MessageConstants';
+import T from '../../../services/MessageConstants';
 import { useReactFlow } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import createNodeFactory from '../../services/createNodeFactory';
-import useBlockService from '../../hooks/service/useBlockService';
+import createNode from '../../../services/createNode';
+import useBlockService from '../../../hooks/service/useBlockService';
 
 function BlockCreateButton({ className, title, description, icon, type }) {
   const { getViewport } = useReactFlow();
@@ -14,7 +14,7 @@ function BlockCreateButton({ className, title, description, icon, type }) {
     try {
       const viewport = getViewport();
       const pos = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
-      const node = createNodeFactory(type, pos);
+      const node = createNode(type, pos);
       addNode(node);
       toast.success(T.blocks.creationSuccess);
     } catch {

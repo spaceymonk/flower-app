@@ -1,10 +1,10 @@
 import React from 'react';
 import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
-import T from '../../services/MessageConstants';
-import { BlockNode } from './BlockNode';
 import { Handle, Position } from 'react-flow-renderer';
-import { BlockTypes } from '../../services/createNodeFactory';
-import BlockCreateButton from './BlockCreateButton';
+import T from '../../../services/MessageConstants';
+import { BlockNode } from '../common/BlockNode';
+import { BlockTypes } from '../../../services/createNode';
+import BlockCreateButton from '../common/BlockCreateButton';
 
 export function NodeComponent(node) {
   const processed = node.data.text; //todo: handle special keywords by bolding them etc.

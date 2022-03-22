@@ -8,15 +8,15 @@ import NotConnectedError from '../../exceptions/NotConnectedError';
 import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
 
-const useParser = () => {
+const useFlowParser = () => {
   const { getEdges, getNodes } = useReactFlow();
-  const { setVariableTable, currentBlockRef } = React.useContext(SimulationContext);
+  const { currentBlockRef } = React.useContext(SimulationContext);
   const { highlightNode } = useBlockService();
 
   const updateCurrentBlock = React.useCallback(
     (nextBlock) => {
       currentBlockRef.current = nextBlock;
-      highlightNode(currentBlockRef.current, GlowTypes.NORMAL);
+      highlightNode(currentBlockRef.current.id, GlowTypes.NORMAL);
       console.log('[parser] block to process: ', currentBlockRef.current);
     },
     [currentBlockRef, highlightNode]
@@ -87,4 +87,4 @@ const useParser = () => {
   };
 };
 
-export default useParser;
+export default useFlowParser;

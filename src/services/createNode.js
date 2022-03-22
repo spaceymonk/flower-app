@@ -9,13 +9,14 @@ export const BlockTypes = Object.freeze({
   STOP_BLOCK: 'stop',
 });
 
-function createNodeFactory(type, pos) {
+function createNode(type, pos) {
   return {
     id: uuid(),
     type: type,
     position: pos,
     data: { text: undefined, glow: undefined },
+    parentNode: undefined,
   };
 }
 
-export default createNodeFactory;
+export default createNode;

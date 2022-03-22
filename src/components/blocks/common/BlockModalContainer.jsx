@@ -6,8 +6,8 @@ import {
   StatementBlockModal,
   StoreBlockModal,
   StopBlockModal,
-} from '.';
-import useToggle from '../../hooks/useToggle';
+} from '..';
+import useToggle from '../../../hooks/useToggle';
 
 export function BlockModalContainer({ node }) {
   const [activeModal, setActiveModal] = React.useState('');

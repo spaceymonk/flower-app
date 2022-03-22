@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import NotConnectedError from '../../exceptions/NotConnectedError';
 import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
-import useParser from './useParser';
+import useFlowParser from './useFlowParser';
 
 const SimulationActions = Object.freeze({
   none: 0,
@@ -17,7 +17,7 @@ const useSimulation = () => {
   const jumpNextBlockRef = React.useRef(false);
   const actionRef = React.useRef(SimulationActions.none);
 
-  const parser = useParser();
+  const flowParser = useFlowParser();
   const { highlightNode } = useBlockService();
   const { isRunning, setRunning } = React.useContext(SimulationContext);
 
@@ -33,29 +33,29 @@ const useSimulation = () => {
     toast.info('Simulation started!');
     const simulationLoop = () => {
       console.log('[simualtion] timeout', actionRef.current);
-      if (actionRef.current === SimulationActions.stop || !parser.hasNext()) {
+      if (actionRef.current === SimulationActions.stop || !flowParser.hasNext()) {
         highlightNode();
         setRunning(false);
         actionRef.current = SimulationActions.none;
         toast.info('Simulation ended!');
       } else {
         if (actionRef.current === SimulationActions.continue) {
-          parser.parse();
+          flowParser.parse();
         } else if (actionRef.current === SimulationActions.debug && jumpNextBlockRef.current) {
           jumpNextBlockRef.current = false;
-          parser.parse();
+          flowParser.parse();
         }
         setTimeout(simulationLoop, speedInMsRef.current);
       }
     };
     simulationLoop();
-  }, [highlightNode, parser, setRunning]);
+  }, [highlightNode, flowParser, setRunning]);
 
   const start = React.useCallback(() => {
     actionRef.current = SimulationActions.debug;
     jumpNextBlockRef.current = false;
     try {
-      parser.validate();
+      flowParser.validate();
       run();
     } catch (e) {
       if (e instanceof NotConnectedError) {
@@ -66,7 +66,7 @@ const useSimulation = () => {
       setRunning(false);
       actionRef.current = SimulationActions.none;
     }
-  }, [highlightNode, parser, run, setRunning]);
+  }, [highlightNode, flowParser, run, setRunning]);
 
   const next = React.useCallback(() => {
     if (isRunning()) {

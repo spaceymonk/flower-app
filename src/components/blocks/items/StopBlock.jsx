@@ -1,10 +1,10 @@
 import React from 'react';
 import { faCircleStop } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
-import T from '../../services/MessageConstants';
-import { BlockNode } from './BlockNode';
-import BlockCreateButton from './BlockCreateButton';
-import { BlockTypes } from '../../services/createNodeFactory';
+import T from '../../../services/MessageConstants';
+import { BlockNode } from '../common/BlockNode';
+import { BlockTypes } from '../../../services/createNode';
+import BlockCreateButton from '../common/BlockCreateButton';
 
 export function NodeComponent(node) {
   return (
