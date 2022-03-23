@@ -24,18 +24,21 @@ const useFlowParser = () => {
 
   const next = React.useCallback(
     (handleId) => {
-      const edge = getEdges().find((e) => e.source === currentBlockRef.current.id);
+      const nodes = getNodes();
+      const edges = getEdges();
+      const edge = edges.find((e) => e.source === currentBlockRef.current.id);
       let node;
-      if (handleId) node = getNodes().find((n) => edge.handleId === handleId && n.id === edge.target);
-      else node = getNodes().find((n) => n.id === edge.target);
+      if (handleId) node = nodes.find((n) => edge.handleId === handleId && n.id === edge.target);
+      else node = nodes.find((n) => n.id === edge.target);
       return node;
     },
     [currentBlockRef, getEdges, getNodes]
   );
 
   const hasNext = React.useCallback(() => {
-    for (let i = 0; i < getEdges().length; ++i) {
-      const e = getEdges()[i];
+    const edges = getEdges();
+    for (let i = 0; i < edges.length; ++i) {
+      const e = edges[i];
       if (e.source === currentBlockRef.current.id) return true;
     }
     return false;
@@ -44,13 +47,16 @@ const useFlowParser = () => {
   const validate = React.useCallback(() => {
     let startBlockCount = 0;
     let stopBlockCount = 0;
+    const nodes = getNodes();
+    const edges = getEdges();
+    let startBlock = null;
 
     for (let i = 0; i < getNodes().length; i++) {
-      const n = getNodes()[i];
+      const n = nodes[i];
       if (n.type === 'start') {
         startBlockCount += 1;
         if (startBlockCount > 1) throw new MultipleStartError();
-        updateCurrentBlock(n);
+        startBlock = n;
       }
       if (n.type === 'stop') {
         stopBlockCount += 1;
@@ -58,18 +64,19 @@ const useFlowParser = () => {
       }
 
       if (n.handleBounds.source) {
-        const x = getEdges().find((e) => e.source === n.id);
+        const x = edges.find((e) => e.source === n.id);
         if (!x || n.handleBounds.source.length === x.length) throw new NotConnectedError(n.id);
       }
 
       if (n.handleBounds.target) {
-        const x = getEdges().find((e) => e.target === n.id);
+        const x = edges.find((e) => e.target === n.id);
         if (!x || n.handleBounds.target.length === x.length) throw new NotConnectedError(n.id);
       }
     }
-
     if (startBlockCount === 0) throw new NoStartError();
     if (stopBlockCount === 0) throw new NoStopError();
+    
+    if (startBlock) updateCurrentBlock(startBlock);
   }, [getNodes, updateCurrentBlock, getEdges]);
 
   const parse = React.useCallback(() => {
