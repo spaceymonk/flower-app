@@ -4,16 +4,14 @@ import { Background, MiniMap, Controls, ControlButton } from 'react-flow-rendere
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
 import usePaneLock from '../../hooks/usePaneLock';
-import useBlockService from '../../hooks/service/useBlockService.js'
-import useEdgeService from '../../hooks/service/useEdgeService.js'
+import useEdgeService from '../../hooks/service/useEdgeService.js';
 import { AppContext } from '../../providers/AppProvider';
 
 function Board({ height }) {
   const paneLockConfigs = usePaneLock();
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
-  const { getNodes, getEdges } = React.useContext(AppContext);
-  const { onNodesChange } = useBlockService();
-  const { onEdgesChange, onConnect } = useEdgeService();
+  const { getNodes, getEdges, onNodesChange, onEdgesChange } = React.useContext(AppContext);
+  const { onConnect } = useEdgeService();
 
   const [dblClkNode, setDblClkNode] = React.useState(null);
   const handleNodeDoubleClick = (event, node) => setDblClkNode(node);
@@ -30,7 +28,7 @@ function Board({ height }) {
           fitView={true}
           nodeTypes={nodeTypes}
           onNodeDoubleClick={handleNodeDoubleClick}
-          connectionLineType='smoothstep'
+          connectionLineType="smoothstep"
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
           {...paneLockConfigs}

@@ -7,11 +7,13 @@ import NotConnectedError from '../../exceptions/NotConnectedError';
 import { AppContext } from '../../providers/AppProvider';
 import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
+import useEdgeService from './useEdgeService';
 
 const useFlowParser = () => {
   const { getEdges, getNodes } = React.useContext(AppContext);
   const { currentBlockRef } = React.useContext(SimulationContext);
   const { highlightNode } = useBlockService();
+  const { getConnectedEdges } = useEdgeService();
 
   const updateCurrentBlock = React.useCallback(
     (nextBlock) => {
@@ -48,36 +50,28 @@ const useFlowParser = () => {
     let startBlockCount = 0;
     let stopBlockCount = 0;
     const nodes = getNodes();
-    const edges = getEdges();
     let startBlock = null;
 
     for (let i = 0; i < getNodes().length; i++) {
       const n = nodes[i];
       if (n.type === 'start') {
         startBlockCount += 1;
-        if (startBlockCount > 1) throw new MultipleStartError();
+        if (startBlockCount > 1) throw new MultipleStartError([startBlock.id, n.id]);
         startBlock = n;
       }
       if (n.type === 'stop') {
         stopBlockCount += 1;
         if (stopBlockCount > 1) throw new MultipleStopError();
       }
-
-      if (n.handleBounds.source) {
-        const x = edges.find((e) => e.source === n.id);
-        if (!x || n.handleBounds.source.length === x.length) throw new NotConnectedError(n.id);
-      }
-
-      if (n.handleBounds.target) {
-        const x = edges.find((e) => e.target === n.id);
-        if (!x || n.handleBounds.target.length === x.length) throw new NotConnectedError(n.id);
+      if (getConnectedEdges(n.id).length === 0) {
+        throw new NotConnectedError(n.id);
       }
     }
     if (startBlockCount === 0) throw new NoStartError();
     if (stopBlockCount === 0) throw new NoStopError();
-    
+
     if (startBlock) updateCurrentBlock(startBlock);
-  }, [getNodes, updateCurrentBlock, getEdges]);
+  }, [getNodes, updateCurrentBlock, getConnectedEdges]);
 
   const parse = React.useCallback(() => {
     console.log('[parser] processing: ', currentBlockRef.current);

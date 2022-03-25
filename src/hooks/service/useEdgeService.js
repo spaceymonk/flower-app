@@ -1,12 +1,11 @@
 import React from 'react';
 import { AppContext } from '../../providers/AppProvider';
-import { addEdge, applyEdgeChanges } from 'react-flow-renderer';
+import { addEdge } from 'react-flow-renderer';
 import createEdge from '../../services/createEdge';
 
 const useEdgeService = () => {
-  const { setEdges } = React.useContext(AppContext);
-  
-  const onEdgesChange = React.useCallback((changes) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
+  const { setEdges, getEdges } = React.useContext(AppContext);
+
   const onConnect = React.useCallback(
     (connection) => {
       return setEdges((eds) => {
@@ -24,9 +23,14 @@ const useEdgeService = () => {
     [setEdges]
   );
 
+  const getConnectedEdges = React.useCallback((nodeId) => {
+    const edges = getEdges();
+    return edges.filter((e) => e.source === nodeId || e.target === nodeId);
+  }, [getEdges]);
+
   return {
-    onEdgesChange,
     onConnect,
+    getConnectedEdges
   };
 };
 

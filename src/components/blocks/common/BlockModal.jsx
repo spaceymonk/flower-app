@@ -9,8 +9,7 @@ export function BlockModal({ node, onClose, show }) {
   const textAreaRef = React.useRef(null);
 
   function handleSave() {
-    node.data.text = textAreaRef.current.value;
-    updateNode(node.id, node);
+    updateNode(node.id, { text: textAreaRef.current.value });
     onClose();
   }
 

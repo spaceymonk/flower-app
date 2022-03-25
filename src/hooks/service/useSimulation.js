@@ -1,5 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import MultipleStartError from '../../exceptions/MultipleStartError';
+import MultipleStopError from '../../exceptions/MultipleStopError';
 import NotConnectedError from '../../exceptions/NotConnectedError';
 import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
@@ -60,6 +62,8 @@ const useSimulation = () => {
     } catch (e) {
       if (e instanceof NotConnectedError) {
         highlightNode(e.blockId, GlowTypes.ERROR);
+      } else if (e instanceof MultipleStartError || e instanceof MultipleStopError) {
+        highlightNode(e.blockIdList, GlowTypes.ERROR);
       }
       toast.error(e.message);
       console.error(e);
