@@ -12,41 +12,43 @@ const useEdgeService = () => {
         return;
       }
       return setEdges((eds) => {
-        const duplicateEdge = eds.find(
-          (e) => e.source === connection.source && connection.sourceHandle === e.sourceHandle
-        );
-        if (duplicateEdge) {
-          return eds;
-        } else {
-          const edge = createEdge(connection);
-          return addEdge(edge, eds);
+        for (const e of eds) {
+          if (e.source === connection.source && connection.sourceHandle === e.sourceHandle) {
+            return eds;
+          }
         }
+        const edge = createEdge(connection);
+        return addEdge(edge, eds);
       });
     },
     [setEdges]
   );
 
-  const onEdgeUpdate = React.useCallback(
-    (oldEdge, newConnection) => {
-      if (newConnection.source === newConnection.target) {
-        return;
-      }
-      setEdges((els) => {
-        for (const e of els) {
-          if (
-            e.source === newConnection.source &&
-            e.sourceHandle === newConnection.sourceHandle &&
-            e.target === newConnection.target &&
-            e.targetHandle === newConnection.targetHandle
-          ) {
-            return;
-          }
+  const onEdgeUpdate = (oldEdge, newConnection) => {
+    // check for self connection
+    if (newConnection.source === newConnection.target) {
+      return;
+    }
+
+    return setEdges((eds) => {
+      // check for same edge
+      for (const e of eds) {
+        if (e.source === newConnection.source && e.sourceHandle === newConnection.sourceHandle && oldEdge.id !== e.id) {
+          return eds;
         }
-        updateEdge(oldEdge, newConnection, els);
-      });
-    },
-    [setEdges]
-  );
+        if (
+          e.source === newConnection.source &&
+          e.sourceHandle === newConnection.sourceHandle &&
+          e.target === newConnection.target &&
+          e.targetHandle === newConnection.targetHandle
+        ) {
+          return eds;
+        }
+      }
+
+      return updateEdge(oldEdge, newConnection, eds);
+    });
+  };
 
   const getConnectedEdges = React.useCallback(
     (nodeId) => {
