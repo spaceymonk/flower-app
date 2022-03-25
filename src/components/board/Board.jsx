@@ -11,7 +11,7 @@ function Board({ height }) {
   const paneLockConfigs = usePaneLock();
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
   const { getNodes, getEdges, onNodesChange, onEdgesChange } = React.useContext(AppContext);
-  const { onConnect } = useEdgeService();
+  const { onConnect, onEdgeUpdate } = useEdgeService();
 
   const [dblClkNode, setDblClkNode] = React.useState(null);
   const handleNodeDoubleClick = (event, node) => setDblClkNode(node);
@@ -25,6 +25,7 @@ function Board({ height }) {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onEdgeUpdate={onEdgeUpdate}
           fitView={true}
           nodeTypes={nodeTypes}
           onNodeDoubleClick={handleNodeDoubleClick}
