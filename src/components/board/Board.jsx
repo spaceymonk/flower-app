@@ -6,6 +6,7 @@ import useMinimapToggle from '../../hooks/useMinimapToggle';
 import usePaneLock from '../../hooks/usePaneLock';
 import useEdgeService from '../../hooks/service/useEdgeService.js';
 import { AppContext } from '../../providers/AppProvider';
+import { CustomConnectionLine, edgeTypes } from '../edges';
 
 function Board({ height }) {
   const paneLockConfigs = usePaneLock();
@@ -17,7 +18,7 @@ function Board({ height }) {
   const handleNodeDoubleClick = (event, node) => setDblClkNode(node);
 
   return (
-    <>
+    <g>
       <div id="board" style={{ height: height + 'px', width: '100%' }}>
         <ReactFlow
           nodes={getNodes()}
@@ -28,21 +29,22 @@ function Board({ height }) {
           onEdgeUpdate={onEdgeUpdate}
           fitView={true}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           onNodeDoubleClick={handleNodeDoubleClick}
-          connectionLineType="smoothstep"
+          connectionLineComponent={CustomConnectionLine}
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
           {...paneLockConfigs}
         >
           <Background />
-          <MiniMap style={{ display: minimapToggled ? 'initial' : 'none' }} />
+          {minimapToggled && <MiniMap />}
           <Controls showInteractive={false} showZoom={false}>
             <ControlButton onClick={handleMinimapVisibility}>{minimapIcon}</ControlButton>
           </Controls>
         </ReactFlow>
       </div>
       <BlockModalContainer node={dblClkNode} />
-    </>
+    </g>
   );
 }
 

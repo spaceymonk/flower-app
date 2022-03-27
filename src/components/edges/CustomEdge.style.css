@@ -1,0 +1,27 @@
+.customedge-btn {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+}
+
+.customedge-btn:hover {
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+}
+
+.customedge-foreignobject .btn-wrapper {
+  background: transparent;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.react-flow__edge-path {
+  stroke: #505050;
+}

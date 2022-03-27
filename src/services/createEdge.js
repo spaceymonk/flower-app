@@ -8,14 +8,8 @@ const createEdge = (connection) => {
     target: connection.target,
     sourceHandle: connection.sourceHandle,
     targetHandle: connection.targetHandle,
-    type: 'smoothstep',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: '#505050'
-    },
-    style: {
-      stroke: '#505050'
-    }
+    type: 'custom',
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#505050' },
   };
 };
 

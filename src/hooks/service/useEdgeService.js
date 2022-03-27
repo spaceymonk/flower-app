@@ -58,10 +58,13 @@ const useEdgeService = () => {
     [getEdges]
   );
 
+  const removeEdge = React.useCallback((edgeId) => setEdges((eds) => eds.filter((e) => e.id !== edgeId)), [setEdges]);
+
   return {
     onConnect,
     onEdgeUpdate,
     getConnectedEdges,
+    removeEdge,
   };
 };
 
