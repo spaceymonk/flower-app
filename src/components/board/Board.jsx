@@ -18,7 +18,7 @@ function Board({ height }) {
   const handleNodeDoubleClick = (event, node) => setDblClkNode(node);
 
   return (
-    <g>
+    <>
       <div id="board" style={{ height: height + 'px', width: '100%' }}>
         <ReactFlow
           nodes={getNodes()}
@@ -44,7 +44,7 @@ function Board({ height }) {
         </ReactFlow>
       </div>
       <BlockModalContainer node={dblClkNode} />
-    </g>
+    </>
   );
 }
 

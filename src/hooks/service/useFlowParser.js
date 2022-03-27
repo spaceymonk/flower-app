@@ -8,6 +8,7 @@ import { AppContext } from '../../providers/AppProvider';
 import { SimulationContext } from '../../providers/SimulationProvider';
 import useBlockService, { GlowTypes } from './useBlockService';
 import useEdgeService from './useEdgeService';
+import { BlockTypes } from '../../services/createNode';
 
 const useFlowParser = () => {
   const { getEdges, getNodes } = React.useContext(AppContext);
@@ -54,16 +55,19 @@ const useFlowParser = () => {
 
     for (let i = 0; i < getNodes().length; i++) {
       const n = nodes[i];
-      if (n.type === 'start') {
+      const connectedEdgeCount = getConnectedEdges(n.id).length;
+      if (n.type === BlockTypes.START_BLOCK) {
         startBlockCount += 1;
         if (startBlockCount > 1) throw new MultipleStartError([startBlock.id, n.id]);
         startBlock = n;
-      }
-      if (n.type === 'stop') {
+        if (connectedEdgeCount < 1) throw new NotConnectedError(n.id);
+      } else if (n.type === BlockTypes.STOP_BLOCK) {
         stopBlockCount += 1;
         if (stopBlockCount > 1) throw new MultipleStopError();
-      }
-      if (getConnectedEdges(n.id).length === 0) {
+        if (connectedEdgeCount < 1) throw new NotConnectedError(n.id);
+      } else if (n.type === BlockTypes.DECISION_BLOCK) {
+        if (connectedEdgeCount < 3) throw new NotConnectedError(n.id);
+      } else if (connectedEdgeCount < 2) {
         throw new NotConnectedError(n.id);
       }
     }
