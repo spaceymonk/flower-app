@@ -7,6 +7,7 @@ export const BlockTypes = Object.freeze({
   STORE_BLOCK: 'store',
   START_BLOCK: 'start',
   STOP_BLOCK: 'stop',
+  WHILE_LOOP_BLOCK: 'while',
 });
 
 function createNode(type, pos) {

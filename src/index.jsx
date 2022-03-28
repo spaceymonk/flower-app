@@ -5,6 +5,7 @@ import App from "./pages/App";
 import NotFound from "./pages/NotFound";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'react-resizable/css/styles.css';
 import "./index.css";
 
 ReactDOM.render(

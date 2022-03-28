@@ -15,8 +15,8 @@
 .node:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
-.selected > .node {
-  border-width: 3px;
+.selected .node {
+  border: 3px solid #505050;
 }
 .node.glow__normal{
   background-color: #ff07;
@@ -50,6 +50,17 @@
   font-weight: bold;
   text-align: center;
   padding: 0.1rem;
+}
+
+/* ------------------------------ subtitle part ----------------------------- */
+.node .subtitle {
+  color: black;
+  background-color: #efefef;
+  border-bottom: 1px solid #e0e0e0;
+  width: 100%;
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 0.1rem 0.2rem;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -100,6 +111,19 @@
   font-size: 0.9rem;
   font-weight: bold;
   text-align: center;
+}
+
+/* ----------------------------- node-container ----------------------------- */
+.node-container {
+  background-color: #fff;
+  height: inherit;
+  width: inherit;
+  border: 3px double #505050;
+}
+.react-resizable-handle-se {
+  bottom: 3px!important;
+  right: 3px!important;
+  cursor: se-resize;
 }
 
 /* -------------------------------------------------------------------------- */

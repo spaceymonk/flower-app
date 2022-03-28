@@ -37,6 +37,10 @@ const T = {
       title: 'Store Block',
       description: 'A store block lets you print out the given variables to display.',
     },
+    while: {
+      title: 'While Loop Block',
+      description: 'A while loop block lets you define a loop that repeats until the given condition is false.',
+    },
   },
   projectTitle: {
     tooltip: 'Click to change project title',

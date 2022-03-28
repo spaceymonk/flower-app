@@ -11,6 +11,7 @@ import {
   StopBlockCreateButton,
   LoadBlockCreateButton,
   StoreBlockCreateButton,
+  WhileLoopBlockCreateButton,
 } from '../../blocks';
 import useToggle from '../../../hooks/useToggle';
 import { SimulationContext } from '../../../providers/SimulationProvider';
@@ -38,6 +39,7 @@ function BlockSidebar() {
           <DecisionBlockCreateButton className="mb-3" />
           <LoadBlockCreateButton className="mb-3" />
           <StoreBlockCreateButton className="mb-3" />
+          <WhileLoopBlockCreateButton className="mb-3" />
         </Offcanvas.Body>
       </Offcanvas>
     </>
