@@ -14,7 +14,7 @@ import './menubar.css';
 
 function Menubar() {
   return (
-    <Stack id="menubar" direction="horizontal" className="bg-light">
+    <Stack id="menubar" direction="horizontal" className="bg-light user-select-none">
       <NavDropdown className="p-0" title="File" id="nav-title-dropdown">
         <NewMenuItem />
         <OpenMenuItem />

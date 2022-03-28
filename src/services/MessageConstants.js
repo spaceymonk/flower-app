@@ -8,7 +8,7 @@ const T = {
     deleteTxt: 'Delete',
   },
   blocks: {
-    defaultTxt: 'Enter some text...',
+    defaultTxt: '<code>',
     creationFailed: 'Block creation failed!',
     creationSuccess: 'Block placed on the leftmost corner.',
     label: 'Code',

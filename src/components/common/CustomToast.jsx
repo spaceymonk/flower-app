@@ -4,7 +4,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 export function CustomToast({ toast, onClose }) {
   return (
-    <Toast show={true} delay={5000} autohide animation={false} onClose={() => onClose(toast.key)}>
+    <Toast show={true} delay={3000} autohide animation={false} onClose={() => onClose(toast.key)}>
       <Toast.Header>
         <FontAwesomeIcon icon={faInfoCircle} />
         <strong className="me-auto ms-2">{toast.title}</strong>

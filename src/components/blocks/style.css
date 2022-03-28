@@ -130,7 +130,7 @@
 /*                                    MODAL                                   */
 /* -------------------------------------------------------------------------- */
 
-.node-modal {
+.node-modal.modal-body {
   font-family: 'Roboto Mono', monospace;
 }
 .node-modal textarea {

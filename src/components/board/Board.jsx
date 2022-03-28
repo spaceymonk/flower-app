@@ -17,12 +17,15 @@ function Board({ height }) {
   const [dblClkNode, setDblClkNode] = React.useState(null);
   const handleNodeDoubleClick = (event, node) => setDblClkNode(node);
 
+  const nodes = React.useMemo(getNodes, [getNodes]);
+  const edges = React.useMemo(getEdges, [getEdges]);
+
   return (
     <>
       <div id="board" style={{ height: height + 'px', width: '100%' }}>
         <ReactFlow
-          nodes={getNodes()}
-          edges={getEdges()}
+          nodes={nodes}
+          edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}

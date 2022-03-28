@@ -3,7 +3,7 @@ import {Navbar as BsNavbar} from 'react-bootstrap';
 
 function Navbar(props) {
   return (
-    <BsNavbar id="navbar" bg="light" expand="lg" className="px-4">
+    <BsNavbar id="navbar" bg="light" expand="lg" className="px-4 user-select-none">
       <BsNavbar.Brand href="/">{T.app.name}</BsNavbar.Brand>
       {props.children}
     </BsNavbar>
