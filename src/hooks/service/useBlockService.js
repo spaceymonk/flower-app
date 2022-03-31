@@ -9,7 +9,7 @@ export const GlowTypes = Object.freeze({
 });
 
 const useBlockService = () => {
-  const { setNodes } = React.useContext(AppContext);
+  const { setNodes, getNodes } = React.useContext(AppContext);
   const { addNodes, setCenter } = useReactFlow();
 
   const updateNode = React.useCallback(
@@ -62,12 +62,24 @@ const useBlockService = () => {
     [setCenter]
   );
 
+  const getChildNodes = React.useCallback(
+    (node) => {
+      const nodes = getNodes();
+      return nodes.filter((n) => n.parentNode === node.id);
+    },
+    [getNodes]
+  );
+
+  const updateParentNode = React.useCallback((parentNode, children) => {}, []);
+
   return {
     updateNode,
     addNode,
     removeNode,
     highlightNode,
     focusNode,
+    getChildNodes,
+    updateParentNode,
   };
 };
 

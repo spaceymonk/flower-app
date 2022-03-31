@@ -21,7 +21,7 @@ export { BlockModal as StatementBlockModal } from './common/BlockModal';
 export { BlockModal as DecisionBlockModal } from './common/BlockModal';
 export { BlockModal as LoadBlockkModal } from './common/BlockModal';
 export { BlockModal as StoreBlockModal } from './common/BlockModal';
-export { BlockModal as WhileLoopBlockModal } from './common/BlockModal';
+export { ContainerModal as WhileLoopBlockModal } from './common/ContainerModal';
 
 export const nodeTypes = {
   statement: StatementBlockNC,

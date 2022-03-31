@@ -22,6 +22,8 @@ export function BlockModalContainer({ node }) {
     }
   }, [node, toggleModal]);
 
+  if (!node) return <></>;
+
   return (
     <div>
       <StatementBlockModal node={node} show={showModal && activeModal === BlockTypes.STATEMENT_BLOCK} onClose={toggleModal} />
