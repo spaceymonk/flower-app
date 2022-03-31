@@ -10,13 +10,23 @@ import { AppContext } from '../../../providers/AppProvider';
 import Select from 'react-select';
 import { BlockTypes } from '../../../services/createNode';
 
+const nodeArrayContains = (nodeList, node) => {
+  for (const n of nodeList) {
+    if (n.id === node.id) {
+      return true;
+    }
+  }
+  return false;
+};
+
 export function ContainerModal({ node, onClose, show }) {
-  const { updateNode, getChildNodes, updateParentNode } = useBlockService();
+  const { updateNode, getChildNodes, updateParentNode, removeChildNodes } = useBlockService();
   const { getNodes } = React.useContext(AppContext);
 
   const textAreaRef = React.useRef(null);
   const [selectedChild, setSelectedChild] = React.useState(null);
-  const [childNodes, setChildNodes] = React.useState(getChildNodes(node.id));
+  const [childNodes, setChildNodes] = React.useState([]);
+  const [removedChildren, setRemovedChildren] = React.useState([]);
 
   const nodes = React.useMemo(getNodes, [getNodes]);
   const availableNodes = React.useMemo(() => {
@@ -27,7 +37,7 @@ export function ContainerModal({ node, onClose, show }) {
           n.id === node.id ||
           n.type === BlockTypes.START_BLOCK ||
           n.type === BlockTypes.STOP_BLOCK ||
-          childNodes.includes(n)
+          nodeArrayContains(childNodes, n)
         )
       ) {
         avail.push(n);
@@ -36,12 +46,20 @@ export function ContainerModal({ node, onClose, show }) {
     return avail;
   }, [childNodes, node.id, nodes]);
 
+  React.useEffect(() => {
+    const nds = getChildNodes(node);
+    setChildNodes(nds);
+  }, [getChildNodes, node]);
+
   const handleSave = () => {
     updateNode(node.id, { text: textAreaRef.current.value });
     updateParentNode(node, childNodes);
+    removeChildNodes(node, removedChildren);
+    setRemovedChildren([]);
     onClose();
   };
   const removeChild = (child) => {
+    setRemovedChildren((children) => children.concat(child));
     setChildNodes(childNodes.filter((n) => n.id !== child.id));
   };
   const addChild = () => {
@@ -58,7 +76,7 @@ export function ContainerModal({ node, onClose, show }) {
             placeholder={T.blocks.label}
             as="textarea"
             ref={textAreaRef}
-            defaultValue={node?.data?.text}
+            defaultValue={node.data?.text}
             onKeyDown={(event) => {
               if (event.ctrlKey && event.key === 'Enter') handleSave();
             }}

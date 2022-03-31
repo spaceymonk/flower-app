@@ -25,3 +25,7 @@
 .react-flow__edge-path {
   stroke: #505050;
 }
+
+.react-flow__edges.react-flow__container {
+  z-index: 1001 !important;
+}

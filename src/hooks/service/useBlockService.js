@@ -8,6 +8,11 @@ export const GlowTypes = Object.freeze({
   ERROR: 2,
 });
 
+const clearParentNode = (node) => {
+  node.parentNode = undefined;
+  node.extent = undefined;
+};
+
 const useBlockService = () => {
   const { setNodes, getNodes } = React.useContext(AppContext);
   const { addNodes, setCenter } = useReactFlow();
@@ -32,7 +37,20 @@ const useBlockService = () => {
   const addNode = React.useCallback((node) => addNodes(node), [addNodes]);
 
   const removeNode = React.useCallback(
-    (node) => setNodes((nodes) => nodes.filter((n) => n.id !== node.id)),
+    (node) =>
+      setNodes((nodes) => {
+        const newNodes = [];
+        nodes.forEach((n) => {
+          if (n.id !== node.id) {
+            if (n.parentNode === node.id) {
+              clearParentNode(n);
+              n.position = { x: n.position.x + node.position.x, y: n.position.y + node.position.y };
+            }
+            newNodes.push(n);
+          }
+        });
+        return newNodes;
+      }),
     [setNodes]
   );
 
@@ -65,12 +83,54 @@ const useBlockService = () => {
   const getChildNodes = React.useCallback(
     (node) => {
       const nodes = getNodes();
-      return nodes.filter((n) => n.parentNode === node.id);
+      const childNodes = nodes.filter((n) => n.parentNode === node.id);
+      return childNodes;
     },
     [getNodes]
   );
 
-  const updateParentNode = React.useCallback((parentNode, children) => {}, []);
+  const updateParentNode = React.useCallback(
+    (parentNode, children) => {
+      let position = { x: 0, y: 0 };
+      const nextPosition = () => {
+        position = {
+          x: position.x + 15,
+          y: position.y + 15,
+        };
+        return position;
+      };
+      setNodes((nodes) => {
+        const remainingNodes = nodes.filter((n) => !children.includes(n));
+        const updatedChildren = children.map((n) => {
+          if (n.parentNode !== parentNode.id) {
+            n.parentNode = parentNode.id;
+            n.extent = 'parent';
+            n.position = nextPosition();
+          }
+          return n;
+        });
+        return [...remainingNodes, ...updatedChildren];
+      });
+    },
+    [setNodes]
+  );
+
+  const removeChildNodes = React.useCallback(
+    (parent, children) => {
+      setNodes((nodes) =>
+        nodes.map((n) => {
+          for (const c of children) {
+            if (n.id === c.id) {
+              clearParentNode(n);
+              n.position = { x: n.position.x + parent.position.x, y: n.position.y + parent.position.y };
+            }
+          }
+          return n;
+        })
+      );
+    },
+    [setNodes]
+  );
 
   return {
     updateNode,
@@ -80,6 +140,7 @@ const useBlockService = () => {
     focusNode,
     getChildNodes,
     updateParentNode,
+    removeChildNodes,
   };
 };
 
