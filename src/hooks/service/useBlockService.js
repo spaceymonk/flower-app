@@ -1,17 +1,14 @@
 import React from 'react';
 import { AppContext } from '../../providers/AppProvider';
 import { useReactFlow } from 'react-flow-renderer';
+import { toast } from 'react-toastify';
+import { clearParentNode, getParentNode, includesNode } from '../../services/BlockHelper';
 
 export const GlowTypes = Object.freeze({
   NONE: 0,
   NORMAL: 1,
   ERROR: 2,
 });
-
-const clearParentNode = (node) => {
-  node.parentNode = undefined;
-  node.extent = undefined;
-};
 
 const useBlockService = () => {
   const { setNodes, getNodes } = React.useContext(AppContext);
@@ -99,8 +96,21 @@ const useBlockService = () => {
         };
         return position;
       };
+
+      const nodeList = getNodes();
+      let parent = getParentNode(nodeList, parentNode);
+      while (parent) {
+        for (const child of children) {
+          if (child.id === parent.id) {
+            toast.error('Cannot add parent node as child');
+            return;
+          }
+        }
+        parent = getParentNode(nodeList, parent);
+      }
+
       setNodes((nodes) => {
-        const remainingNodes = nodes.filter((n) => !children.includes(n));
+        const remainingNodes = nodes.filter((n) => !includesNode(children, n));
         const updatedChildren = children.map((n) => {
           if (n.parentNode !== parentNode.id) {
             n.parentNode = parentNode.id;
@@ -112,7 +122,7 @@ const useBlockService = () => {
         return [...remainingNodes, ...updatedChildren];
       });
     },
-    [setNodes]
+    [setNodes, getNodes]
   );
 
   const removeChildNodes = React.useCallback(
