@@ -31,8 +31,6 @@ const useBlockService = () => {
     [setNodes]
   );
 
-  const addNode = React.useCallback((node) => addNodes(node), [addNodes]);
-
   const removeNode = React.useCallback(
     (node) =>
       setNodes((nodes) => {
@@ -127,12 +125,21 @@ const useBlockService = () => {
 
   const removeChildNodes = React.useCallback(
     (parent, children) => {
+      let position = { x: parent.position.x, y: parent.position.y };
+      const nextPosition = () => {
+        position = {
+          x: position.x - 15,
+          y: position.y - 15,
+        };
+        return position;
+      };
+
       setNodes((nodes) =>
         nodes.map((n) => {
           for (const c of children) {
             if (n.id === c.id) {
               clearParentNode(n);
-              n.position = { x: n.position.x + parent.position.x, y: n.position.y + parent.position.y };
+              n.position = nextPosition();
             }
           }
           return n;
@@ -144,7 +151,7 @@ const useBlockService = () => {
 
   return {
     updateNode,
-    addNode,
+    addNode: addNodes,
     removeNode,
     highlightNode,
     focusNode,

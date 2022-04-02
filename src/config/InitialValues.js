@@ -20,8 +20,8 @@ class Initial {
   empty() {
     return {
       title: uniqueNamesGenerator(ProjectNameOptions),
-      defaultNodes: [],
-      defaultEdges: [],
+      nodes: [],
+      edges: [],
       inputParams: '',
     };
   }
