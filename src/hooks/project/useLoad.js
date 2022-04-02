@@ -5,7 +5,7 @@ const useLoad = () => {
   const { setTitle, setInputParams,setEdges, setNodes } = React.useContext(AppContext);
 
   const load = React.useCallback(
-    (edges, nodes, title, inputParams) => {
+    ({edges, nodes, title, inputParams}) => {
       setEdges(edges);
       setNodes(nodes);
       setTitle(title);

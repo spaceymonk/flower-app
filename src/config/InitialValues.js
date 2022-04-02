@@ -1,4 +1,9 @@
-import generateProjectName from 'project-name-generator';
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+
+export const ProjectNameOptions = {
+  dictionaries: [colors, adjectives, animals],
+  separator: '-',
+};
 
 class Initial {
   constructor() {
@@ -6,10 +11,19 @@ class Initial {
   }
 
   refresh() {
-    this.title = window.localStorage.getItem('title') || generateProjectName().dashed;
+    this.title = window.localStorage.getItem('title') || uniqueNamesGenerator(ProjectNameOptions);
     this.defaultNodes = JSON.parse(window.localStorage.getItem('nodes')) || [];
     this.defaultEdges = JSON.parse(window.localStorage.getItem('edges')) || [];
     this.inputParams = window.localStorage.getItem('inputParams') || '';
+  }
+
+  empty() {
+    return {
+      title: uniqueNamesGenerator(ProjectNameOptions),
+      defaultNodes: [],
+      defaultEdges: [],
+      inputParams: '',
+    };
   }
 }
 

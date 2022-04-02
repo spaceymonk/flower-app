@@ -9,7 +9,12 @@ const useOpen = () => {
       const fileReader = new FileReader();
       const handleFileRead = (e) => {
         const content = JSON.parse(fileReader.result);
-        load(content.edges, content.nodes, content.title, content.inputParams);
+        load({
+          title: content.edges,
+          defaultNodes: content.nodes,
+          defaultEdges: content.title,
+          inputParams: content.inputParams,
+        });
       };
       fileReader.onloadend = handleFileRead;
       fileReader.readAsText(file);
