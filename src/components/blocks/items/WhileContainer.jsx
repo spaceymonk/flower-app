@@ -11,12 +11,14 @@ export function NodeComponent(node) {
 
   return (
     <ContainerNode node={node}>
-      <Handle type="target" position={Position.Top} className="handle" />
+      <Handle type="target" id="outer-target" position={Position.Top} className="handle" />
+      <Handle type="source" id="inner-source" position={Position.Top} className="handle-container source" />
       <div className="w-100">
         <div className="header">WHILE</div>
         <div className="subtitle">{processed ? processed : <em className="text-muted">{T.blocks.defaultTxt}</em>}</div>
       </div>
-      <Handle type="source" position={Position.Bottom} className="handle " />
+      <Handle type="target" id="inner-target" position={Position.Bottom} className="handle-container target" />
+      <Handle type="source" id="outer-source" position={Position.Bottom} className="handle" />
     </ContainerNode>
   );
 }

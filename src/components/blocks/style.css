@@ -18,7 +18,7 @@
 .selected .node {
   border: 3px solid #505050;
 }
-.node.glow__normal{
+.node.glow__normal {
   background-color: #ff07;
 }
 .node.glow__error {
@@ -121,9 +121,25 @@
   border: 3px double #505050;
 }
 .react-resizable-handle-se {
-  bottom: 3px!important;
-  right: 3px!important;
-  cursor: se-resize;
+  bottom: 3px !important;
+  right: 3px !important;
+}
+.handle-container {
+  width: 0;
+  height: 0;
+  border-radius: 0;
+  border-style: solid;
+  background-color: transparent;
+}
+.handle-container.target {
+  bottom: 10px;
+  border-width: 0 0.4rem 0.4rem 0.4rem;
+  border-color: transparent transparent red transparent;
+}
+.handle-container.source {
+  top: 50px;
+  border-width: 0.4rem 0.4rem 0 0.4rem;
+  border-color: red transparent transparent transparent;
 }
 
 /* -------------------------------------------------------------------------- */
