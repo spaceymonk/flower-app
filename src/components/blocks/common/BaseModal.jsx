@@ -13,13 +13,17 @@ export function BaseModal({ show, children, onSave, onClose, node }) {
     onClose();
   }
   function handleNameField() {
-    if (name.trim().length === 0) {
+    if (name.trim().length === 0 || name.trim() === node.id) {
       updateNode(node.id, { name: undefined });
       setName(node.id);
     } else {
       updateNode(node.id, { name: name });
     }
   }
+
+  React.useEffect(() => {
+    setName(node.data.name || node.id);
+  }, [node]);
 
   return (
     <Modal show={show} size="md" centered className="node-modal">

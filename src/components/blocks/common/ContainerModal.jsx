@@ -11,7 +11,7 @@ import Select from 'react-select';
 import { BlockTypes } from '../../../services/createNode';
 import { includesNode } from '../../../services/BlockHelper';
 
-const CustomOption = ({ node, className }) => {
+const CustomOption = ({ node }) => {
   return (
     <Container fluid className='px-0'>
       <Row>
