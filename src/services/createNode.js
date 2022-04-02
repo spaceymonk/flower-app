@@ -15,7 +15,7 @@ function createNode(type, pos) {
     id: uuid(),
     type: type,
     position: pos,
-    data: { text: undefined, glow: undefined },
+    data: { text: undefined, glow: undefined, name: undefined },
     parentNode: undefined,
   };
 }

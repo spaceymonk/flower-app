@@ -2,10 +2,10 @@ import React from 'react';
 import { faStarOfLife } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from 'react-bootstrap';
-import generateProjectName from 'project-name-generator';
 import { toast } from 'react-toastify';
 import useLoad from '../../../hooks/project/useLoad';
 import { useReactFlow } from 'react-flow-renderer';
+import InitialValues from '../../../config/InitialValues';
 
 export function NewMenuItem() {
   const load = useLoad();
@@ -14,7 +14,7 @@ export function NewMenuItem() {
   function handleClick() {
     const ans = window.confirm('All changes will be lost?');
     if (ans) {
-      load([], [], generateProjectName().dashed, '');
+      load(InitialValues.empty());
       fitView();
       toast.info('New project created.');
     }
