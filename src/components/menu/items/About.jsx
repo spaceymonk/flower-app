@@ -14,19 +14,17 @@ export function AboutModal({ show, onClose }) {
         </h4>
       </Modal.Header>
       <Modal.Body className="pb-2">
-        <Container>
-          <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis hic consequatur, delectus odio quam
-            vitae dolores? Fuga, natus mollitia nulla consequatur, perspiciatis praesentium labore, iure repellat
-            facilis architecto pariatur. Tempora ratione, quod doloribus rem eum obcaecati esse nesciunt itaque aperiam
-            quia quam consequuntur. Exercitationem esse natus minima voluptatum necessitatibus. Alias minima fuga
-            mollitia quidem dolorum ab, magnam voluptate quos odio, libero et natus assumenda incidunt nobis quae dolor.
-            Autem aperiam quasi tempore quas, quaerat optio nam magni rem debitis expedita nesciunt aliquam ipsam velit
-            praesentium temporibus consequuntur neque! Illo, provident? Cupiditate rem esse aspernatur repudiandae natus
-            repellat laboriosam, ut, soluta dolorem sed itaque. Illo tenetur excepturi sint enim illum, nemo dicta hic
-            itaque beatae aliquam quibusdam in ratione nesciunt aperiam accusantium porro, eos perspiciatis tempore ex
-            tempora id molestiae veniam. Provident, repudiandae. Optio ipsam suscipit eligendi voluptatibus tenetur
-            ipsum, quibusdam repellat ab dolore impedit, voluptate veniam expedita non voluptatem iusto!
+        <Container className="text-center">
+          <p className="lead">
+            Flower App <small>ver: {process.env.REACT_APP_VERSION}</small>
+          </p>
+          <p className="text-center mx-5">
+            Flower App is a simple app to help you organize your flowcharts. You can add, remove, edit, export and
+            simulate your flowchart diagrams.
+          </p>
+          <p className="text-muted text-center small">
+            This project developed by Berktuğ Kaan Özkan (<a href="http://spaceymonk.github.io/">@spaceymonk</a>). You
+            can find the source code on <a href="https://github.com/spaceymonk/flower-app">GitHub page</a>.
           </p>
         </Container>
       </Modal.Body>
