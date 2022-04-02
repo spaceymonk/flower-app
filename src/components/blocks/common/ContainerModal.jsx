@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, FloatingLabel, Button, ListGroup, Tooltip, Badge, Stack } from 'react-bootstrap';
+import { Form, FloatingLabel, Button, ListGroup, Tooltip, Badge, Stack, Container, Row, Col } from 'react-bootstrap';
 import T from '../../../services/MessageConstants';
 import useBlockService from '../../../hooks/service/useBlockService';
 import { BaseModal } from './BaseModal';
@@ -9,14 +9,40 @@ import CustomOverlay from '../../common/CustomOverlay';
 import { AppContext } from '../../../providers/AppProvider';
 import Select from 'react-select';
 import { BlockTypes } from '../../../services/createNode';
+import { includesNode } from '../../../services/BlockHelper';
 
-const nodeArrayContains = (nodeList, node) => {
-  for (const n of nodeList) {
-    if (n.id === node.id) {
-      return true;
-    }
-  }
-  return false;
+const CustomOption = ({ node, className }) => {
+  return (
+    <Container fluid className='px-0'>
+      <Row>
+        <Col sm={3} className="d-flex justify-content-center align-items-center">
+          <Badge className="rounded-pill" bg="info">
+            {node.type}
+          </Badge>
+        </Col>
+        {node.data.name ? (
+          <>
+            <CustomOverlay overlay={<Tooltip>{node.data.name}</Tooltip>}>
+              <Col sm={6} className="text-truncate fw-bold small text-center">
+                <span>{node.data.name}</span>
+              </Col>
+            </CustomOverlay>
+            <CustomOverlay overlay={<Tooltip>{node.id}</Tooltip>}>
+              <Col sm={3} className="text-truncate small text-muted fst-italic text-end">
+                <span>{node.id}</span>
+              </Col>
+            </CustomOverlay>
+          </>
+        ) : (
+          <CustomOverlay overlay={<Tooltip>{node.id}</Tooltip>}>
+            <Col sm={9} className="small text-truncate">
+              <span>{node.id}</span>
+            </Col>
+          </CustomOverlay>
+        )}
+      </Row>
+    </Container>
+  );
 };
 
 export function ContainerModal({ node, onClose, show }) {
@@ -28,8 +54,8 @@ export function ContainerModal({ node, onClose, show }) {
   const [childNodes, setChildNodes] = React.useState([]);
   const [removedChildren, setRemovedChildren] = React.useState([]);
 
-  const nodes = React.useMemo(getNodes, [getNodes]);
   const availableNodes = React.useMemo(() => {
+    const nodes = getNodes();
     let avail = [];
     for (const n of nodes) {
       if (
@@ -37,14 +63,14 @@ export function ContainerModal({ node, onClose, show }) {
           n.id === node.id ||
           n.type === BlockTypes.START_BLOCK ||
           n.type === BlockTypes.STOP_BLOCK ||
-          nodeArrayContains(childNodes, n)
+          includesNode(childNodes, n)
         )
       ) {
         avail.push(n);
       }
     }
     return avail;
-  }, [childNodes, node.id, nodes]);
+  }, [childNodes, getNodes, node.id]);
 
   React.useEffect(() => {
     const nds = getChildNodes(node);
@@ -63,6 +89,7 @@ export function ContainerModal({ node, onClose, show }) {
     setChildNodes(childNodes.filter((n) => n.id !== child.id));
   };
   const addChild = () => {
+    const nodes = getNodes();
     const child = nodes.find((n) => n.id === selectedChild.value);
     setChildNodes([...childNodes, nodes.find((n) => n.id === child.id)]);
     setSelectedChild(null);
@@ -101,6 +128,7 @@ export function ContainerModal({ node, onClose, show }) {
             // below style makes the dropdown appear as rounded-pill
             styles={{ control: (props, state) => ({ ...props, borderRadius: '50em' }) }}
             components={{ DropdownIndicator: null }}
+            formatOptionLabel={CustomOption}
             noOptionsMessage={() => 'There are no blocks to add'}
             placeholder="Select a block"
             defaultValue={null}
@@ -108,24 +136,27 @@ export function ContainerModal({ node, onClose, show }) {
             isSearchable={true}
             onChange={setSelectedChild}
             value={selectedChild}
-            options={availableNodes.map((n) => ({ value: n.id, label: `${n.type} - ${n.id}` }))}
+            options={availableNodes.map((n) => ({ value: n.id, node: n }))}
           />
         </div>
         <ListGroup>
           {childNodes.length === 0 && <em className="text-muted text-center mt-2">No children</em>}
           {childNodes.map((n) => (
-            <ListGroup.Item key={n.id} className="d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center">
-                <Badge className="me-2 flex-1" bg="info">
-                  {n.type}
-                </Badge>
-                <small className="text-truncate">{n.id}</small>
-              </div>
-              <CustomOverlay placement="top" overlay={<Tooltip>Remove from container</Tooltip>}>
-                <Button variant="outline-danger" size="sm" className="my-auto" onClick={() => removeChild(n)}>
-                  <FontAwesomeIcon icon={faRemove} />
-                </Button>
-              </CustomOverlay>
+            <ListGroup.Item key={n.id}>
+              <Container fluid className="px-1" >
+                <Row>
+                  <Col sm={11} className="d-flex align-items-center justify-content-center">
+                    <CustomOption node={n} />
+                  </Col>
+                  <CustomOverlay placement="top" overlay={<Tooltip>Remove from container</Tooltip>}>
+                    <Col sm={1}  className="d-flex align-items-center justify-content-center">
+                      <Button variant="outline-danger" size="sm" className="my-auto" onClick={() => removeChild(n)}>
+                        <FontAwesomeIcon icon={faRemove} />
+                      </Button>
+                    </Col>
+                  </CustomOverlay>
+                </Row>
+              </Container>
             </ListGroup.Item>
           ))}
         </ListGroup>
