@@ -2,15 +2,28 @@ import React from 'react';
 import { AppContext } from '../../providers/AppProvider';
 import { addEdge, updateEdge } from 'react-flow-renderer';
 import createEdge from '../../services/createEdge';
+import { includesEdge } from '../../services/EdgeHelper';
 
 const useEdgeService = () => {
-  const { setEdges, getEdges } = React.useContext(AppContext);
+  const { setEdges, getEdges, getNodes } = React.useContext(AppContext);
 
   const onConnect = React.useCallback(
     (connection) => {
       if (connection.source === connection.target) {
         return;
       }
+      const source = getNodes().find((node) => node.id === connection.source);
+      const target = getNodes().find((node) => node.id === connection.target);
+
+      if (
+        (connection.targetHandle === 'inner-target' && source.parentNode !== connection.target) ||
+        (connection.targetHandle === 'outer-target' && source.parentNode === connection.target) ||
+        (connection.sourceHandle === 'inner-source' && target.parentNode !== connection.source) ||
+        (connection.sourceHandle === 'outer-source' && target.parentNode === connection.source)
+      ) {
+        return;
+      }
+
       return setEdges((eds) => {
         for (const e of eds) {
           if (e.source === connection.source && connection.sourceHandle === e.sourceHandle) {
@@ -21,32 +34,44 @@ const useEdgeService = () => {
         return addEdge(edge, eds);
       });
     },
-    [setEdges]
+    [setEdges, getNodes]
   );
 
-  const onEdgeUpdate = (oldEdge, newConnection) => {
+  const onEdgeUpdate = (oldEdge, connection) => {
     // check for self connection
-    if (newConnection.source === newConnection.target) {
+    if (connection.source === connection.target) {
+      return;
+    }
+
+    const source = getNodes().find((node) => node.id === connection.source);
+    const target = getNodes().find((node) => node.id === connection.target);
+
+    if (
+      (connection.targetHandle === 'inner-target' && source.parentNode !== connection.target) ||
+      (connection.targetHandle === 'outer-target' && source.parentNode === connection.target) ||
+      (connection.sourceHandle === 'inner-source' && target.parentNode !== connection.source) ||
+      (connection.sourceHandle === 'outer-source' && target.parentNode === connection.source)
+    ) {
       return;
     }
 
     return setEdges((eds) => {
       // check for same edge
       for (const e of eds) {
-        if (e.source === newConnection.source && e.sourceHandle === newConnection.sourceHandle && oldEdge.id !== e.id) {
+        if (e.source === connection.source && e.sourceHandle === connection.sourceHandle && oldEdge.id !== e.id) {
           return eds;
         }
         if (
-          e.source === newConnection.source &&
-          e.sourceHandle === newConnection.sourceHandle &&
-          e.target === newConnection.target &&
-          e.targetHandle === newConnection.targetHandle
+          e.source === connection.source &&
+          e.sourceHandle === connection.sourceHandle &&
+          e.target === connection.target &&
+          e.targetHandle === connection.targetHandle
         ) {
           return eds;
         }
       }
 
-      return updateEdge(oldEdge, newConnection, eds);
+      return updateEdge(oldEdge, connection, eds);
     });
   };
 
@@ -58,7 +83,15 @@ const useEdgeService = () => {
     [getEdges]
   );
 
-  const removeEdge = React.useCallback((edgeId) => setEdges((eds) => eds.filter((e) => e.id !== edgeId)), [setEdges]);
+  const removeEdge = React.useCallback(
+    (edgeIds) => {
+      if (Array.isArray(edgeIds)) {
+        return setEdges((eds) => eds.filter((e) => !includesEdge(edgeIds, e)));
+      }
+      return setEdges((eds) => eds.filter((e) => e.id !== edgeIds));
+    },
+    [setEdges]
+  );
 
   return {
     onConnect,

@@ -3,6 +3,7 @@ import { AppContext } from '../../providers/AppProvider';
 import { useReactFlow } from 'react-flow-renderer';
 import { toast } from 'react-toastify';
 import { clearParentNode, getParentNode, includesNode } from '../../services/BlockHelper';
+import useEdgeService from './useEdgeService';
 
 export const GlowTypes = Object.freeze({
   NONE: 0,
@@ -12,6 +13,7 @@ export const GlowTypes = Object.freeze({
 
 const useBlockService = () => {
   const { setNodes, getNodes } = React.useContext(AppContext);
+  const { getConnectedEdges, removeEdge } = useEdgeService();
   const { addNodes, setCenter } = useReactFlow();
 
   const updateNode = React.useCallback(
@@ -111,6 +113,7 @@ const useBlockService = () => {
         const remainingNodes = nodes.filter((n) => !includesNode(children, n));
         const updatedChildren = children.map((n) => {
           if (n.parentNode !== parentNode.id) {
+            removeEdge(getConnectedEdges(n.id));
             n.parentNode = parentNode.id;
             n.extent = 'parent';
             n.position = nextPosition();
@@ -120,7 +123,7 @@ const useBlockService = () => {
         return [...remainingNodes, ...updatedChildren];
       });
     },
-    [setNodes, getNodes]
+    [getNodes, setNodes, removeEdge, getConnectedEdges]
   );
 
   const removeChildNodes = React.useCallback(
@@ -137,6 +140,7 @@ const useBlockService = () => {
       setNodes((nodes) =>
         nodes.map((n) => {
           for (const c of children) {
+            removeEdge(getConnectedEdges(c.id));
             if (n.id === c.id) {
               clearParentNode(n);
               n.position = nextPosition();
@@ -146,7 +150,7 @@ const useBlockService = () => {
         })
       );
     },
-    [setNodes]
+    [getConnectedEdges, removeEdge, setNodes]
   );
 
   return {

@@ -132,14 +132,15 @@
   background-color: transparent;
 }
 .handle-container.target {
+  left: 10%;
   bottom: 10px;
   border-width: 0 0.4rem 0.4rem 0.4rem;
-  border-color: transparent transparent red transparent;
+  border-color: transparent transparent violet transparent;
 }
 .handle-container.source {
   top: 50px;
   border-width: 0.4rem 0.4rem 0 0.4rem;
-  border-color: red transparent transparent transparent;
+  border-color: violet transparent transparent transparent;
 }
 
 /* -------------------------------------------------------------------------- */
