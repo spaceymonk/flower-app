@@ -23,10 +23,9 @@ export function NodeComponent(node) {
   );
 }
 
-export function CreateButton({ className }) {
+export function CreateButton() {
   return (
     <BlockCreateButton
-      className={className}
       type={BlockTypes.WHILE_LOOP_BLOCK}
       title={T.blocks.while.title}
       description={T.blocks.while.description}

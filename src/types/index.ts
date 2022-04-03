@@ -39,10 +39,10 @@ export type AppContextType = {
 
 export type SimulationContextType = {
   isRunning: () => boolean;
-  setRunning: (isRunning: boolean) => void;
+  setRunning: React.Dispatch<React.SetStateAction<boolean>>;
   getWatchList: () => any[];
-  setWatchList: (watchList: any[]) => void;
+  setWatchList: React.Dispatch<React.SetStateAction<any[]>>;
   getVariableTable: () => {};
-  setVariableTable: (variableTable: {}) => void;
+  setVariableTable: React.Dispatch<React.SetStateAction<{}>>;
   currentBlockRef: React.MutableRefObject<any>;
 };

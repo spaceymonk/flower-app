@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import createNode from '../../../services/createNode';
 import useBlockService from '../../../hooks/service/useBlockService';
 
-function BlockCreateButton({ className, title, description, icon, type }) {
+function BlockCreateButton({ title, description, icon, type }) {
   const { getViewport } = useReactFlow();
   const { addNode } = useBlockService();
 
@@ -23,7 +23,7 @@ function BlockCreateButton({ className, title, description, icon, type }) {
   }
 
   return (
-    <Card className={'small user-select-none clickable ' + className} onClick={handleClick}>
+    <Card className='small user-select-none clickable mb-3' onClick={handleClick}>
       <Card.Header>
         <Card.Title className="d-flex justify-content-between align-items-center">
           <FontAwesomeIcon icon={icon} />

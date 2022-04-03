@@ -1,14 +1,12 @@
 import React from 'react';
 
-const useToggle = (initialState = false) => {
+const useToggle = (initialState = false): [boolean, () => void] => {
   const [state, setState] = React.useState(initialState);
-  const toggle = React.useCallback((overrideState: any) => {
-    if ('boolean' == typeof overrideState) {
-      setState(() => overrideState);
-    } else {
-      setState((state) => !state);
-    }
+
+  const toggle = React.useCallback(() => {
+    setState((state) => !state);
   }, []);
+
   return [state, toggle];
 };
 

@@ -14,10 +14,10 @@ import {
   WhileLoopBlockCreateButton,
 } from '../../blocks';
 import useToggle from '../../../hooks/useToggle';
-import { SimulationContext } from '../../../providers/SimulationProvider';
+import { useSimulationContext } from '../../../providers/SimulationProvider';
 
 function BlockSidebar() {
-  const { isRunning } = React.useContext(SimulationContext);
+  const { isRunning } = useSimulationContext();
   const [showSidebar, toggleSidebar] = useToggle();
 
   return (
@@ -33,13 +33,13 @@ function BlockSidebar() {
           <Offcanvas.Title>{T.blockSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <StartBlockCreateButton className="mb-3" />
-          <StopBlockCreateButton className="mb-3" />
-          <StatementBlockCreateButton className="mb-3" />
-          <DecisionBlockCreateButton className="mb-3" />
-          <LoadBlockCreateButton className="mb-3" />
-          <StoreBlockCreateButton className="mb-3" />
-          <WhileLoopBlockCreateButton className="mb-3" />
+          <StartBlockCreateButton />
+          <StopBlockCreateButton />
+          <StatementBlockCreateButton />
+          <DecisionBlockCreateButton />
+          <LoadBlockCreateButton />
+          <StoreBlockCreateButton />
+          <WhileLoopBlockCreateButton />
         </Offcanvas.Body>
       </Offcanvas>
     </>

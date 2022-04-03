@@ -3,8 +3,9 @@ import { Button, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import CustomOverlay from '../common/CustomOverlay';
-import { getEdgeCenter, getSmoothStepPath } from 'react-flow-renderer';
+import { getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
 import useEdgeService from '../../hooks/service/useEdgeService';
+import PropTypes from 'prop-types';
 
 export default function CustomEdge({
   id,
@@ -16,14 +17,14 @@ export default function CustomEdge({
   targetPosition,
   sourceHandleId,
   markerEnd,
-}) {
+}: CustomEdgeProps) {
   const foreignObjectSize = 80;
   const edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
   const [edgeCenterX, edgeCenterY] = getEdgeCenter({ sourceX, sourceY, targetX, targetY });
   const { removeEdge } = useEdgeService();
   const [showBtn, toggleBtn] = React.useState(false);
 
-  const handleClick = (evt, id) => {
+  const handleClick = (evt: React.MouseEvent, id: string) => {
     evt.stopPropagation();
     removeEdge(id);
   };
@@ -70,3 +71,26 @@ export default function CustomEdge({
   );
 }
 
+CustomEdge.propTypes = {
+  id: PropTypes.string.isRequired,
+  sourceX: PropTypes.number.isRequired,
+  sourceY: PropTypes.number.isRequired,
+  targetX: PropTypes.number.isRequired,
+  targetY: PropTypes.number.isRequired,
+  sourcePosition: PropTypes.object.isRequired,
+  targetPosition: PropTypes.object.isRequired,
+  sourceHandleId: PropTypes.string.isRequired,
+  markerEnd: PropTypes.object.isRequired,
+};
+
+type CustomEdgeProps = {
+  id: string;
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+  sourcePosition: Position;
+  targetPosition: Position;
+  sourceHandleId: string;
+  markerEnd: MarkerType;
+};

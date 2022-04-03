@@ -15,10 +15,9 @@ export function NodeComponent(node) {
   );
 }
 
-export function CreateButton({ className }) {
+export function CreateButton() {
   return (
     <BlockCreateButton
-      className={className}
       type={BlockTypes.STOP_BLOCK}
       title={T.blocks.stop.title}
       description={T.blocks.stop.description}

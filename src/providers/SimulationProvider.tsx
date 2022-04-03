@@ -22,7 +22,7 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
   return <SimulationContext.Provider value={value}>{props.children}</SimulationContext.Provider>;
 };
 
-export const useSimulationContext = () => {
+export const useSimulationContext = (): SimulationContextType => {
   const context = React.useContext(SimulationContext);
   return throwErrorIfNull(context, 'SimulationContext not initialized');
 };

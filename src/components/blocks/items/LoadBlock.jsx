@@ -24,10 +24,9 @@ export function NodeComponent(node) {
   );
 }
 
-export function CreateButton({ className }) {
+export function CreateButton() {
   return (
     <BlockCreateButton
-      className={className}
       type={BlockTypes.LOAD_BLOCK}
       title={T.blocks.load.title}
       description={T.blocks.load.description}
