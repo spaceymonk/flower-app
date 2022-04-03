@@ -28,7 +28,7 @@ export function OpenModal({ show, onClose }) {
   }
   function handleRestoreCheckpoint() {
     try {
-      load(InitialValues.defaultEdges, InitialValues.defaultNodes, InitialValues.title, InitialValues.inputParams);
+      load(InitialValues.defaultEdges, InitialValues.defaultBlocks, InitialValues.title, InitialValues.inputParams);
       fitView();
       onClose();
       toast.success('Last save restored!');

@@ -9,7 +9,7 @@ import CustomOverlay from '../../common/CustomOverlay';
 import { AppContext } from '../../../providers/AppProvider';
 import Select from 'react-select';
 import { BlockTypes } from '../../../services/createNode';
-import { includesNode } from '../../../services/BlockHelper';
+import { includesBlock } from '../../../services/BlockHelper';
 
 const CustomOption = ({ node }) => {
   return (
@@ -63,7 +63,7 @@ export function ContainerModal({ node, onClose, show }) {
           n.id === node.id ||
           n.type === BlockTypes.START_BLOCK ||
           n.type === BlockTypes.STOP_BLOCK ||
-          includesNode(childNodes, n)
+          includesBlock(childNodes, n)
         )
       ) {
         avail.push(n);

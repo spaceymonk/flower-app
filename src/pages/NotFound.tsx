@@ -12,7 +12,7 @@ function NotFound() {
 
       <Container className="mt-5">
         <Card className="text-danger text-center w-75 mx-auto my-auto">
-          <Card.Header variant="top">
+          <Card.Header>
             <FontAwesomeIcon icon={faExclamationTriangle} size="6x" />
           </Card.Header>
           <Card.Body className="p-4">

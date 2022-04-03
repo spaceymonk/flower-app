@@ -1,9 +1,9 @@
 import React from 'react';
-import { SimulationContext } from '../providers/SimulationProvider';
 import useBlockService from './service/useBlockService';
+import useSimulationContext from './useSimulationContext';
 
 const usePaneLock = () => {
-  const { isRunning } = React.useContext(SimulationContext);
+  const { isRunning } = useSimulationContext();
   const { highlightNode } = useBlockService();
 
   const [nodesDraggable, setNodesDraggable] = React.useState(true);

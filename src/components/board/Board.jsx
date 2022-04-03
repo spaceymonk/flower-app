@@ -7,6 +7,7 @@ import usePaneLock from '../../hooks/usePaneLock';
 import useEdgeService from '../../hooks/service/useEdgeService.js';
 import { AppContext } from '../../providers/AppProvider';
 import { CustomConnectionLine, edgeTypes } from '../edges';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Board({ height }) {
   const paneLockConfigs = usePaneLock();
@@ -42,7 +43,9 @@ function Board({ height }) {
           <Background />
           {minimapToggled && <MiniMap />}
           <Controls showInteractive={false} showZoom={false}>
-            <ControlButton onClick={handleMinimapVisibility}>{minimapIcon}</ControlButton>
+            <ControlButton onClick={handleMinimapVisibility}>
+              <FontAwesomeIcon icon={minimapIcon}></FontAwesomeIcon>
+            </ControlButton>
           </Controls>
         </ReactFlow>
       </div>

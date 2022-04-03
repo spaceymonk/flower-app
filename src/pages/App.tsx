@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import useAlert from '../hooks/useAlert';
 import { AppProvider } from '../providers/AppProvider';
 import { SimulationProvider } from '../providers/SimulationProvider';
+import { throwErrorIfNull } from '../services/common';
 
 function App() {
   const [boardHeight, setBoardHeight] = React.useState(1);
@@ -21,9 +22,9 @@ function App() {
   React.useEffect(() => {
     setBoardHeight(
       windowDim.height -
-        menubarRef.current.clientHeight -
-        footerRef.current.clientHeight -
-        toolbarRef.current.clientHeight
+        throwErrorIfNull(menubarRef.current).clientHeight -
+        throwErrorIfNull(footerRef.current).clientHeight -
+        throwErrorIfNull(toolbarRef.current).clientHeight
     );
   }, [windowDim.height]);
 

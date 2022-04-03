@@ -1,5 +1,7 @@
 export default class NotConnectedError extends Error {
-  constructor(blockId) {
+  public blockId: string;
+
+  constructor(blockId: string) {
     super('A block has unconnected handles!');
     this.name = 'NotConnectedError';
     this.blockId = blockId;
