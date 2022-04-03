@@ -3,14 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
-import { AppContext } from '../../../providers/AppProvider';
+import { useAppContext } from '../../../providers/AppProvider';
+import PropTypes from 'prop-types';
 
-export function InputSelectModal({ show, onClose }) {
-  const { getInputParams, setInputParams } = React.useContext(AppContext);
-  const textRef = React.useRef();
+export function InputSelectModal({ show, onClose }: InputSelectModalProps) {
+  const { getInputParams, setInputParams } = useAppContext();
+  const [text, setText] = React.useState(getInputParams());
 
   const handleSave = () => {
-    setInputParams(textRef.current.value);
+    setInputParams(text);
     onClose();
   };
 
@@ -26,9 +27,9 @@ export function InputSelectModal({ show, onClose }) {
           <Form.Label className="mb-3">Enter input parameters of the project:</Form.Label>
           <Form.Control
             as="textarea"
-            ref={textRef}
             rows={6}
-            defaultValue={getInputParams()}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
             onKeyDown={(event) => {
               if (event.ctrlKey && event.key === 'Enter') handleSave();
             }}
@@ -47,6 +48,13 @@ export function InputSelectModal({ show, onClose }) {
     </Modal>
   );
 }
+
+InputSelectModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export interface InputSelectModalProps extends PropTypes.InferProps<typeof InputSelectModal.propTypes> {}
 
 export function InputSelectMenuItem() {
   const [show, toggleShow] = useToggle();

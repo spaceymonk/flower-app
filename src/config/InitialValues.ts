@@ -1,5 +1,5 @@
 import { Edge } from 'react-flow-renderer';
-import { Block } from '../types';
+import { Block, ProjectData } from '../types';
 
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 
@@ -18,7 +18,7 @@ class Initial {
     this.refresh();
   }
 
-  refresh() {
+  refresh(): void {
     const storageNodes = window.localStorage.getItem('nodes') || '[]';
     const storageEdges = window.localStorage.getItem('edges') || '[]';
     this.defaultBlocks = JSON.parse(storageNodes);
@@ -27,12 +27,21 @@ class Initial {
     this.inputParams = window.localStorage.getItem('inputParams') || '';
   }
 
-  empty() {
+  empty(): ProjectData {
     return {
       title: uniqueNamesGenerator(ProjectNameOptions),
-      nodes: [],
+      blocks: [],
       edges: [],
       inputParams: '',
+    };
+  }
+
+  get(): ProjectData {
+    return {
+      title: this.title,
+      blocks: this.defaultBlocks,
+      edges: this.defaultEdges,
+      inputParams: this.inputParams,
     };
   }
 }

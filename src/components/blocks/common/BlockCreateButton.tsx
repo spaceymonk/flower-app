@@ -3,19 +3,22 @@ import T from '../../../services/MessageConstants';
 import { useReactFlow } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import createNode from '../../../services/createNode';
 import useBlockService from '../../../hooks/service/useBlockService';
+import { createBlock } from '../../../services/BlockHelper';
+import PropTypes from 'prop-types';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { BlockTypes } from '../../../types';
 
-function BlockCreateButton({ title, description, icon, type }) {
+function BlockCreateButton({ title, description, icon, type }: BlockCreateButtonProps) {
   const { getViewport } = useReactFlow();
-  const { addNode } = useBlockService();
+  const { addBlock } = useBlockService();
 
   function handleClick() {
     try {
       const viewport = getViewport();
       const pos = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
-      const node = createNode(type, pos);
-      addNode(node);
+      const block = createBlock(type, pos);
+      addBlock(block);
       toast.success(T.blocks.creationSuccess);
     } catch {
       toast.error(T.blocks.creationFailed);
@@ -23,7 +26,7 @@ function BlockCreateButton({ title, description, icon, type }) {
   }
 
   return (
-    <Card className='small user-select-none clickable mb-3' onClick={handleClick}>
+    <Card className="small user-select-none clickable mb-3" onClick={handleClick}>
       <Card.Header>
         <Card.Title className="d-flex justify-content-between align-items-center">
           <FontAwesomeIcon icon={icon} />
@@ -35,6 +38,18 @@ function BlockCreateButton({ title, description, icon, type }) {
       </Card.Body>
     </Card>
   );
+}
+
+BlockCreateButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  icon: PropTypes.any.isRequired,
+  type: PropTypes.string.isRequired,
+};
+
+export interface BlockCreateButtonProps extends PropTypes.InferProps<typeof BlockCreateButton.propTypes> {
+  icon: IconProp;
+  type: BlockTypes;
 }
 
 export default BlockCreateButton;

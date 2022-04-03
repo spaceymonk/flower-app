@@ -1,11 +1,11 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { NavDropdown, Modal, Container, Button } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
+import PropTypes from 'prop-types';
 
-export const FindModal = ({ show, onClose }) => {
-  function handleFind() {}
+export function FindModal({ show, onClose }: FindModalProps) {
+  function handleFind() { }
 
   return (
     <Modal show={show} size="lg" centered onHide={onClose} scrollable>
@@ -27,7 +27,14 @@ export const FindModal = ({ show, onClose }) => {
       </Modal.Footer>
     </Modal>
   );
+}
+
+FindModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
+
+export interface FindModalProps extends PropTypes.InferProps<typeof FindModal.propTypes> {}
 
 export function FindMenuItem() {
   const [show, toggleShow] = useToggle();

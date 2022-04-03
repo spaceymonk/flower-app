@@ -4,32 +4,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import T from '../../../services/MessageConstants';
 import useBlockService from '../../../hooks/service/useBlockService';
+import PropTypes from 'prop-types';
+import { Block } from '../../../types';
+import { throwErrorIfUndefined } from '../../../services/common';
 
-export function BaseModal({ show, children, onSave, onClose, node }) {
-  const { removeNode, updateNode } = useBlockService();
-  const [name, setName] = React.useState(node.data.name || node.id);
+export function BaseModal({ show, children, onSave, onClose, block }: BaseModalProps) {
+  const { removeBlock, updateBlockData } = useBlockService();
+  const [name, setName] = React.useState(block.data.name || block.id);
   function handleDelete() {
-    removeNode(node);
+    removeBlock(block);
     onClose();
   }
   function handleNameField() {
-    if (name.trim().length === 0 || name.trim() === node.id) {
-      updateNode(node.id, { name: undefined });
-      setName(node.id);
+    if (name.trim().length === 0 || name.trim() === block.id) {
+      updateBlockData(block.id, { name: undefined });
+      setName(block.id);
     } else {
-      updateNode(node.id, { name: name });
+      updateBlockData(block.id, { name: name });
     }
   }
 
   React.useEffect(() => {
-    setName(node.data.name || node.id);
-  }, [node]);
+    setName(block.data.name || block.id);
+  }, [block]);
 
   return (
-    <Modal show={show} size="md" centered className="node-modal">
-      {node && (
+    <Modal show={show} centered className="node-modal">
+      {block && (
         <Modal.Header className="overflow-auto">
-          <strong className="me-5 me-sm-auto">{node.type.toUpperCase()}</strong>
+          <strong className="me-5 me-sm-auto">{throwErrorIfUndefined(block.type).toUpperCase()}</strong>
           <Form.Control
             className="w-75 text-muted small p-0 text-end fst-italic"
             size="sm"
@@ -38,8 +41,8 @@ export function BaseModal({ show, children, onSave, onClose, node }) {
             type="text"
             autoFocus
             onBlur={handleNameField}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') event.target.blur();
+            onKeyDown={(event: React.KeyboardEvent) => {
+              if (event.key === 'Enter') (event.target as HTMLInputElement).blur();
             }}
             onChange={(event) => setName(event.target.value)}
             value={name}
@@ -63,4 +66,16 @@ export function BaseModal({ show, children, onSave, onClose, node }) {
       </Modal.Footer>
     </Modal>
   );
+}
+
+BaseModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  children: PropTypes.node,
+  onSave: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+  block: PropTypes.object.isRequired,
+};
+
+interface BaseModalProps extends PropTypes.InferProps<typeof BaseModal.propTypes> {
+  block: Block;
 }

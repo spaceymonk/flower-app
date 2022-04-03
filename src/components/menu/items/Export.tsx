@@ -1,22 +1,19 @@
 import { faFileExport } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { NavDropdown, Modal, Button, Container } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
-import domtoimage from 'dom-to-image';
-import FileSaver from 'file-saver';
-import { AppContext } from '../../../providers/AppProvider';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+import useExport from '../../../hooks/project/useExport';
 
-export function ExportModal({ show, onClose }) {
-  const { getTitle } = React.useContext(AppContext);
+export function ExportModal({ show, onClose }: ExportModalProps) {
+  const { toPNG } = useExport();
 
   async function handleExport() {
     try {
-      const blob = await domtoimage.toBlob(document.getElementById('board'), { bgcolor: '#fff' });
-      FileSaver.saveAs(blob, getTitle() + '.png');
+      toPNG();
     } catch {
-      toast.error('Error exporting image');
+      toast.error('Export failed!');
     }
   }
 
@@ -40,6 +37,13 @@ export function ExportModal({ show, onClose }) {
     </Modal>
   );
 }
+
+ExportModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export interface ExportModalProps extends PropTypes.InferProps<typeof ExportModal.propTypes> {}
 
 export function ExportMenuItem() {
   const [show, toggleShow] = useToggle();

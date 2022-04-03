@@ -5,29 +5,31 @@ import { nodeTypes, BlockModalContainer } from '../blocks';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
 import usePaneLock from '../../hooks/usePaneLock';
 import useEdgeService from '../../hooks/service/useEdgeService.js';
-import { AppContext } from '../../providers/AppProvider';
 import { CustomConnectionLine, edgeTypes } from '../edges';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
+import { useAppContext } from '../../providers/AppProvider';
+import { Block } from '../../types';
 
-function Board({ height }) {
+function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const paneLockConfigs = usePaneLock();
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
-  const { getNodes, getEdges, onNodesChange, onEdgesChange } = React.useContext(AppContext);
+  const { getBlocks, getEdges, onBlocksChange, onEdgesChange } = useAppContext();
   const { onConnect, onEdgeUpdate } = useEdgeService();
 
-  const [dblClkNode, setDblClkNode] = React.useState(null);
-  const handleNodeDoubleClick = (event, node) => setDblClkNode(node);
+  const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
+  const handleNodeDoubleClick = (event: any, block: Block) => setDblClkNode(block);
 
-  const nodes = React.useMemo(getNodes, [getNodes]);
+  const blocks = React.useMemo(getBlocks, [getBlocks]);
   const edges = React.useMemo(getEdges, [getEdges]);
 
   return (
     <>
       <div id="board" style={{ height: height + 'px', width: '100%' }}>
         <ReactFlow
-          nodes={nodes}
+          nodes={blocks}
           edges={edges}
-          onNodesChange={onNodesChange}
+          onNodesChange={onBlocksChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}
@@ -49,9 +51,13 @@ function Board({ height }) {
           </Controls>
         </ReactFlow>
       </div>
-      <BlockModalContainer node={dblClkNode} />
+      <BlockModalContainer block={dblClkNode} />
     </>
   );
 }
+
+Board.propTypes = {
+  height: PropTypes.number.isRequired,
+};
 
 export default Board;

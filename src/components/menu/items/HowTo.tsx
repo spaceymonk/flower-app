@@ -1,11 +1,11 @@
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
 import { Modal, Button, Container } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
+import PropTypes from 'prop-types';
 
-export function HowToModal({ show, onClose }) {
+export function HowToModal({ show, onClose }: HowToModalProps) {
   return (
     <Modal show={show} size="lg" centered onHide={onClose} scrollable>
       <Modal.Header closeButton>
@@ -38,6 +38,13 @@ export function HowToModal({ show, onClose }) {
     </Modal>
   );
 }
+
+HowToModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export interface HowToModalProps extends PropTypes.InferProps<typeof HowToModal.propTypes> {}
 
 export function HowToMenuItem() {
   const [show, toggleShow] = useToggle();

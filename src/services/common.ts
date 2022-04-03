@@ -10,6 +10,13 @@ export const throwErrorIfNull = (value: any, errorMsg = 'Value cannot be null'):
   return value;
 };
 
+export const throwErrorIfUndefined = (value: any, errorMsg = 'Value cannot be undefined'): any => {
+  if (typeof value === 'undefined') {
+    throw new Error(errorMsg);
+  }
+  return value;
+};
+
 export class PositionGenerator {
   private position: XYPosition;
 

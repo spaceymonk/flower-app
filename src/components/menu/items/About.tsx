@@ -4,8 +4,9 @@ import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
 import { Modal, Button, Container } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
+import PropTypes from 'prop-types';
 
-export function AboutModal({ show, onClose }) {
+export function AboutModal({ show, onClose }: AboutModalProps) {
   return (
     <Modal show={show} size="lg" centered onHide={onClose} scrollable>
       <Modal.Header closeButton>
@@ -36,6 +37,14 @@ export function AboutModal({ show, onClose }) {
     </Modal>
   );
 }
+
+AboutModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export interface AboutModalProps extends PropTypes.InferProps<typeof AboutModal.propTypes> {}
+
 
 export function AboutMenuItem() {
   const [show, toggleShow] = useToggle();

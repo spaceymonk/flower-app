@@ -3,14 +3,14 @@ import { faCode } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
 import T from '../../../services/MessageConstants';
 import { BlockNode } from '../common/BlockNode';
-import { BlockTypes } from '../../../services/createNode';
 import BlockCreateButton from '../common/BlockCreateButton';
+import { Block, BlockTypes } from '../../../types';
 
-export function NodeComponent(node) {
-  const processed = node.data.text; //todo: handle special keywords by bolding them etc.
+export function NodeComponent(block: Block) {
+  const processed = block.data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <BlockNode className="node-statement" node={node}>
+    <BlockNode className="node-statement" block={block}>
       <Handle type="target" position={Position.Top} className="handle" />
       <div>
         {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}

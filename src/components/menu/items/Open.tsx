@@ -8,12 +8,23 @@ import useToggle from '../../../hooks/useToggle';
 import useOpen from '../../../hooks/project/useOpen';
 import useLoad from '../../../hooks/project/useLoad';
 import { useReactFlow } from 'react-flow-renderer';
+import PropTypes from 'prop-types';
 
-export function OpenModal({ show, onClose }) {
-  const [file, setFile] = React.useState(null);
+export function OpenModal({ show, onClose }: OpenModalProps) {
+  const [file, setFile] = React.useState<File | null>(null);
   const open = useOpen();
   const load = useLoad();
   const { fitView } = useReactFlow();
+
+  const handleFileSelection = (event: React.ChangeEvent) => {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.item(0);
+    if (file) {
+      setFile(file);
+    } else {
+      toast.warn('No file selected.');
+    }
+  };
 
   function handleOpen() {
     try {
@@ -28,7 +39,7 @@ export function OpenModal({ show, onClose }) {
   }
   function handleRestoreCheckpoint() {
     try {
-      load(InitialValues.defaultEdges, InitialValues.defaultBlocks, InitialValues.title, InitialValues.inputParams);
+      load(InitialValues.get());
       fitView();
       onClose();
       toast.success('Last save restored!');
@@ -48,7 +59,7 @@ export function OpenModal({ show, onClose }) {
         <Container>
           <Form.Group controlId="formFile">
             <Form.Label>Select from computer:</Form.Label>
-            <Form.Control type="file" accept=".json" onChange={(event) => setFile(event.target.files[0])} />
+            <Form.Control type="file" accept=".json" onChange={handleFileSelection} />
           </Form.Group>
           <div className="mt-3  text-center">
             <p className="text-muted">or</p>
@@ -70,6 +81,13 @@ export function OpenModal({ show, onClose }) {
     </Modal>
   );
 }
+
+OpenModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export interface OpenModalProps extends PropTypes.InferProps<typeof OpenModal.propTypes> {}
 
 export function OpenMenuItem() {
   const [show, toggleShow] = useToggle();

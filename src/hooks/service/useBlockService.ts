@@ -9,6 +9,7 @@ import {
   findDirectChildBlocks,
   updateBlockParent,
   removeBlockParent,
+  findAllAvailableChildren,
 } from '../../services/BlockHelper';
 import useEdgeService from './useEdgeService';
 import { Block, BlockData, GlowTypes } from '../../types';
@@ -19,7 +20,7 @@ const useBlockService = () => {
   const { addNodes, setCenter } = useReactFlow();
 
   return {
-    addNode: addNodes,
+    addBlock: addNodes,
     updateBlockData: React.useCallback(
       (id: string, changeData: BlockData) => {
         updateBlockData(id, changeData, setBlocks);
@@ -61,6 +62,12 @@ const useBlockService = () => {
         removeBlockParent(parentBlock, children, setBlocks, removeEdge, getConnectedEdges);
       },
       [getConnectedEdges, removeEdge, setBlocks]
+    ),
+    findAllAvailableChildren: React.useCallback(
+      (block: Block, childNodes: Block[]) => {
+        return findAllAvailableChildren(getBlocks(), block, childNodes);
+      },
+      [getBlocks]
     ),
   };
 };

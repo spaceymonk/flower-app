@@ -1,10 +1,10 @@
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { NavDropdown, Modal, Container, Table, Button } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
+import PropTypes from 'prop-types';
 
-export function StatisticsModal({ show, onClose }) {
+export function StatisticsModal({ show, onClose }: StatisticsModalProps) {
   return (
     <Modal show={show} size="lg" centered onHide={onClose} scrollable>
       <Modal.Header closeButton>
@@ -25,6 +25,13 @@ export function StatisticsModal({ show, onClose }) {
     </Modal>
   );
 }
+
+StatisticsModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export interface StatisticsModalProps extends PropTypes.InferProps<typeof StatisticsModal.propTypes> {}
 
 export const StatisticsMenuItem = () => {
   const [show, toggleShow] = useToggle();

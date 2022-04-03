@@ -24,6 +24,7 @@ export const BlockSchema = Joi.object({
     y: Joi.number().required(),
   }).required(),
   data: Joi.object({
+    name: Joi.string(),
     text: Joi.string().allow(''),
     glow: Joi.string().valid(glowTypeList),
     width: Joi.number(),

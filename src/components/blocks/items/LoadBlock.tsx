@@ -1,19 +1,19 @@
 import React from 'react';
-import { faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faTruckLoading } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
 import T from '../../../services/MessageConstants';
 import { BlockNode } from '../common/BlockNode';
-import { BlockTypes } from '../../../services/createNode';
 import BlockCreateButton from '../common/BlockCreateButton';
+import { Block, BlockTypes } from '../../../types';
 
-export function NodeComponent(node) {
-  const processed = node.data.text; //todo: handle special keywords by bolding them etc.
+export function NodeComponent(block: Block) {
+  const processed = block.data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <BlockNode node={node}>
+    <BlockNode block={block}>
       <Handle type="target" position={Position.Top} className="handle" />
       <div className="w-100">
-        <div className="header">STORE</div>
+        <div className="header">LOAD</div>
         <div className="p-2 text-center">
           {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}
           {processed}
@@ -27,10 +27,10 @@ export function NodeComponent(node) {
 export function CreateButton() {
   return (
     <BlockCreateButton
-      type={BlockTypes.STORE_BLOCK}
-      title={T.blocks.store.title}
-      description={T.blocks.store.description}
-      icon={faPrint}
+      type={BlockTypes.LOAD_BLOCK}
+      title={T.blocks.load.title}
+      description={T.blocks.load.description}
+      icon={faTruckLoading}
     />
   );
 }

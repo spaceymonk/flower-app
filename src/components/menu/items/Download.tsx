@@ -1,6 +1,5 @@
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { NavDropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import useDownload from '../../../hooks/project/useDownload';

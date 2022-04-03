@@ -185,3 +185,16 @@ export const findParentBlock = (blockList: Block[], block: Block): Block | undef
   }
   return undefined;
 };
+
+/* -------------------------------------------------------------------------- */
+/*                          findAllAvailableChildren                          */
+/* -------------------------------------------------------------------------- */
+export const findAllAvailableChildren = (blockList: Block[], block: Block, childNodes: Block[]): Block[] => {
+  let availableChildren: Block[] = [];
+  for (const b of blockList) {
+    if (!(b.id === block.id || b.type === BlockTypes.START_BLOCK || b.type === BlockTypes.STOP_BLOCK || includesBlock(childNodes, b))) {
+      availableChildren.push(b);
+    }
+  }
+  return availableChildren;
+};

@@ -77,20 +77,14 @@ CustomEdge.propTypes = {
   sourceY: PropTypes.number.isRequired,
   targetX: PropTypes.number.isRequired,
   targetY: PropTypes.number.isRequired,
-  sourcePosition: PropTypes.object.isRequired,
-  targetPosition: PropTypes.object.isRequired,
+  sourcePosition: PropTypes.string.isRequired,
+  targetPosition: PropTypes.string.isRequired,
   sourceHandleId: PropTypes.string.isRequired,
-  markerEnd: PropTypes.object.isRequired,
+  markerEnd: PropTypes.string.isRequired,
 };
 
-type CustomEdgeProps = {
-  id: string;
-  sourceX: number;
-  sourceY: number;
-  targetX: number;
-  targetY: number;
+interface CustomEdgeProps extends PropTypes.InferProps<typeof CustomEdge.propTypes> {
   sourcePosition: Position;
   targetPosition: Position;
-  sourceHandleId: string;
   markerEnd: MarkerType;
 };
