@@ -1,5 +1,8 @@
 import { XYPosition } from 'react-flow-renderer';
 
+// make sure that the string you type is a property on a given object.
+export const nameof = <T>(name: keyof T) => name;
+
 export const throwErrorIfNull = (value: any, errorMsg = 'Value cannot be null'): any => {
   if (value === null) {
     throw new Error(errorMsg);

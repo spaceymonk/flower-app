@@ -1,5 +1,12 @@
 import { Node, Edge, OnEdgesChange, OnNodesChange } from 'react-flow-renderer';
 
+export type ProjectData = {
+  title: string;
+  inputParams: string;
+  blocks: Block[];
+  edges: Edge[];
+};
+
 export enum BlockTypes {
   DECISION_BLOCK = 'decision',
   STATEMENT_BLOCK = 'statement',
@@ -8,6 +15,10 @@ export enum BlockTypes {
   START_BLOCK = 'start',
   STOP_BLOCK = 'stop',
   WHILE_LOOP_BLOCK = 'while',
+}
+
+export enum EdgeTypes {
+  CUSTOM_EDGE = 'custom',
 }
 
 export enum GlowTypes {
