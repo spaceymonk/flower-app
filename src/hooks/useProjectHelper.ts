@@ -2,10 +2,11 @@ import FileSaver from 'file-saver';
 import React from 'react';
 import InitialValues from '../config/InitialValues';
 import { useAppContext } from '../providers/AppProvider';
-import { nameof, throwErrorIfNull } from '../services/common';
+import { nameof, throwErrorIfNull } from '../util';
 import { ProjectData } from '../types';
+import domtoimage from 'dom-to-image';
 
-export const useProjectService = () => {
+export const useProjectHelper = () => {
   const { setTitle, setInputParams, setEdges, setBlocks, getTitle, getInputParams, getBlocks, getEdges } = useAppContext();
 
   return {
@@ -37,7 +38,7 @@ export const useProjectService = () => {
       FileSaver.saveAs(blob, getTitle() + '.json');
     }, [getEdges, getInputParams, getBlocks, getTitle]),
     toPNG: React.useCallback(async () => {
-      const blob = await DomToImage.toBlob(throwErrorIfNull(document.getElementById('board')), { bgcolor: '#fff' });
+      const blob = await domtoimage.toBlob(throwErrorIfNull(document.getElementById('board')), { bgcolor: '#fff' });
       FileSaver.saveAs(blob, getTitle() + '.png');
     }, [getTitle]),
   };

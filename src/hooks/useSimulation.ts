@@ -1,11 +1,9 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import MultipleStartError from '../../exceptions/MultipleStartError';
-import MultipleStopError from '../../exceptions/MultipleStopError';
-import NotConnectedError from '../../exceptions/NotConnectedError';
-import { useSimulationContext } from '../../providers/SimulationProvider';
-import { GlowTypes, SimulationActions } from '../../types';
-import useBlockService from './useBlockService';
+import { MultipleStartError, NotConnectedError } from '../exceptions';
+import { useSimulationContext } from '../providers/SimulationProvider';
+import { GlowTypes, SimulationActions } from '../types';
+import useBlockHelper from './useBlockHelper';
 import useFlowParser from './useFlowParser';
 
 const useSimulation = () => {
@@ -14,7 +12,7 @@ const useSimulation = () => {
   const actionRef = React.useRef(SimulationActions.none);
 
   const flowParser = useFlowParser();
-  const { highlightBlocks } = useBlockService();
+  const { highlightBlocks } = useBlockHelper();
   const { isRunning, setRunning } = useSimulationContext();
 
   const stop = React.useCallback(() => {
@@ -36,10 +34,10 @@ const useSimulation = () => {
         toast.info('Simulation ended!');
       } else {
         if (actionRef.current === SimulationActions.continue) {
-          flowParser.parse();
+          flowParser.process();
         } else if (actionRef.current === SimulationActions.debug && jumpNextBlockRef.current) {
           jumpNextBlockRef.current = false;
-          flowParser.parse();
+          flowParser.process();
         }
         setTimeout(simulationLoop, speedInMsRef.current);
       }
@@ -51,12 +49,12 @@ const useSimulation = () => {
     actionRef.current = SimulationActions.debug;
     jumpNextBlockRef.current = false;
     try {
-      flowParser.validate();
+      flowParser.initialize();
       run();
     } catch (e: any) {
       if (e instanceof NotConnectedError) {
         highlightBlocks([e.blockId], GlowTypes.ERROR);
-      } else if (e instanceof MultipleStartError || e instanceof MultipleStopError) {
+      } else if (e instanceof MultipleStartError || e instanceof MultipleStartError) {
         highlightBlocks(e.blockIdList, GlowTypes.ERROR);
       }
       toast.error(e.message);

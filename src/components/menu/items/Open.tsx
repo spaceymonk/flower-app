@@ -7,14 +7,14 @@ import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
 import { useReactFlow } from 'react-flow-renderer';
 import PropTypes from 'prop-types';
-import { throwErrorIfNull } from '../../../services/common';
+import { throwErrorIfNull } from '../../../util';
 import { ProjectData } from '../../../types';
 import { open } from '../../../services/ProjectHelper';
-import { useProjectService } from '../../../hooks/useProjectService';
+import { useProjectHelper } from '../../../hooks/useProjectHelper';
 
 export function OpenModal({ show, onClose }: OpenModalProps) {
   const [file, setFile] = React.useState<File | null>(null);
-  const { load } = useProjectService();
+  const { load } = useProjectHelper();
   const { fitView } = useReactFlow();
 
   const handleFileSelection = (event: React.ChangeEvent) => {

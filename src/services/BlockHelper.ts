@@ -2,9 +2,7 @@ import { Edge, getConnectedEdges, SetCenter, XYPosition } from 'react-flow-rende
 import { toast } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
 import { BlockTypes, Block, BlockData, GlowTypes } from '../types';
-import { PositionGenerator } from './common';
-
-type SetBlocks = React.Dispatch<React.SetStateAction<Block[]>>;
+import { PositionGenerator, SetBlocks } from './common';
 
 /* -------------------------------------------------------------------------- */
 /*                                 createBlock                                */
@@ -60,7 +58,6 @@ export const removeBlock = (block: Block, setBlocks: SetBlocks): void => {
 /*                               highlightBlocks                              */
 /* -------------------------------------------------------------------------- */
 export const highlightBlocks = (ids: string[] | null, glowType: GlowTypes = GlowTypes.NONE, setBlocks: SetBlocks): void => {
-  console.log('highlightBlocks', ids);
   setBlocks((blocks) =>
     blocks.map((b) => {
       if (ids === null) {

@@ -4,7 +4,7 @@ import { Background, MiniMap, Controls, ControlButton } from 'react-flow-rendere
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
 import usePaneLock from '../../hooks/usePaneLock';
-import useEdgeService from '../../hooks/service/useEdgeService';
+import useEdgeHelper from '../../hooks/useEdgeHelper';
 import { CustomConnectionLine, edgeTypes } from '../edges';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
@@ -15,7 +15,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const paneLockConfigs = usePaneLock();
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
   const { getBlocks, getEdges, onBlocksChange, onEdgesChange } = useAppContext();
-  const { onConnect, onEdgeUpdate } = useEdgeService();
+  const { onConnect, onEdgeUpdate } = useEdgeHelper();
 
   const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
   const handleNodeDoubleClick = (event: any, block: Block) => setDblClkNode(block);

@@ -2,10 +2,10 @@ import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useProjectService } from '../../../hooks/useProjectService';
+import { useProjectHelper } from '../../../hooks/useProjectHelper';
 
 export function SaveMenuItem() {
-  const { save } = useProjectService();
+  const { save } = useProjectHelper();
 
   function handleClick() {
     try {

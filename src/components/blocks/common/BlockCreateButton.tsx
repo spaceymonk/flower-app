@@ -3,7 +3,7 @@ import T from '../../../services/MessageConstants';
 import { useReactFlow } from 'react-flow-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import useBlockService from '../../../hooks/service/useBlockService';
+import useBlockHelper from '../../../hooks/useBlockHelper';
 import { createBlock } from '../../../services/BlockHelper';
 import PropTypes from 'prop-types';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -11,7 +11,7 @@ import { BlockTypes } from '../../../types';
 
 function BlockCreateButton({ title, description, icon, type }: BlockCreateButtonProps) {
   const { getViewport } = useReactFlow();
-  const { addBlock } = useBlockService();
+  const { addBlock } = useBlockHelper();
 
   function handleClick() {
     try {

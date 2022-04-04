@@ -1,9 +1,9 @@
 import React from 'react';
 import { Connection, Edge } from 'react-flow-renderer';
-import { useAppContext } from '../../providers/AppProvider';
-import { findById, onConnect, onEdgeUpdate, removeEdges } from '../../services/EdgeHelper';
+import { findById, onConnect, onEdgeUpdate, removeEdges } from '../services/EdgeHelper';
+import { useAppContext } from '../providers/AppProvider';
 
-const useEdgeService = () => {
+const useEdgeHelper = () => {
   const { setEdges, getEdges, getBlocks } = useAppContext();
 
   return {
@@ -34,4 +34,4 @@ const useEdgeService = () => {
   };
 };
 
-export default useEdgeService;
+export default useEdgeHelper;

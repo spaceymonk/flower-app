@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import CustomOverlay from '../common/CustomOverlay';
 import { Edge, getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
-import useEdgeService from '../../hooks/service/useEdgeService';
+import useEdgeHelper from '../../hooks/useEdgeHelper';
 import PropTypes from 'prop-types';
-import { throwErrorIfUndefined } from '../../services/common';
+import { throwErrorIfUndefined } from '../../util';
 
 export default function CustomEdge({
   id,
@@ -22,7 +22,7 @@ export default function CustomEdge({
   const foreignObjectSize = 80;
   const edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
   const [edgeCenterX, edgeCenterY] = getEdgeCenter({ sourceX, sourceY, targetX, targetY });
-  const { removeEdges, findById } = useEdgeService();
+  const { removeEdges, findById } = useEdgeHelper();
   const [showBtn, toggleBtn] = React.useState(false);
 
   const handleClick = (evt: React.MouseEvent, id: string) => {

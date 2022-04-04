@@ -2,11 +2,11 @@ import React from 'react';
 import { useViewport } from 'react-flow-renderer';
 import { BlockNode, BlockNodeProps } from './BlockNode';
 import { ResizableBox } from 'react-resizable';
-import useBlockService from '../../../hooks/service/useBlockService';
+import useBlockHelper from '../../../hooks/useBlockHelper';
 import PropTypes from 'prop-types';
 
 export function ContainerNode({ block, ...props }: ContainerNodeProps) {
-  const { updateBlockSize } = useBlockService();
+  const { updateBlockData } = useBlockHelper();
   const { zoom } = useViewport();
 
   const handleResizeStart = React.useCallback((e) => {
@@ -15,17 +15,17 @@ export function ContainerNode({ block, ...props }: ContainerNodeProps) {
   }, []);
   const handleResize = React.useCallback(
     (event, { size }) => {
-      updateBlockSize(block.id, size.width, size.height);
+      updateBlockData(block.id, { width: size.width, height: size.height });
     },
-    [block.id, updateBlockSize]
+    [block.id, updateBlockData]
   );
 
   return (
     <ResizableBox
       // @ts-ignore: invalid @types/react-resizable package
       transformScale={zoom}
-      width={block.width || 200}
-      height={block.height || 200}
+      width={block.data.width || 200}
+      height={block.data.height || 200}
       minConstraints={[200, 200]}
       onResizeStart={handleResizeStart}
       onResize={handleResize}

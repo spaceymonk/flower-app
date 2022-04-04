@@ -3,7 +3,7 @@ import { DecisionBlockModal, LoadBlockkModal, StartBlockModal, StatementBlockMod
 import useToggle from '../../../hooks/useToggle';
 import { Block, BlockTypes } from '../../../types';
 import PropTypes from 'prop-types';
-import { throwErrorIfUndefined } from '../../../services/common';
+import { throwErrorIfUndefined } from '../../../util';
 
 export function BlockModalContainer({ block }: BlockModalContainerProps) {
   const [activeModal, setActiveModal] = React.useState<string | null>(null);

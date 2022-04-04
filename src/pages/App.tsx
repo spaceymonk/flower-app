@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import useAlert from '../hooks/useAlert';
 import { AppProvider } from '../providers/AppProvider';
 import { SimulationProvider } from '../providers/SimulationProvider';
-import { throwErrorIfNull } from '../services/common';
+import { throwErrorIfNull } from '../util';
 
 function App() {
   const [boardHeight, setBoardHeight] = React.useState(1);

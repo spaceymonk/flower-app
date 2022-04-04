@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, FloatingLabel, Button, ListGroup, Tooltip, Stack, Container, Row, Col } from 'react-bootstrap';
 import T from '../../../services/MessageConstants';
-import useBlockService from '../../../hooks/service/useBlockService';
+import useBlockHelper from '../../../hooks/useBlockHelper';
 import { BaseModal } from './BaseModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faRemove } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import BlockOption from './BlockOption';
 
 export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
-  const { updateBlockData, findDirectChildBlocks, updateBlockParent, removeBlockParent, findAllAvailableChildren } = useBlockService();
+  const { updateBlockData, findDirectChildBlocks, updateBlockParent, removeBlockParent, findAllAvailableChildren } = useBlockHelper();
 
   const [text, setText] = React.useState(block.data.text || '');
   const [selectedChild, setSelectedChild] = React.useState<{ value: string; block: Block } | null>(null);

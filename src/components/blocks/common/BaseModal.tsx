@@ -3,13 +3,13 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import T from '../../../services/MessageConstants';
-import useBlockService from '../../../hooks/service/useBlockService';
+import useBlockHelper from '../../../hooks/useBlockHelper';
 import PropTypes from 'prop-types';
 import { Block } from '../../../types';
-import { throwErrorIfUndefined } from '../../../services/common';
+import { throwErrorIfUndefined } from '../../../util';
 
 export function BaseModal({ show, children, onSave, onClose, block }: BaseModalProps) {
-  const { removeBlock, updateBlockData } = useBlockService();
+  const { removeBlock, updateBlockData } = useBlockHelper();
   const [name, setName] = React.useState(block.data.name || block.id);
   function handleDelete() {
     removeBlock(block);

@@ -1,4 +1,4 @@
-export default class NotConnectedError extends Error {
+export class NotConnectedError extends Error {
   public blockId: string;
 
   constructor(blockId: string) {

@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Form, Tooltip } from 'react-bootstrap';
 import { faArrowDown, faForwardStep, faPause, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CustomOverlay from '../../common/CustomOverlay';
-import useSimulation from '../../../hooks/service/useSimulation';
+import useSimulation from '../../../hooks/useSimulation';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
 
 const SimulationControls = () => {

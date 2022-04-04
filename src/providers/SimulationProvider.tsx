@@ -1,6 +1,6 @@
 import React from 'react';
 import { SimulationContextType } from '../types';
-import { throwErrorIfNull } from '../services/common';
+import { throwErrorIfNull } from '../util';
 
 const SimulationContext = React.createContext<SimulationContextType | null>(null);
 

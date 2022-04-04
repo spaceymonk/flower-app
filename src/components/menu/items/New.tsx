@@ -5,10 +5,10 @@ import { NavDropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useReactFlow } from 'react-flow-renderer';
 import InitialValues from '../../../config/InitialValues';
-import { useProjectService } from '../../../hooks/useProjectService';
+import { useProjectHelper } from '../../../hooks/useProjectHelper';
 
 export function NewMenuItem() {
-  const { load } = useProjectService();
+  const { load } = useProjectHelper();
   const { fitView } = useReactFlow();
 
   function handleClick() {

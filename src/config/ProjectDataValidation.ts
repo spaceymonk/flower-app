@@ -32,7 +32,7 @@ export const BlockSchema = Joi.object({
     text: Joi.string().allow(''),
     glow: Joi.string().valid(...glowTypeList),
   }).required(),
-});
+}).options({ allowUnknown: true });
 
 export const EdgeSchema = Joi.object({
   id: Joi.string().required(),
@@ -47,7 +47,7 @@ export const EdgeSchema = Joi.object({
     type: Joi.string().valid(MarkerType.ArrowClosed).required(),
     color: Joi.string().valid('#505050').required(),
   }).required(),
-});
+}).options({ allowUnknown: true });
 
 export const ProjectDataSchema = Joi.object({
   title: Joi.string().min(5).max(30).required(),

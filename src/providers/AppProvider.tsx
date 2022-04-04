@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNodesState, useEdgesState } from 'react-flow-renderer';
 import InitialValues from '../config/InitialValues';
-import { throwErrorIfNull } from '../services/common';
+import { throwErrorIfNull } from '../util';
 import { AppContextType } from '../types';
 
 const AppContext = React.createContext<AppContextType | null>(null);

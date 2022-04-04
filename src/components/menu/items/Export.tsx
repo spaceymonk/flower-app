@@ -4,10 +4,10 @@ import { NavDropdown, Modal, Button, Container } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import { useProjectService } from '../../../hooks/useProjectService';
+import { useProjectHelper } from '../../../hooks/useProjectHelper';
 
 export function ExportModal({ show, onClose }: ExportModalProps) {
-  const { toPNG } = useProjectService();
+  const { toPNG } = useProjectHelper();
 
   async function handleExport() {
     try {

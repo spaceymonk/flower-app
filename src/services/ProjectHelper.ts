@@ -1,8 +1,11 @@
 import { ProjectData } from '../types';
-import { throwErrorIfNull } from './common';
+import { throwErrorIfNull } from '../util';
 import { ProjectDataSchema } from '../config/ProjectDataValidation';
 import { toast } from 'react-toastify';
 
+/* -------------------------------------------------------------------------- */
+/*                                    open                                    */
+/* -------------------------------------------------------------------------- */
 export const open = (file: Blob, onOpen?: (content: ProjectData) => void) => {
   const fileReader = new FileReader();
   const handleFileRead = () => {

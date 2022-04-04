@@ -1,4 +1,4 @@
-export default class MultipleStartError extends Error {
+export class MultipleStartError extends Error {
   public blockIdList: string[];
 
   constructor(blockIdList: string[]) {
