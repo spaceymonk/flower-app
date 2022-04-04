@@ -41,7 +41,7 @@ const useBlockService = () => {
       [setBlocks]
     ),
     highlightBlocks: React.useCallback(
-      (ids: string[] | string | null, glowType: GlowTypes = GlowTypes.NONE) => {
+      (ids: string[] | null, glowType: GlowTypes = GlowTypes.NONE) => {
         highlightBlocks(ids, glowType, setBlocks);
       },
       [setBlocks]

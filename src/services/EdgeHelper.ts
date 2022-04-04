@@ -6,6 +6,9 @@ import { Block } from '../types';
 
 type SetEdges = React.Dispatch<React.SetStateAction<Edge<any>[]>>;
 
+/* -------------------------------------------------------------------------- */
+/*                                  findById                                  */
+/* -------------------------------------------------------------------------- */
 export const findById = (edgeList: Edge<any>[], id: string): Edge<any> | undefined => {
   return edgeList.find((edge) => edge.id === id);
 };
@@ -38,9 +41,9 @@ export const createEdge = (connection: Connection): Edge => {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                             validateConnection                             */
+/*                              isValidConnection                             */
 /* -------------------------------------------------------------------------- */
-export const validateConnection = (connection: Connection, blockList: Block[]): boolean => {
+export const isValidConnection = (connection: Connection, blockList: Block[]): boolean => {
   if (connection.source === connection.target) {
     return false;
   }
@@ -61,9 +64,9 @@ export const validateConnection = (connection: Connection, blockList: Block[]): 
 };
 
 /* -------------------------------------------------------------------------- */
-/*                              validateOnConnect                             */
+/*                              isValidOnConnect                              */
 /* -------------------------------------------------------------------------- */
-export const validateOnConnect = (connection: Connection, blockList: Block[], edgeList: Edge[]): boolean => {
+export const isValidOnConnect = (connection: Connection, blockList: Block[], edgeList: Edge[]): boolean => {
   for (const e of edgeList) {
     // there can be only one edge with same source data between two nodes
     if (e.source === connection.source && connection.sourceHandle === e.sourceHandle) {
@@ -74,9 +77,9 @@ export const validateOnConnect = (connection: Connection, blockList: Block[], ed
 };
 
 /* -------------------------------------------------------------------------- */
-/*                            validateOnEdgeUpdate                            */
+/*                             isValidOnEdgeUpdate                            */
 /* -------------------------------------------------------------------------- */
-export const validateOnEdgeUpdate = (oldEdge: Edge, connection: Connection, blockList: Block[], edgeList: Edge[]): boolean => {
+export const isValidOnEdgeUpdate = (oldEdge: Edge, connection: Connection, blockList: Block[], edgeList: Edge[]): boolean => {
   for (const e of edgeList) {
     // if there is already an edge return
     if (e.source === connection.source && e.sourceHandle === connection.sourceHandle && oldEdge.id !== e.id) {
@@ -99,7 +102,7 @@ export const validateOnEdgeUpdate = (oldEdge: Edge, connection: Connection, bloc
 /*                                  onConnect                                 */
 /* -------------------------------------------------------------------------- */
 export const onConnect = (connection: Connection, blockList: Block[], edgeList: Edge[], setEdges: SetEdges) => {
-  if (!(validateConnection(connection, blockList) && validateOnConnect(connection, blockList, edgeList))) {
+  if (isValidConnection(connection, blockList) && isValidOnConnect(connection, blockList, edgeList)) {
     const edge = createEdge(connection);
     setEdges((eds) => addEdge(edge, eds));
   }
@@ -109,7 +112,7 @@ export const onConnect = (connection: Connection, blockList: Block[], edgeList: 
 /*                                onEdgeUpdate                                */
 /* -------------------------------------------------------------------------- */
 export const onEdgeUpdate = (connection: Connection, blockList: Block[], edgeList: Edge[], oldEdge: Edge, setEdges: SetEdges) => {
-  if (!(validateConnection(connection, blockList) && validateOnEdgeUpdate(oldEdge, connection, blockList, edgeList))) {
+  if (isValidConnection(connection, blockList) && isValidOnEdgeUpdate(oldEdge, connection, blockList, edgeList)) {
     setEdges((eds) => updateEdge(oldEdge, connection, eds));
   }
 };

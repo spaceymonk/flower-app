@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppContext } from '../../providers/AppProvider';
 import { ProjectData } from '../../types';
+import { toast } from 'react-toastify';
 
 const useLoad = () => {
   const { setTitle, setInputParams, setEdges, setBlocks } = useAppContext();
@@ -11,6 +12,7 @@ const useLoad = () => {
       setBlocks(blocks);
       setTitle(title);
       setInputParams(inputParams);
+      toast.success('Project loaded');
     },
     [setEdges, setBlocks, setTitle, setInputParams]
   );

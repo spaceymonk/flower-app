@@ -4,7 +4,7 @@ import { Background, MiniMap, Controls, ControlButton } from 'react-flow-rendere
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
 import usePaneLock from '../../hooks/usePaneLock';
-import useEdgeService from '../../hooks/service/useEdgeService.js';
+import useEdgeService from '../../hooks/service/useEdgeService';
 import { CustomConnectionLine, edgeTypes } from '../edges';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';

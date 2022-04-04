@@ -32,7 +32,6 @@ export function OpenModal({ show, onClose }: OpenModalProps) {
       fitView();
       setFile(null);
       onClose();
-      toast.success('Project opened, do not forget to save!');
     } catch (e) {
       toast.error('Project could not open!');
     }

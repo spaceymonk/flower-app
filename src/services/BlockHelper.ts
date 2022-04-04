@@ -59,17 +59,20 @@ export const removeBlock = (block: Block, setBlocks: SetBlocks): void => {
 /* -------------------------------------------------------------------------- */
 /*                               highlightBlocks                              */
 /* -------------------------------------------------------------------------- */
-export const highlightBlocks = (ids: string[] | string | null, glowType: GlowTypes = GlowTypes.NONE, setBlocks: SetBlocks): void => {
-  setBlocks((blocks) => {
-    return blocks.map((b) => {
-      if ((Array.isArray(ids) && ids.includes(b.id)) || b.id === ids) {
+export const highlightBlocks = (ids: string[] | null, glowType: GlowTypes = GlowTypes.NONE, setBlocks: SetBlocks): void => {
+  console.log('highlightBlocks', ids);
+  setBlocks((blocks) =>
+    blocks.map((b) => {
+      if (ids === null) {
+        updateBlockData(b.id, { glow: GlowTypes.NONE }, setBlocks);
+      } else if (ids.includes(b.id)) {
         updateBlockData(b.id, { glow: glowType }, setBlocks);
       } else {
-        updateBlockData(b.id, { glow: glowType }, setBlocks);
+        updateBlockData(b.id, { glow: GlowTypes.NONE }, setBlocks);
       }
       return b;
-    });
-  });
+    })
+  );
 };
 
 /* -------------------------------------------------------------------------- */

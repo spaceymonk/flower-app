@@ -3,6 +3,7 @@ import React from 'react';
 import { ProjectData } from '../../types';
 import { throwErrorIfNull } from '../../services/common';
 import { ProjectDataSchema } from '../../config/ProjectDataValidation';
+import { toast } from 'react-toastify';
 
 const useOpen = () => {
   const load = useLoad();
@@ -11,9 +12,16 @@ const useOpen = () => {
     (file) => {
       const fileReader = new FileReader();
       const handleFileRead = () => {
-        const content: ProjectData = JSON.parse(throwErrorIfNull(fileReader.result));
-        ProjectDataSchema.validate(content);
-        load(content);
+        try {
+          const content: ProjectData = JSON.parse(throwErrorIfNull(fileReader.result));
+          const result = ProjectDataSchema.validate(content);
+          if (result.error) {
+            throw new Error(result.error.message);
+          }
+          load(content);
+        } catch (e: any) {
+          toast.error('Invalid project file: ' + e.message);
+        }
       };
       fileReader.onloadend = handleFileRead;
       fileReader.readAsText(file);

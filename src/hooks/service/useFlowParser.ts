@@ -31,7 +31,7 @@ const useFlowParser = () => {
       const edges = getEdges();
       const edge = throwErrorIfUndefined(edges.find((e) => e.source === currentBlockRef.current.id));
       let block: Block;
-      if (handleId) block = throwErrorIfUndefined(nodes.find((n) => edge.handleId === handleId && n.id === edge.target));
+      if (handleId) block = throwErrorIfUndefined(nodes.find((n) => edge.targetHandle === handleId && n.id === edge.target));
       else block = throwErrorIfUndefined(nodes.find((n) => n.id === edge.target));
       return block;
     },
@@ -58,11 +58,9 @@ const useFlowParser = () => {
       const connectedEdgeCount = getConnectedEdges([n], edges).length;
       if (n.type === BlockTypes.START_BLOCK) {
         startBlocks.push(n);
-        if (startBlocks.length > 1) throw new MultipleStartError(startBlocks.map((b) => b.id));
         if (connectedEdgeCount < 1) throw new NotConnectedError(n.id);
       } else if (n.type === BlockTypes.STOP_BLOCK) {
         stopBlocks.push(n);
-        if (startBlocks.length > 1) throw new MultipleStopError(stopBlocks.map((b) => b.id));
         if (connectedEdgeCount < 1) throw new NotConnectedError(n.id);
       } else if (n.type === BlockTypes.DECISION_BLOCK) {
         if (connectedEdgeCount < 3) throw new NotConnectedError(n.id);
@@ -70,6 +68,8 @@ const useFlowParser = () => {
         throw new NotConnectedError(n.id);
       }
     }
+    if (startBlocks.length > 1) throw new MultipleStartError(startBlocks.map((b) => b.id));
+    if (stopBlocks.length > 1) throw new MultipleStopError(stopBlocks.map((b) => b.id));
     if (startBlocks.length === 0) throw new NoStartError();
     if (stopBlocks.length === 0) throw new NoStopError();
 

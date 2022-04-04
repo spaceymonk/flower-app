@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
 import { throwErrorIfUndefined } from '../../../services/common';
 
 export function BlockModalContainer({ block }: BlockModalContainerProps) {
-  const [activeModal, setActiveModal] = React.useState<BlockTypes | null>(null);
+  const [activeModal, setActiveModal] = React.useState<string | null>(null);
   const [showModal, toggleModal] = useToggle();
 
   React.useEffect(() => {
     if (block) {
-      setActiveModal(throwErrorIfUndefined(block.type, 'block.type cannot be undefined'));
+      setActiveModal(throwErrorIfUndefined(block.type));
       toggleModal();
     }
   }, [block, toggleModal]);

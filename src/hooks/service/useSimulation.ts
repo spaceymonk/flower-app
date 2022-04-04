@@ -55,7 +55,7 @@ const useSimulation = () => {
       run();
     } catch (e: any) {
       if (e instanceof NotConnectedError) {
-        highlightBlocks(e.blockId, GlowTypes.ERROR);
+        highlightBlocks([e.blockId], GlowTypes.ERROR);
       } else if (e instanceof MultipleStartError || e instanceof MultipleStopError) {
         highlightBlocks(e.blockIdList, GlowTypes.ERROR);
       }

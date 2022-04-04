@@ -3,7 +3,7 @@ import { Button, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import CustomOverlay from '../common/CustomOverlay';
-import { getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
+import { Edge, getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
 import useEdgeService from '../../hooks/service/useEdgeService';
 import PropTypes from 'prop-types';
 import { throwErrorIfUndefined } from '../../services/common';
@@ -27,8 +27,8 @@ export default function CustomEdge({
 
   const handleClick = (evt: React.MouseEvent, id: string) => {
     evt.stopPropagation();
-    const edge = throwErrorIfUndefined(findById(id));
-    removeEdges(edge);
+    const edge = throwErrorIfUndefined<Edge>(findById(id));
+    removeEdges([edge]);
   };
 
   let x = edgeCenterX - foreignObjectSize / 2;
@@ -81,7 +81,7 @@ CustomEdge.propTypes = {
   targetY: PropTypes.number.isRequired,
   sourcePosition: PropTypes.string.isRequired,
   targetPosition: PropTypes.string.isRequired,
-  sourceHandleId: PropTypes.string.isRequired,
+  sourceHandleId: PropTypes.string,
   markerEnd: PropTypes.string.isRequired,
 };
 

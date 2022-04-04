@@ -18,7 +18,9 @@ const glowTypeList = [GlowTypes.NONE, GlowTypes.NORMAL, GlowTypes.ERROR];
 
 export const BlockSchema = Joi.object({
   id: Joi.string().required(),
-  type: Joi.string().valid(blockTypeList).required(),
+  type: Joi.string()
+    .valid(...blockTypeList)
+    .required(),
   position: Joi.object({
     x: Joi.number().required(),
     y: Joi.number().required(),
@@ -26,7 +28,7 @@ export const BlockSchema = Joi.object({
   data: Joi.object({
     name: Joi.string(),
     text: Joi.string().allow(''),
-    glow: Joi.string().valid(glowTypeList),
+    glow: Joi.string().valid(...glowTypeList),
     width: Joi.number(),
     height: Joi.number(),
   }).required(),
@@ -38,16 +40,18 @@ export const EdgeSchema = Joi.object({
   target: Joi.string().required(),
   sourceHandle: Joi.string().allow(null).required(),
   targetHandle: Joi.string().allow(null).required(),
-  type: Joi.string().valid(edgeTypeList).required(),
+  type: Joi.string()
+    .valid(...edgeTypeList)
+    .required(),
   markerEnd: Joi.object({
     type: Joi.string().valid(MarkerType.ArrowClosed).required(),
-    color: Joi.string().valid(['#505050']).required(),
+    color: Joi.string().valid('#505050').required(),
   }).required(),
 });
 
 export const ProjectDataSchema = Joi.object({
   title: Joi.string().required(),
-  inputParams: Joi.string().required(),
+  inputParams: Joi.string().allow('').required(),
   blocks: Joi.array().items(BlockSchema).required(),
   edges: Joi.array().items(EdgeSchema).required(),
 });
