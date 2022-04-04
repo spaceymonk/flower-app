@@ -3,16 +3,10 @@ import { toast } from 'react-toastify';
 import MultipleStartError from '../../exceptions/MultipleStartError';
 import MultipleStopError from '../../exceptions/MultipleStopError';
 import NotConnectedError from '../../exceptions/NotConnectedError';
-import { SimulationContext } from '../../providers/SimulationProvider';
-import useBlockService, { GlowTypes } from './useBlockService';
+import { useSimulationContext } from '../../providers/SimulationProvider';
+import { GlowTypes, SimulationActions } from '../../types';
+import useBlockService from './useBlockService';
 import useFlowParser from './useFlowParser';
-
-const SimulationActions = Object.freeze({
-  none: 0,
-  stop: 1,
-  continue: 2,
-  debug: 3,
-});
 
 const useSimulation = () => {
   const speedInMsRef = React.useRef(500);
@@ -20,8 +14,8 @@ const useSimulation = () => {
   const actionRef = React.useRef(SimulationActions.none);
 
   const flowParser = useFlowParser();
-  const { highlightNode } = useBlockService();
-  const { isRunning, setRunning } = React.useContext(SimulationContext);
+  const { highlightBlocks } = useBlockService();
+  const { isRunning, setRunning } = useSimulationContext();
 
   const stop = React.useCallback(() => {
     if (isRunning()) {
@@ -36,7 +30,7 @@ const useSimulation = () => {
     const simulationLoop = () => {
       console.log('[simualtion] timeout', actionRef.current);
       if (actionRef.current === SimulationActions.stop || !flowParser.hasNext()) {
-        highlightNode();
+        highlightBlocks(null);
         setRunning(false);
         actionRef.current = SimulationActions.none;
         toast.info('Simulation ended!');
@@ -51,7 +45,7 @@ const useSimulation = () => {
       }
     };
     simulationLoop();
-  }, [highlightNode, flowParser, setRunning]);
+  }, [setRunning, flowParser, highlightBlocks]);
 
   const start = React.useCallback(() => {
     actionRef.current = SimulationActions.debug;
@@ -59,18 +53,18 @@ const useSimulation = () => {
     try {
       flowParser.validate();
       run();
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof NotConnectedError) {
-        highlightNode(e.blockId, GlowTypes.ERROR);
+        highlightBlocks(e.blockId, GlowTypes.ERROR);
       } else if (e instanceof MultipleStartError || e instanceof MultipleStopError) {
-        highlightNode(e.blockIdList, GlowTypes.ERROR);
+        highlightBlocks(e.blockIdList, GlowTypes.ERROR);
       }
       toast.error(e.message);
       console.error(e);
       setRunning(false);
       actionRef.current = SimulationActions.none;
     }
-  }, [highlightNode, flowParser, run, setRunning]);
+  }, [flowParser, run, setRunning, highlightBlocks]);
 
   const next = React.useCallback(() => {
     if (isRunning()) {
@@ -99,7 +93,7 @@ const useSimulation = () => {
     next,
     continueFn,
     getSpeedInMs: () => speedInMsRef.current,
-    setSpeedInMs: (val) => (speedInMsRef.current = val),
+    setSpeedInMs: (val: number) => (speedInMsRef.current = val),
   };
 };
 

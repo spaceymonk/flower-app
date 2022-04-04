@@ -1,4 +1,4 @@
-import { SetCenter, XYPosition } from 'react-flow-renderer';
+import { Edge, getConnectedEdges, SetCenter, XYPosition } from 'react-flow-renderer';
 import { toast } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
 import { BlockTypes, Block, BlockData, GlowTypes } from '../types';
@@ -112,27 +112,29 @@ export const updateBlockParent = (
   parentBlock: Block,
   children: Block[],
   blockList: Block[],
+  edgeList: Edge[],
   setBlocks: SetBlocks,
-  removeEdge: (edgeIds: string[]) => void,
-  getConnectedEdges: (blockId: string) => string[]
+  removeEdges: (edgeList: Edge[]) => void
 ): void => {
-  const positionGen = new PositionGenerator({ x: 0, y: 0 }, 15);
   if (checkRecursiveParentPresent(blockList, parentBlock, children)) {
     toast.error('Cannot add parent block as child');
     return;
   }
+  const positionGen = new PositionGenerator({ x: 0, y: 0 }, 15);
 
   setBlocks((blocks) => {
     const remainingBlocks = blocks.filter((b) => !includesBlock(children, b));
     const updatedChildren = children.map((b) => {
       if (b.parentNode !== parentBlock.id) {
-        removeEdge(getConnectedEdges(b.id));
+        // if block is not already a child of parent
         b.parentNode = parentBlock.id;
         b.extent = 'parent';
         b.position = positionGen.nextPosition();
       }
       return b;
     });
+    const childrenEdges = getConnectedEdges(children, edgeList);
+    removeEdges(childrenEdges);
     return [...remainingBlocks, ...updatedChildren];
   });
 };
@@ -143,21 +145,22 @@ export const updateBlockParent = (
 export const removeBlockParent = (
   parentBlock: Block,
   children: Block[],
+  edgeList: Edge[],
   setBlocks: SetBlocks,
-  removeEdge: (edgeIds: string[]) => void,
-  getConnectedEdges: (blockId: string) => string[]
+  removeEdges: (edgeList: Edge[]) => void
 ) => {
   const positionGen = new PositionGenerator({ x: parentBlock.position.x, y: parentBlock.position.y }, -15);
 
   setBlocks((blocks) => {
     const remainingBlocks = blocks.filter((b) => !includesBlock(children, b));
     const updatedChildren = children.map((b) => {
-      removeEdge(getConnectedEdges(b.id));
       b.parentNode = undefined;
       b.extent = undefined;
       b.position = positionGen.nextPosition();
       return b;
     });
+    const childrenEdges = getConnectedEdges(children, edgeList);
+    removeEdges(childrenEdges);
     return [...remainingBlocks, ...updatedChildren];
   });
 };
@@ -197,4 +200,16 @@ export const findAllAvailableChildren = (blockList: Block[], block: Block, child
     }
   }
   return availableChildren;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  findById                                  */
+/* -------------------------------------------------------------------------- */
+export const findById = (blockList: Block[], id: string): Block | undefined => {
+  for (let i = 0; i < blockList.length; i++) {
+    if (blockList[i].id === id) {
+      return blockList[i];
+    }
+  }
+  return undefined;
 };

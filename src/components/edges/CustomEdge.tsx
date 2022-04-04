@@ -6,6 +6,7 @@ import CustomOverlay from '../common/CustomOverlay';
 import { getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
 import useEdgeService from '../../hooks/service/useEdgeService';
 import PropTypes from 'prop-types';
+import { throwErrorIfUndefined } from '../../services/common';
 
 export default function CustomEdge({
   id,
@@ -21,12 +22,13 @@ export default function CustomEdge({
   const foreignObjectSize = 80;
   const edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
   const [edgeCenterX, edgeCenterY] = getEdgeCenter({ sourceX, sourceY, targetX, targetY });
-  const { removeEdge } = useEdgeService();
+  const { removeEdges, findById } = useEdgeService();
   const [showBtn, toggleBtn] = React.useState(false);
 
   const handleClick = (evt: React.MouseEvent, id: string) => {
     evt.stopPropagation();
-    removeEdge(id);
+    const edge = throwErrorIfUndefined(findById(id));
+    removeEdges(edge);
   };
 
   let x = edgeCenterX - foreignObjectSize / 2;
@@ -87,4 +89,4 @@ interface CustomEdgeProps extends PropTypes.InferProps<typeof CustomEdge.propTyp
   sourcePosition: Position;
   targetPosition: Position;
   markerEnd: MarkerType;
-};
+}

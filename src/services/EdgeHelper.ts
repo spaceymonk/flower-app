@@ -1,7 +1,18 @@
-import { Connection, Edge, MarkerType } from 'react-flow-renderer';
+import { addEdge, Connection, Edge, MarkerType, updateEdge } from 'react-flow-renderer';
 import { v4 as uuid } from 'uuid';
-import { throwErrorIfNull } from './common';
+import { throwErrorIfNull, throwErrorIfUndefined } from './common';
+import * as BlockHelper from './BlockHelper';
+import { Block } from '../types';
 
+type SetEdges = React.Dispatch<React.SetStateAction<Edge<any>[]>>;
+
+export const findById = (edgeList: Edge<any>[], id: string): Edge<any> | undefined => {
+  return edgeList.find((edge) => edge.id === id);
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                includesEdge                                */
+/* -------------------------------------------------------------------------- */
 export const includesEdge = (edgeList: Edge[], edge: Edge): boolean => {
   for (let i = 0; i < edgeList.length; i++) {
     if (edgeList[i].id === edge.id) {
@@ -11,6 +22,9 @@ export const includesEdge = (edgeList: Edge[], edge: Edge): boolean => {
   return false;
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                 createEdge                                 */
+/* -------------------------------------------------------------------------- */
 export const createEdge = (connection: Connection): Edge => {
   return {
     id: uuid(),
@@ -21,4 +35,88 @@ export const createEdge = (connection: Connection): Edge => {
     type: 'custom',
     markerEnd: { type: MarkerType.ArrowClosed, color: '#505050' },
   };
+};
+
+/* -------------------------------------------------------------------------- */
+/*                             validateConnection                             */
+/* -------------------------------------------------------------------------- */
+export const validateConnection = (connection: Connection, blockList: Block[]): boolean => {
+  if (connection.source === connection.target) {
+    return false;
+  }
+
+  const source = throwErrorIfUndefined(BlockHelper.findById(blockList, throwErrorIfNull(connection.source)));
+  const target = throwErrorIfUndefined(BlockHelper.findById(blockList, throwErrorIfNull(connection.target)));
+
+  if (
+    (connection.targetHandle === 'inner-target' && source.parentNode !== connection.target) ||
+    (connection.targetHandle === 'outer-target' && source.parentNode === connection.target) ||
+    (connection.sourceHandle === 'inner-source' && target.parentNode !== connection.source) ||
+    (connection.sourceHandle === 'outer-source' && target.parentNode === connection.source)
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                              validateOnConnect                             */
+/* -------------------------------------------------------------------------- */
+export const validateOnConnect = (connection: Connection, blockList: Block[], edgeList: Edge[]): boolean => {
+  for (const e of edgeList) {
+    // there can be only one edge with same source data between two nodes
+    if (e.source === connection.source && connection.sourceHandle === e.sourceHandle) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                            validateOnEdgeUpdate                            */
+/* -------------------------------------------------------------------------- */
+export const validateOnEdgeUpdate = (oldEdge: Edge, connection: Connection, blockList: Block[], edgeList: Edge[]): boolean => {
+  for (const e of edgeList) {
+    // if there is already an edge return
+    if (e.source === connection.source && e.sourceHandle === connection.sourceHandle && oldEdge.id !== e.id) {
+      return false;
+    }
+    // if there is already an exact edge return
+    if (
+      e.source === connection.source &&
+      e.sourceHandle === connection.sourceHandle &&
+      e.target === connection.target &&
+      e.targetHandle === connection.targetHandle
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  onConnect                                 */
+/* -------------------------------------------------------------------------- */
+export const onConnect = (connection: Connection, blockList: Block[], edgeList: Edge[], setEdges: SetEdges) => {
+  if (!(validateConnection(connection, blockList) && validateOnConnect(connection, blockList, edgeList))) {
+    const edge = createEdge(connection);
+    setEdges((eds) => addEdge(edge, eds));
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                onEdgeUpdate                                */
+/* -------------------------------------------------------------------------- */
+export const onEdgeUpdate = (connection: Connection, blockList: Block[], edgeList: Edge[], oldEdge: Edge, setEdges: SetEdges) => {
+  if (!(validateConnection(connection, blockList) && validateOnEdgeUpdate(oldEdge, connection, blockList, edgeList))) {
+    setEdges((eds) => updateEdge(oldEdge, connection, eds));
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                 removeEdges                                */
+/* -------------------------------------------------------------------------- */
+export const removeEdges = (edgeList: Edge[], setEdges: SetEdges) => {
+  setEdges((eds) => eds.filter((e) => !includesEdge(edgeList, e)));
 };

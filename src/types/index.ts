@@ -35,6 +35,13 @@ export type BlockData = {
   height?: number;
 };
 
+export enum SimulationActions {
+  none,
+  stop,
+  continue,
+  debug,
+}
+
 export interface Block extends Node<BlockData> {}
 
 export type AppContextType = {

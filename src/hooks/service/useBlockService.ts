@@ -10,17 +10,24 @@ import {
   updateBlockParent,
   removeBlockParent,
   findAllAvailableChildren,
+  findById,
 } from '../../services/BlockHelper';
 import useEdgeService from './useEdgeService';
 import { Block, BlockData, GlowTypes } from '../../types';
 
 const useBlockService = () => {
-  const { setBlocks, getBlocks } = useAppContext();
-  const { getConnectedEdges, removeEdge } = useEdgeService();
+  const { setBlocks, getBlocks, getEdges } = useAppContext();
+  const { removeEdges } = useEdgeService();
   const { addNodes, setCenter } = useReactFlow();
 
   return {
     addBlock: addNodes,
+    findById: React.useCallback(
+      (id: string) => {
+        return findById(getBlocks(), id);
+      },
+      [getBlocks]
+    ),
     updateBlockData: React.useCallback(
       (id: string, changeData: BlockData) => {
         updateBlockData(id, changeData, setBlocks);
@@ -53,15 +60,15 @@ const useBlockService = () => {
     ),
     updateBlockParent: React.useCallback(
       (parentBlock: Block, children: Block[]) => {
-        updateBlockParent(parentBlock, children, getBlocks(), setBlocks, removeEdge, getConnectedEdges);
+        updateBlockParent(parentBlock, children, getBlocks(), getEdges(), setBlocks, removeEdges);
       },
-      [getBlocks, setBlocks, removeEdge, getConnectedEdges]
+      [getBlocks, getEdges, setBlocks, removeEdges]
     ),
     removeBlockParent: React.useCallback(
       (parentBlock: Block, children: Block[]) => {
-        removeBlockParent(parentBlock, children, setBlocks, removeEdge, getConnectedEdges);
+        removeBlockParent(parentBlock, children, getEdges(), setBlocks, removeEdges);
       },
-      [getConnectedEdges, removeEdge, setBlocks]
+      [getEdges, removeEdges, setBlocks]
     ),
     findAllAvailableChildren: React.useCallback(
       (block: Block, childNodes: Block[]) => {
