@@ -31,8 +31,6 @@ export type BlockData = {
   text?: string;
   glow?: GlowTypes;
   name?: string;
-  width?: number;
-  height?: number;
 };
 
 export enum SimulationActions {

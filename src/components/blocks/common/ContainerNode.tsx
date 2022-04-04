@@ -6,7 +6,7 @@ import useBlockService from '../../../hooks/service/useBlockService';
 import PropTypes from 'prop-types';
 
 export function ContainerNode({ block, ...props }: ContainerNodeProps) {
-  const { updateBlockData } = useBlockService();
+  const { updateBlockSize } = useBlockService();
   const { zoom } = useViewport();
 
   const handleResizeStart = React.useCallback((e) => {
@@ -15,17 +15,17 @@ export function ContainerNode({ block, ...props }: ContainerNodeProps) {
   }, []);
   const handleResize = React.useCallback(
     (event, { size }) => {
-      updateBlockData(block.id, size);
+      updateBlockSize(block.id, size.width, size.height);
     },
-    [block.id, updateBlockData]
+    [block.id, updateBlockSize]
   );
 
   return (
     <ResizableBox
       // @ts-ignore: invalid @types/react-resizable package
       transformScale={zoom}
-      width={block.data.width || 200}
-      height={block.data.height || 200}
+      width={block.width || 200}
+      height={block.height || 200}
       minConstraints={[200, 200]}
       onResizeStart={handleResizeStart}
       onResize={handleResize}
@@ -39,6 +39,4 @@ ContainerNode.propTypes = {
   block: PropTypes.object.isRequired,
 };
 
-export interface ContainerNodeProps extends BlockNodeProps {
-
-};
+export interface ContainerNodeProps extends BlockNodeProps {}

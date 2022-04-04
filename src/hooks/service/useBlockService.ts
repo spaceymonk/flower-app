@@ -34,6 +34,12 @@ const useBlockService = () => {
       },
       [setBlocks]
     ),
+    updateBlockSize: React.useCallback(
+      (id: string, width: number, height: number) => {
+        setBlocks((blks) => blks.map((b) => (b.id === id ? { ...b, width: width, height: height } : b)));
+      },
+      [setBlocks]
+    ),
     removeBlock: React.useCallback(
       (block: Block) => {
         removeBlock(block, setBlocks);

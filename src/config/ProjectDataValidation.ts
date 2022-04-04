@@ -25,12 +25,12 @@ export const BlockSchema = Joi.object({
     x: Joi.number().required(),
     y: Joi.number().required(),
   }).required(),
+  width: Joi.number().required(),
+  height: Joi.number().required(),
   data: Joi.object({
     name: Joi.string(),
     text: Joi.string().allow(''),
     glow: Joi.string().valid(...glowTypeList),
-    width: Joi.number(),
-    height: Joi.number(),
   }).required(),
 });
 
@@ -50,7 +50,7 @@ export const EdgeSchema = Joi.object({
 });
 
 export const ProjectDataSchema = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string().min(5).max(30).required(),
   inputParams: Joi.string().allow('').required(),
   blocks: Joi.array().items(BlockSchema).required(),
   edges: Joi.array().items(EdgeSchema).required(),
