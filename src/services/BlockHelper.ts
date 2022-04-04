@@ -128,16 +128,16 @@ export const updateBlockParent = (
   setBlocks((blocks) => {
     const remainingBlocks = blocks.filter((b) => !includesBlock(children, b));
     const updatedChildren = children.map((b) => {
+      // if block is not already a child of parent
       if (b.parentNode !== parentBlock.id) {
-        // if block is not already a child of parent
+        const childEdges = getConnectedEdges([b], edgeList);
+        removeEdges(childEdges);
         b.parentNode = parentBlock.id;
         b.extent = 'parent';
         b.position = positionGen.nextPosition();
       }
       return b;
     });
-    const childrenEdges = getConnectedEdges(children, edgeList);
-    removeEdges(childrenEdges);
     return [...remainingBlocks, ...updatedChildren];
   });
 };

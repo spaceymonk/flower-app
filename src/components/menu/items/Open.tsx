@@ -5,15 +5,16 @@ import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
 import InitialValues from '../../../config/InitialValues';
 import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
-import useOpen from '../../../hooks/project/useOpen';
-import useLoad from '../../../hooks/project/useLoad';
 import { useReactFlow } from 'react-flow-renderer';
 import PropTypes from 'prop-types';
+import { throwErrorIfNull } from '../../../services/common';
+import { ProjectData } from '../../../types';
+import { open } from '../../../services/ProjectHelper';
+import { useProjectService } from '../../../hooks/useProjectService';
 
 export function OpenModal({ show, onClose }: OpenModalProps) {
   const [file, setFile] = React.useState<File | null>(null);
-  const open = useOpen();
-  const load = useLoad();
+  const { load } = useProjectService();
   const { fitView } = useReactFlow();
 
   const handleFileSelection = (event: React.ChangeEvent) => {
@@ -28,7 +29,10 @@ export function OpenModal({ show, onClose }: OpenModalProps) {
 
   function handleOpen() {
     try {
-      open(file);
+      open(throwErrorIfNull(file), (content: ProjectData) => {
+        load(content);
+        toast.success('Project loaded!');
+      });
       fitView();
       setFile(null);
       onClose();

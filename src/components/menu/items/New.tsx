@@ -3,12 +3,12 @@ import { faStarOfLife } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import useLoad from '../../../hooks/project/useLoad';
 import { useReactFlow } from 'react-flow-renderer';
 import InitialValues from '../../../config/InitialValues';
+import { useProjectService } from '../../../hooks/useProjectService';
 
 export function NewMenuItem() {
-  const load = useLoad();
+  const { load } = useProjectService();
   const { fitView } = useReactFlow();
 
   function handleClick() {
