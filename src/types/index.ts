@@ -7,6 +7,18 @@ export type ProjectData = {
   edges: Edge[];
 };
 
+export enum DecisionBlockHandle {
+  FALSE = 'false',
+  TRUE = 'true',
+}
+
+export enum ContainerBlockHandle {
+  OUTER_TARGET = 'outer_target',
+  INNER_TARGET = 'inner_target',
+  OUTER_SOURCE = 'outer_source',
+  INNER_SOURCE = 'inner_source',
+}
+
 export enum BlockTypes {
   DECISION_BLOCK = 'decision',
   STATEMENT_BLOCK = 'statement',

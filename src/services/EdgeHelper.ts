@@ -13,6 +13,13 @@ export const findById = (edgeList: Edge<any>[], id: string): Edge<any> | undefin
 };
 
 /* -------------------------------------------------------------------------- */
+/*                                findAllByPair                               */
+/* -------------------------------------------------------------------------- */
+export const findAllByPair = (edgeList: Edge<any>[], source: string, target: string): Edge<any>[] | undefined => {
+  return edgeList.filter((edge) => edge.source === source && edge.target === target);
+};
+
+/* -------------------------------------------------------------------------- */
 /*                                includesEdge                                */
 /* -------------------------------------------------------------------------- */
 export const includesEdge = (edgeList: Edge[], edge: Edge): boolean => {

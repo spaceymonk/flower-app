@@ -1,6 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import { MultipleStartError, NotConnectedError } from '../exceptions';
+import { CircularDependencyError, MultipleStartError, NotConnectedError } from '../exceptions';
 import { useSimulationContext } from '../providers/SimulationProvider';
 import { GlowTypes, SimulationActions } from '../types';
 import useBlockHelper from './useBlockHelper';
@@ -55,6 +55,8 @@ const useSimulation = () => {
       if (e instanceof NotConnectedError) {
         highlightBlocks([e.blockId], GlowTypes.ERROR);
       } else if (e instanceof MultipleStartError || e instanceof MultipleStartError) {
+        highlightBlocks(e.blockIdList, GlowTypes.ERROR);
+      } else if (e instanceof CircularDependencyError) {
         highlightBlocks(e.blockIdList, GlowTypes.ERROR);
       }
       toast.error(e.message);

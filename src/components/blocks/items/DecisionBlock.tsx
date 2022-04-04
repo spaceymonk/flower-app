@@ -4,7 +4,7 @@ import { Handle, Position } from 'react-flow-renderer';
 import T from '../../../services/MessageConstants';
 import { BlockNode } from '../common/BlockNode';
 import BlockCreateButton from '../common/BlockCreateButton';
-import { Block, BlockTypes } from '../../../types';
+import { Block, BlockTypes, DecisionBlockHandle } from '../../../types';
 
 export function NodeComponent(block: Block) {
   const processed = block.data.text; //todo: handle special keywords by bolding them etc.
@@ -21,8 +21,8 @@ export function NodeComponent(block: Block) {
         </div>
       </div>
       <div className="decision-fields true">T</div>
-      <Handle id="false" type="source" position={Position.Left} className="handle" />
-      <Handle id="true" type="source" position={Position.Right} className="handle " />
+      <Handle id={DecisionBlockHandle.FALSE} type="source" position={Position.Left} className="handle" />
+      <Handle id={DecisionBlockHandle.TRUE} type="source" position={Position.Right} className="handle " />
     </BlockNode>
   );
 }

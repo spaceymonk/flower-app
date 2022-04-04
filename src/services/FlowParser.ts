@@ -1,13 +1,16 @@
-import { Edge, getConnectedEdges } from 'react-flow-renderer';
-import { MultipleStartError, MultipleStopError, NoStartError, NoStopError, NotConnectedError } from '../exceptions';
-import { Block, BlockTypes } from '../types';
+import { Edge, getConnectedEdges, getOutgoers } from 'react-flow-renderer';
+import { CircularDependencyError, MultipleStartError, MultipleStopError, NoStartError, NoStopError, NotConnectedError } from '../exceptions';
+import { Block, BlockTypes, ContainerBlockHandle } from '../types';
+import { throwErrorIfUndefined } from '../util';
+import { includesBlock } from './BlockHelper';
+import { findAllByPair } from './EdgeHelper';
 
 /* -------------------------------------------------------------------------- */
 /*                                validateFlow                                */
 /* -------------------------------------------------------------------------- */
 export const validateFlow = (nodes: Block[], edges: Edge[]): Block => {
-  const startBlocks = [];
-  const stopBlocks = [];
+  const startBlocks: Block[] = [];
+  const stopBlocks: Block[] = [];
 
   for (let i = 0; i < nodes.length; i++) {
     const n = nodes[i];
@@ -28,6 +31,31 @@ export const validateFlow = (nodes: Block[], edges: Edge[]): Block => {
   if (stopBlocks.length > 1) throw new MultipleStopError(stopBlocks.map((b) => b.id));
   if (startBlocks.length === 0) throw new NoStartError();
   if (stopBlocks.length === 0) throw new NoStopError();
+
+  // check for circular depencies
+  const visited: Block[] = [];
+  const stack: Block[] = [startBlocks[0]];
+  while (stack.length !== 0) {
+    const iter: Block = throwErrorIfUndefined(stack.pop());
+    if (!includesBlock(visited, iter)) {
+      visited.push(iter);
+      const outgoers = getOutgoers(iter, nodes, edges);
+      console.log('outgoers', iter.id, outgoers);
+      for (let i = 0; i < outgoers.length; i++) {
+        const outgoer = outgoers[i];
+        if (includesBlock(visited, outgoer)) {
+          // check connected handle, it may be container block
+          const connectedEdges = findAllByPair(edges, iter.id, outgoer.id);
+          connectedEdges?.forEach((e) => {
+            if (e.targetHandle !== ContainerBlockHandle.INNER_TARGET) {
+              throw new CircularDependencyError([iter.id, outgoer.id]);
+            }
+          });
+        }
+        stack.push(outgoer);
+      }
+    }
+  }
 
   return startBlocks[0];
 };
