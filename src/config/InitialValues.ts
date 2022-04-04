@@ -2,6 +2,7 @@ import { Edge } from 'react-flow-renderer';
 import { Block, ProjectData } from '../types';
 
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
+import { nameof } from '../util';
 
 export const ProjectNameOptions = {
   dictionaries: [colors, adjectives, animals],
@@ -19,12 +20,12 @@ class Initial {
   }
 
   refresh(): void {
-    const storageNodes = window.localStorage.getItem('nodes') || '[]';
-    const storageEdges = window.localStorage.getItem('edges') || '[]';
+    const storageNodes = window.localStorage.getItem(nameof<ProjectData>('blocks')) || '[]';
+    const storageEdges = window.localStorage.getItem(nameof<ProjectData>('edges')) || '[]';
     this.defaultBlocks = JSON.parse(storageNodes);
     this.defaultEdges = JSON.parse(storageEdges);
-    this.title = window.localStorage.getItem('title') || uniqueNamesGenerator(ProjectNameOptions);
-    this.inputParams = window.localStorage.getItem('inputParams') || '';
+    this.title = window.localStorage.getItem(nameof<ProjectData>('title')) || uniqueNamesGenerator(ProjectNameOptions);
+    this.inputParams = window.localStorage.getItem(nameof<ProjectData>('inputParams')) || '';
   }
 
   empty(): ProjectData {
