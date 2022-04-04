@@ -18,18 +18,16 @@ export function BlockModalContainer({ block }: BlockModalContainerProps) {
 
   if (!block) return <></>;
 
-  return showModal ? (
+  return (
     <div>
-      <StatementBlockModal block={block} show={activeModal === BlockTypes.STATEMENT_BLOCK} onClose={toggleModal} />
-      <DecisionBlockModal block={block} show={activeModal === BlockTypes.DECISION_BLOCK} onClose={toggleModal} />
-      <LoadBlockkModal block={block} show={activeModal === BlockTypes.LOAD_BLOCK} onClose={toggleModal} />
-      <StoreBlockModal block={block} show={activeModal === BlockTypes.STORE_BLOCK} onClose={toggleModal} />
-      <StartBlockModal block={block} show={activeModal === BlockTypes.START_BLOCK} onClose={toggleModal} />
-      <StopBlockModal block={block} show={activeModal === BlockTypes.STOP_BLOCK} onClose={toggleModal} />
-      <WhileLoopBlockModal block={block} show={activeModal === BlockTypes.WHILE_LOOP_BLOCK} onClose={toggleModal} />
+      <StatementBlockModal block={block} show={showModal && activeModal === BlockTypes.STATEMENT_BLOCK} onClose={toggleModal} />
+      <DecisionBlockModal block={block} show={showModal && activeModal === BlockTypes.DECISION_BLOCK} onClose={toggleModal} />
+      <LoadBlockkModal block={block} show={showModal && activeModal === BlockTypes.LOAD_BLOCK} onClose={toggleModal} />
+      <StoreBlockModal block={block} show={showModal && activeModal === BlockTypes.STORE_BLOCK} onClose={toggleModal} />
+      <StartBlockModal block={block} show={showModal && activeModal === BlockTypes.START_BLOCK} onClose={toggleModal} />
+      <StopBlockModal block={block} show={showModal && activeModal === BlockTypes.STOP_BLOCK} onClose={toggleModal} />
+      <WhileLoopBlockModal block={block} show={showModal && activeModal === BlockTypes.WHILE_LOOP_BLOCK} onClose={toggleModal} />
     </div>
-  ) : (
-    <></>
   );
 }
 
