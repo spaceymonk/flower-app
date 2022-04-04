@@ -5,13 +5,18 @@ import useToggle from '../../../hooks/useToggle';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { useProjectHelper } from '../../../hooks/useProjectHelper';
+import { ExportType } from '../../../types';
 
 export function ExportModal({ show, onClose }: ExportModalProps) {
-  const { toPNG } = useProjectHelper();
+  const { toPNG, toCode } = useProjectHelper();
 
-  async function handleExport() {
+  async function handleExport(type: ExportType) {
     try {
-      toPNG();
+      if (type === ExportType.PNG) {
+        toPNG();
+      } else if (type === ExportType.CODE) {
+        toCode();
+      }
     } catch {
       toast.error('Export failed!');
     }
@@ -26,7 +31,8 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
       </Modal.Header>
       <Modal.Body className="pb-5">
         <Container>
-          <Button onClick={handleExport}>Export Current View to PNG</Button>
+          <Button onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
+          <Button onClick={() => handleExport(ExportType.CODE)}>Generate Source Code</Button>
         </Container>
       </Modal.Body>
       <Modal.Footer>

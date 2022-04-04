@@ -7,6 +7,11 @@ export type ProjectData = {
   edges: Edge[];
 };
 
+export enum ExportType {
+  PNG,
+  CODE,
+}
+
 export enum DecisionBlockHandle {
   FALSE = 'false',
   TRUE = 'true',
