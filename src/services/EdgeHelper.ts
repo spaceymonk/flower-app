@@ -20,6 +20,20 @@ export const findAllByPair = (edgeList: Edge<any>[], source: string, target: str
 };
 
 /* -------------------------------------------------------------------------- */
+/*                              getOutgoingEdges                              */
+/* -------------------------------------------------------------------------- */
+export const getOutgoingEdges = (block: Block, edgeList: Edge<any>[]): Edge<any>[] => {
+  return throwErrorIfUndefined(edgeList.filter((edge) => edge.source === block.id));
+};
+
+/* -------------------------------------------------------------------------- */
+/*                              getIncomingEdges                              */
+/* -------------------------------------------------------------------------- */
+export const getIncomingEdges = (block: Block, edgeList: Edge<any>[]): Edge<any>[] => {
+  return throwErrorIfUndefined(edgeList.filter((edge) => edge.target === block.id));
+};
+
+/* -------------------------------------------------------------------------- */
 /*                                includesEdge                                */
 /* -------------------------------------------------------------------------- */
 export const includesEdge = (edgeList: Edge[], edge: Edge): boolean => {

@@ -23,7 +23,7 @@ export const useProjectHelper = () => {
       toPNG(getTitle());
     }, [getTitle]),
     toCode: React.useCallback(() => {
-      toCode({ title: getTitle(), inputParams: getInputParams(), blocks: getBlocks(), edges: getEdges() });
+      return toCode({ title: getTitle(), inputParams: getInputParams(), blocks: getBlocks(), edges: getEdges() });
     }, [getEdges, getInputParams, getBlocks, getTitle]),
   };
 };

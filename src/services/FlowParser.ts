@@ -8,12 +8,12 @@ import { findAllByPair } from './EdgeHelper';
 /* -------------------------------------------------------------------------- */
 /*                                validateFlow                                */
 /* -------------------------------------------------------------------------- */
-export const validateFlow = (nodes: Block[], edges: Edge[]): Block => {
+export const validateFlow = (blocks: Block[], edges: Edge[]): Block => {
   const startBlocks: Block[] = [];
   const stopBlocks: Block[] = [];
 
-  for (let i = 0; i < nodes.length; i++) {
-    const n = nodes[i];
+  for (let i = 0; i < blocks.length; i++) {
+    const n = blocks[i];
     const connectedEdgeCount = getConnectedEdges([n], edges).length;
     if (n.type === BlockTypes.START_BLOCK) {
       startBlocks.push(n);
@@ -39,8 +39,7 @@ export const validateFlow = (nodes: Block[], edges: Edge[]): Block => {
     const iter: Block = throwErrorIfUndefined(stack.pop());
     if (!includesBlock(visited, iter)) {
       visited.push(iter);
-      const outgoers = getOutgoers(iter, nodes, edges);
-      console.log('outgoers', iter.id, outgoers);
+      const outgoers: Block[] = getOutgoers(iter, blocks, edges);
       for (let i = 0; i < outgoers.length; i++) {
         const outgoer = outgoers[i];
         if (includesBlock(visited, outgoer)) {

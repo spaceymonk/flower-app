@@ -6,19 +6,22 @@ import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { useProjectHelper } from '../../../hooks/useProjectHelper';
 import { ExportType } from '../../../types';
+import React from 'react';
 
 export function ExportModal({ show, onClose }: ExportModalProps) {
   const { toPNG, toCode } = useProjectHelper();
+
+  const [code, setCode] = React.useState('');
 
   async function handleExport(type: ExportType) {
     try {
       if (type === ExportType.PNG) {
         toPNG();
       } else if (type === ExportType.CODE) {
-        toCode();
+        setCode(toCode());
       }
-    } catch {
-      toast.error('Export failed!');
+    } catch (e: any) {
+      toast.error('Export failed! ' + e.message);
     }
   }
 
@@ -33,6 +36,8 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
         <Container>
           <Button onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
           <Button onClick={() => handleExport(ExportType.CODE)}>Generate Source Code</Button>
+          <br />
+          <code style={{ whiteSpace: 'pre-wrap' }}>{code}</code>
         </Container>
       </Modal.Body>
       <Modal.Footer>

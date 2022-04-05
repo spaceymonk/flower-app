@@ -1,10 +1,13 @@
-import { ProjectData } from '../types';
-import { nameof, throwErrorIfNull } from '../util';
+import { Block, BlockTypes, ProjectData } from '../types';
+import { nameof, throwErrorIfNull, throwErrorIfUndefined } from '../util';
 import { ProjectDataSchema } from '../config/ProjectDataValidation';
 import { toast } from 'react-toastify';
 import InitialValues from '../config/InitialValues';
 import FileSaver from 'file-saver';
 import domtoimage from 'dom-to-image';
+import { includesBlock } from './BlockHelper';
+import { validateFlow } from './FlowParser';
+import { getOutgoers } from 'react-flow-renderer';
 
 /* -------------------------------------------------------------------------- */
 /*                                    load                                    */
@@ -69,7 +72,33 @@ export const open = (file: Blob, onOpen?: (content: ProjectData) => void) => {
 /*                                   toCode                                   */
 /* -------------------------------------------------------------------------- */
 export const toCode = (pd: ProjectData) => {
-  // todo
-  const blob = new Blob([JSON.stringify(pd, null, 2)], { type: 'application/json' });
-  FileSaver.saveAs(blob, pd.title + '.json');
+  let code = '';
+
+  const visited: Block[] = [];
+  const stack: Block[] = [validateFlow(pd.blocks, pd.edges)];
+  while (stack.length !== 0) {
+    const iter: Block = throwErrorIfUndefined(stack.pop());
+    if (!includesBlock(visited, iter)) {
+      visited.push(iter);
+
+      if (iter.type === BlockTypes.START_BLOCK) {
+        code += `begin ${pd.title}\n`;
+      } else if (iter.type === BlockTypes.STOP_BLOCK) {
+        code += 'end\n';
+      } else if (iter.type === BlockTypes.LOAD_BLOCK) {
+        code += `  load ${iter.data.text}\n`;
+      } else if (iter.type === BlockTypes.STORE_BLOCK) {
+        code += `  store ${iter.data.text}\n`;
+      } else if (iter.type === BlockTypes.STATEMENT_BLOCK) {
+        code += `  ${iter.data.text}\n`;
+      } else {
+        //todo: add branching logic
+        throw new Error('Unsupported block type: ' + iter.type);
+      }
+      const outgoers: Block[] = getOutgoers(iter, pd.blocks, pd.edges);
+      stack.push(...outgoers);
+    }
+  }
+
+  return code;
 };
