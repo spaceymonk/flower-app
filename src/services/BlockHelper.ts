@@ -76,8 +76,10 @@ export const highlightBlocks = (ids: string[] | null, glowType: GlowTypes = Glow
 /*                                 focusBlock                                 */
 /* -------------------------------------------------------------------------- */
 export const focusBlock = (block: Block, setCenter: SetCenter) => {
-  const x = block.position.x; //+ node.width / 2;
-  const y = block.position.y; //+ node.height / 2;
+  const w = block.width || 0;
+  const h = block.height || 0;
+  const x = block.position.x + w / 2;
+  const y = block.position.y + h / 2;
   const zoom = 1.85;
   setCenter(x, y, { zoom, duration: 1000 });
 };

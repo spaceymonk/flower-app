@@ -20,7 +20,7 @@ function BlockOption({ block }: BlockOptionProps) {
               </Col>
             </CustomOverlay>
             <CustomOverlay overlay={<Tooltip>{block.id}</Tooltip>}>
-              <Col sm={3} className="text-truncate small text-muted fst-italic text-end">
+              <Col sm={3} className="text-truncate small text-muted fst-italic text-end-sm">
                 <span>{block.id}</span>
               </Col>
             </CustomOverlay>

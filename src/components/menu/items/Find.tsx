@@ -1,11 +1,24 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NavDropdown, Modal, Container, Button } from 'react-bootstrap';
+import { NavDropdown, Modal, Button, ListGroup } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import PropTypes from 'prop-types';
+import BlockOption from '../../blocks/common/BlockOption';
+import { useAppContext } from '../../../providers/AppProvider';
+import { Block } from '../../../types';
+import React from 'react';
+import useBlockHelper from '../../../hooks/useBlockHelper';
 
 export function FindModal({ show, onClose }: FindModalProps) {
-  function handleFind() { }
+  const { getBlocks } = useAppContext();
+  const { focusBlock } = useBlockHelper();
+
+  const blockList = React.useMemo(() => getBlocks(), [getBlocks]);
+
+  function handleSelect(b: Block) {
+    onClose();
+    focusBlock(b);
+  }
 
   return (
     <Modal show={show} size="lg" centered onHide={onClose} scrollable>
@@ -15,12 +28,22 @@ export function FindModal({ show, onClose }: FindModalProps) {
         </h4>
       </Modal.Header>
       <Modal.Body className="pb-5">
-        <Container></Container>
+        {blockList.length === 0 ? (
+          <p className="lead text-center fst-italic text-muted mt-5">No blocks found</p>
+        ) : (
+          <>
+            <h5>Block List</h5>
+            <ListGroup variant="flush">
+              {blockList.map((b) => (
+                <ListGroup.Item key={b.id} action onClick={() => handleSelect(b)}>
+                  <BlockOption block={b} />
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </>
+        )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-primary" size="sm" onClick={handleFind}>
-          Find
-        </Button>
         <Button variant="primary" size="sm" onClick={onClose}>
           Cancel
         </Button>
