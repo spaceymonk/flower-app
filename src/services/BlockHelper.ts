@@ -1,7 +1,7 @@
 import { Edge, getConnectedEdges, SetCenter, XYPosition } from 'react-flow-renderer';
 import { toast } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
-import { BlockTypes, Block, BlockData, GlowTypes } from '../types';
+import { BlockTypes, Block, BlockData, GlowTypes, ContainerBlockHandle } from '../types';
 import { PositionGenerator, SetBlocks } from './common';
 
 /* -------------------------------------------------------------------------- */
@@ -107,6 +107,28 @@ const checkRecursiveParentPresent = (blockList: Block[], parentBlock: Block, chi
   return false;
 };
 
+/* --------------------------- normalizeBlockOrder -------------------------- */
+function normalizeBlockOrder(block: Block, blockList: Block[], result: Block[] = []): Block[] {
+  result.push(block);
+  const children = findDirectChildBlocks(block.id, blockList);
+  children.forEach((child) => normalizeBlockOrder(child, blockList, result));
+  return result;
+}
+
+/* ---------------------------- removeChildEdges ---------------------------- */
+function removeChildEdges(b: Block, edgeList: Edge[], removeEdges: (edgeList: Edge[]) => void): void {
+  const childEdges = getConnectedEdges([b], edgeList).filter((e) => {
+    if (
+      (e.source === b.id && e.sourceHandle === ContainerBlockHandle.INNER_SOURCE) ||
+      (e.target === b.id && e.targetHandle === ContainerBlockHandle.INNER_TARGET)
+    ) {
+      return false;
+    }
+    return true;
+  });
+  removeEdges(childEdges);
+}
+
 /* -------------------------------------------------------------------------- */
 /*                              updateBlockParent                             */
 /* -------------------------------------------------------------------------- */
@@ -125,19 +147,20 @@ export const updateBlockParent = (
   const positionGen = new PositionGenerator({ x: 0, y: 0 }, 15);
 
   setBlocks((blocks) => {
-    const remainingBlocks = blocks.filter((b) => !includesBlock(children, b));
-    const updatedChildren = children.map((b) => {
-      // if block is not already a child of parent
+    const affectedBlocks: Block[] = [];
+    children.forEach((b) => {
+      // if block is not already a child of the parent
       if (b.parentNode !== parentBlock.id) {
-        const childEdges = getConnectedEdges([b], edgeList);
-        removeEdges(childEdges);
         b.parentNode = parentBlock.id;
         b.extent = 'parent';
         b.position = positionGen.nextPosition();
+        removeChildEdges(b, edgeList, removeEdges);
+        affectedBlocks.push(...normalizeBlockOrder(b, blockList));
       }
-      return b;
     });
-    return [...remainingBlocks, ...updatedChildren];
+    const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
+
+    return [...remainingBlocks, ...affectedBlocks];
   });
 };
 
@@ -147,6 +170,7 @@ export const updateBlockParent = (
 export const removeBlockParent = (
   parentBlock: Block,
   children: Block[],
+  blockList: Block[],
   edgeList: Edge[],
   setBlocks: SetBlocks,
   removeEdges: (edgeList: Edge[]) => void
@@ -154,16 +178,17 @@ export const removeBlockParent = (
   const positionGen = new PositionGenerator({ x: parentBlock.position.x, y: parentBlock.position.y }, -15);
 
   setBlocks((blocks) => {
-    const remainingBlocks = blocks.filter((b) => !includesBlock(children, b));
-    const updatedChildren = children.map((b) => {
+    const affectedBlocks: Block[] = [];
+    children.forEach((b) => {
       b.parentNode = undefined;
       b.extent = undefined;
       b.position = positionGen.nextPosition();
-      return b;
+      removeChildEdges(b, edgeList, removeEdges);
+      affectedBlocks.push(...normalizeBlockOrder(b, blockList));
+      console.log(affectedBlocks);
     });
-    const childrenEdges = getConnectedEdges(children, edgeList);
-    removeEdges(childrenEdges);
-    return [...remainingBlocks, ...updatedChildren];
+    const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
+    return [...remainingBlocks, ...affectedBlocks];
   });
 };
 

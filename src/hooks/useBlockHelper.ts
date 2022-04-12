@@ -56,9 +56,9 @@ const useBlockHelper = () => {
     ),
     removeBlockParent: React.useCallback(
       (parentBlock: Block, children: Block[]) => {
-        blockService.removeBlockParent(parentBlock, children, getEdges(), setBlocks, removeEdges);
+        blockService.removeBlockParent(parentBlock, children, getBlocks(), getEdges(), setBlocks, removeEdges);
       },
-      [getEdges, removeEdges, setBlocks]
+      [getBlocks, getEdges, removeEdges, setBlocks]
     ),
     findAllAvailableChildren: React.useCallback(
       (block: Block, childNodes: Block[]) => {
