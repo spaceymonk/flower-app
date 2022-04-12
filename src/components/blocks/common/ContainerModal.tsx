@@ -22,6 +22,7 @@ export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
 
   React.useEffect(() => {
     setChildNodes(findDirectChildBlocks(block.id));
+    setText(block.data.text || '');
   }, [findDirectChildBlocks, block]);
 
   const handleSave = () => {

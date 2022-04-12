@@ -12,12 +12,12 @@ export function NodeComponent(block: Block) {
   return (
     <ContainerNode block={block}>
       <Handle type="target" id={ContainerBlockHandle.OUTER_TARGET} position={Position.Top} className="handle" />
-      <Handle type="source" id={ContainerBlockHandle.INNER_SOURCE} position={Position.Top} className="handle-container source" />
+      <Handle type="source" id={ContainerBlockHandle.INNER_SOURCE} position={Position.Bottom} className="handle-container source" />
       <div className="w-100">
         <div className="header">WHILE</div>
         <div className="subtitle">{processed ? processed : <em className="text-muted">{T.blocks.defaultTxt}</em>}</div>
       </div>
-      <Handle type="target" id={ContainerBlockHandle.INNER_TARGET} position={Position.Bottom} className="handle-container target" />
+      <Handle type="target" id={ContainerBlockHandle.INNER_TARGET} position={Position.Top} className="handle-container target" />
       <Handle type="source" id={ContainerBlockHandle.OUTER_SOURCE} position={Position.Bottom} className="handle" />
     </ContainerNode>
   );

@@ -132,13 +132,12 @@
   background-color: transparent;
 }
 .handle-container.target {
-  left: 10%;
-  bottom: 10px;
+  top: calc(100% - 10px);
   border-width: 0 0.4rem 0.4rem 0.4rem;
   border-color: transparent transparent violet transparent;
 }
 .handle-container.source {
-  top: 50px;
+  bottom: calc(100% - 50px);
   border-width: 0.4rem 0.4rem 0 0.4rem;
   border-color: violet transparent transparent transparent;
 }
