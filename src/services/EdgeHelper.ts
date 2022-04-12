@@ -2,7 +2,7 @@ import { addEdge, Connection, Edge, MarkerType, updateEdge } from 'react-flow-re
 import { v4 as uuid } from 'uuid';
 import { throwErrorIfNull, throwErrorIfUndefined } from '../util';
 import * as BlockHelper from './BlockHelper';
-import { Block } from '../types';
+import { Block, ContainerBlockHandle } from '../types';
 import { SetEdges } from './common';
 
 /* -------------------------------------------------------------------------- */
@@ -72,10 +72,8 @@ export const isValidConnection = (connection: Connection, blockList: Block[]): b
   const target = throwErrorIfUndefined(BlockHelper.findById(blockList, throwErrorIfNull(connection.target)));
 
   if (
-    (connection.targetHandle === 'inner-target' && source.parentNode !== connection.target) ||
-    (connection.targetHandle === 'outer-target' && source.parentNode === connection.target) ||
-    (connection.sourceHandle === 'inner-source' && target.parentNode !== connection.source) ||
-    (connection.sourceHandle === 'outer-source' && target.parentNode === connection.source)
+    (connection.targetHandle === ContainerBlockHandle.INNER_TARGET && source.parentNode !== target.id) ||
+    (connection.sourceHandle === ContainerBlockHandle.INNER_SOURCE && target.parentNode !== source.id)
   ) {
     return false;
   }
