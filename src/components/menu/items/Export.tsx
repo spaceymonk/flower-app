@@ -1,15 +1,18 @@
 import { faFileExport } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NavDropdown, Modal, Button, Container } from 'react-bootstrap';
+import { NavDropdown, Modal, Button, Container, Row, Col } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { useProjectHelper } from '../../../hooks/useProjectHelper';
-import { ExportType } from '../../../types';
+import { ExportType, GlowTypes } from '../../../types';
 import React from 'react';
+import { InvalidDecisionError, MultipleStartError, NotConnectedError } from '../../../exceptions';
+import useBlockHelper from '../../../hooks/useBlockHelper';
 
 export function ExportModal({ show, onClose }: ExportModalProps) {
   const { toPNG, toCode } = useProjectHelper();
+  const { highlightBlocks } = useBlockHelper();
 
   const [code, setCode] = React.useState('');
 
@@ -21,6 +24,12 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
         setCode(toCode());
       }
     } catch (e: any) {
+      if (e instanceof NotConnectedError || e instanceof InvalidDecisionError) {
+        highlightBlocks([e.blockId], GlowTypes.ERROR);
+      } else if (e instanceof MultipleStartError || e instanceof MultipleStartError) {
+        highlightBlocks(e.blockIdList, GlowTypes.ERROR);
+      }
+      onClose();
       toast.error('Export failed! ' + e.message);
     }
   }
@@ -34,10 +43,22 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
       </Modal.Header>
       <Modal.Body className="pb-5">
         <Container>
-          <Button onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
-          <Button onClick={() => handleExport(ExportType.CODE)}>Generate Source Code</Button>
-          <br />
-          <code style={{ whiteSpace: 'pre-wrap' }}>{code}</code>
+          <Row>
+            <Col className="text-center">
+              <Button onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
+            </Col>
+            <Col className="text-center">
+              <Button onClick={() => handleExport(ExportType.CODE)}>Generate Source Code</Button>
+            </Col>
+          </Row>
+          <Row className="mt-5">
+            {code && (
+              <>
+                <h4>Pseudocode</h4>
+                <code>{code}</code>
+              </>
+            )}
+          </Row>
         </Container>
       </Modal.Body>
       <Modal.Footer>

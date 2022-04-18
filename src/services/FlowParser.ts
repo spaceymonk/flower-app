@@ -1,5 +1,6 @@
 import { Edge, getConnectedEdges, getOutgoers } from 'react-flow-renderer';
 import { MultipleStartError, MultipleStopError, NoStartError, NoStopError, NotConnectedError } from '../exceptions';
+import { InvalidDecisionError } from '../exceptions/InvalidDecisionError';
 import { Block, BlockTypes } from '../types';
 import { throwErrorIfUndefined } from '../util';
 import { includesBlock } from './BlockHelper';
@@ -35,7 +36,7 @@ export const mapDecisionPaths = (start: Block, blocks: Block[], edges: Edge[], m
     }
   }
 
-  throw new Error('Branches are not merged! ' + start.id);
+  throw new InvalidDecisionError(start.id);
 };
 
 /* -------------------------------------------------------------------------- */

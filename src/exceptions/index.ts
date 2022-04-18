@@ -3,6 +3,6 @@ import { NoStopError } from './NoStopError';
 import { NotConnectedError } from './NotConnectedError';
 import { MultipleStartError } from './MultipleStartError';
 import { MultipleStopError } from './MultipleStopError';
-import { CircularDependencyError } from './CircularDependencyError';
+import { InvalidDecisionError } from './InvalidDecisionError';
 
-export { NoStartError, NoStopError, NotConnectedError, MultipleStartError, MultipleStopError, CircularDependencyError };
+export { NoStartError, NoStopError, NotConnectedError, MultipleStartError, MultipleStopError, InvalidDecisionError };
