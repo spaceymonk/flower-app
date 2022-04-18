@@ -64,6 +64,8 @@ export const createEdge = (connection: Connection): Edge => {
 /*                              isValidConnection                             */
 /* -------------------------------------------------------------------------- */
 export const isValidConnection = (connection: Connection, blockList: Block[]): boolean => {
+  console.log(connection);
+  // refuse self connection
   if (connection.source === connection.target) {
     return false;
   }
@@ -71,10 +73,16 @@ export const isValidConnection = (connection: Connection, blockList: Block[]): b
   const source = throwErrorIfUndefined(BlockHelper.findById(blockList, throwErrorIfNull(connection.source)));
   const target = throwErrorIfUndefined(BlockHelper.findById(blockList, throwErrorIfNull(connection.target)));
 
-  if (
-    (connection.targetHandle === ContainerBlockHandle.INNER_TARGET && source.parentNode !== target.id) ||
-    (connection.sourceHandle === ContainerBlockHandle.INNER_SOURCE && target.parentNode !== source.id)
-  ) {
+  // refuse illegal connections to container
+  const expr1 = connection.targetHandle === ContainerBlockHandle.INNER_TARGET && source.parentNode !== target.id;
+  const expr2 = connection.sourceHandle === ContainerBlockHandle.INNER_SOURCE && target.parentNode !== source.id;
+  const expr3 = connection.targetHandle === ContainerBlockHandle.OUTER_TARGET && source.parentNode === target.id;
+  const expr4 = connection.sourceHandle === ContainerBlockHandle.OUTER_SOURCE && target.parentNode === source.id;
+  if (expr1 || expr2 || expr3 || expr4) {
+    return false;
+  }
+
+  if (source.parentNode !== target.parentNode && !(source.parentNode === target.id || target.parentNode === source.id)) {
     return false;
   }
 
