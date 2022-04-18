@@ -1,14 +1,47 @@
 import { Edge, getConnectedEdges, getOutgoers } from 'react-flow-renderer';
-import { CircularDependencyError, MultipleStartError, MultipleStopError, NoStartError, NoStopError, NotConnectedError } from '../exceptions';
-import { Block, BlockTypes, ContainerBlockHandle } from '../types';
+import { MultipleStartError, MultipleStopError, NoStartError, NoStopError, NotConnectedError } from '../exceptions';
+import { Block, BlockTypes } from '../types';
 import { throwErrorIfUndefined } from '../util';
 import { includesBlock } from './BlockHelper';
-import { findAllByPair } from './EdgeHelper';
+
+export type PathMapping = { [key: string]: Block };
+
+/* -------------------------------------------------------------------------- */
+/*                              mapDecisionPaths                              */
+/* -------------------------------------------------------------------------- */
+export const mapDecisionPaths = (start: Block, blocks: Block[], edges: Edge[], mapping: PathMapping = {}): PathMapping => {
+  if (start.type !== BlockTypes.DECISION_BLOCK) {
+    throw new Error('start block must be a decision block');
+  }
+  const queue: Block[] = getOutgoers(start, blocks, edges);
+  const visited: Block[] = [];
+  while (queue.length > 0) {
+    const current = throwErrorIfUndefined(queue.shift());
+    if (includesBlock(visited, current)) {
+      mapping[start.id] = current;
+      return mapping;
+    }
+    visited.push(current);
+    const outgoers = getOutgoers(current, blocks, edges);
+    if (current.type === BlockTypes.DECISION_BLOCK) {
+      if (!mapping[current.id]) mapDecisionPaths(current, blocks, edges, mapping);
+      queue.push(mapping[current.id]);
+    } else if (current.type === BlockTypes.WHILE_LOOP_BLOCK) {
+      // pass the body of the container block
+      if (outgoers[0].parentNode === current.id) queue.push(outgoers[1]);
+      else queue.push(outgoers[0]);
+    } else {
+      queue.push(...outgoers);
+    }
+  }
+
+  throw new Error('Branches are not merged! ' + start.id);
+};
 
 /* -------------------------------------------------------------------------- */
 /*                                validateFlow                                */
 /* -------------------------------------------------------------------------- */
-export const validateFlow = (blocks: Block[], edges: Edge[]): Block => {
+export const validateFlow = (blocks: Block[], edges: Edge[]): [Block, Block] => {
   const startBlocks: Block[] = [];
   const stopBlocks: Block[] = [];
 
@@ -32,29 +65,5 @@ export const validateFlow = (blocks: Block[], edges: Edge[]): Block => {
   if (startBlocks.length === 0) throw new NoStartError();
   if (stopBlocks.length === 0) throw new NoStopError();
 
-  // check for circular depencies
-  const visited: Block[] = [];
-  const stack: Block[] = [startBlocks[0]];
-  while (stack.length !== 0) {
-    const iter: Block = throwErrorIfUndefined(stack.pop());
-    if (!includesBlock(visited, iter)) {
-      visited.push(iter);
-      const outgoers: Block[] = getOutgoers(iter, blocks, edges);
-      for (let i = 0; i < outgoers.length; i++) {
-        const outgoer = outgoers[i];
-        if (includesBlock(visited, outgoer)) {
-          // check connected handle, it may be container block
-          const connectedEdges = findAllByPair(edges, iter.id, outgoer.id);
-          connectedEdges?.forEach((e) => {
-            if (e.targetHandle !== ContainerBlockHandle.INNER_TARGET) {
-              throw new CircularDependencyError([iter.id, outgoer.id]);
-            }
-          });
-        }
-        stack.push(outgoer);
-      }
-    }
-  }
-
-  return startBlocks[0];
+  return [startBlocks[0], stopBlocks[0]];
 };

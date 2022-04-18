@@ -1,13 +1,12 @@
-import { Block, BlockTypes, ProjectData } from '../types';
-import { nameof, throwErrorIfNull, throwErrorIfUndefined } from '../util';
+import { Block, BlockTypes, DecisionBlockHandle, ProjectData } from '../types';
+import { nameof, throwErrorIfNull } from '../util';
 import { ProjectDataSchema } from '../config/ProjectDataValidation';
 import { toast } from 'react-toastify';
 import InitialValues from '../config/InitialValues';
 import FileSaver from 'file-saver';
 import domtoimage from 'dom-to-image';
-import { includesBlock } from './BlockHelper';
-import { validateFlow } from './FlowParser';
-import { getOutgoers } from 'react-flow-renderer';
+import { mapDecisionPaths, PathMapping, validateFlow } from './FlowParser';
+import { getConnectedEdges, getOutgoers } from 'react-flow-renderer';
 
 /* -------------------------------------------------------------------------- */
 /*                                    load                                    */
@@ -71,32 +70,77 @@ export const open = (file: Blob, onOpen?: (content: ProjectData) => void) => {
 /* -------------------------------------------------------------------------- */
 /*                                   toCode                                   */
 /* -------------------------------------------------------------------------- */
+
+type Scope = { scopeof: string; end: string };
 export const toCode = (pd: ProjectData) => {
+  const [startBlock, stopBlock] = validateFlow(pd.blocks, pd.edges);
+  const stack: Block[] = [startBlock];
+  let mapping: PathMapping = {};
+  let scope: Scope[] = [];
   let code = '';
 
-  const visited: Block[] = [];
-  const stack: Block[] = [validateFlow(pd.blocks, pd.edges)];
   while (stack.length !== 0) {
-    const iter: Block = throwErrorIfUndefined(stack.pop());
-    if (!includesBlock(visited, iter)) {
-      visited.push(iter);
+    const iter: Block = stack.pop() as Block;
+    const outgoers: Block[] = getOutgoers(iter, pd.blocks, pd.edges);
 
-      if (iter.type === BlockTypes.START_BLOCK) {
-        code += `begin ${pd.title}\n`;
-      } else if (iter.type === BlockTypes.STOP_BLOCK) {
-        code += 'end\n';
-      } else if (iter.type === BlockTypes.LOAD_BLOCK) {
-        code += `  load ${iter.data.text}\n`;
-      } else if (iter.type === BlockTypes.STORE_BLOCK) {
-        code += `  store ${iter.data.text}\n`;
-      } else if (iter.type === BlockTypes.STATEMENT_BLOCK) {
-        code += `  ${iter.data.text}\n`;
-      } else {
-        //todo: add branching logic
-        throw new Error('Unsupported block type: ' + iter.type);
+    if (scope.at(-1)?.end === iter.id) {
+      let currentScope = scope.pop() as Scope;
+
+      while (currentScope.scopeof === 'else') {
+        currentScope = scope.pop() as Scope;
       }
-      const outgoers: Block[] = getOutgoers(iter, pd.blocks, pd.edges);
-      stack.push(...outgoers);
+
+      if (currentScope.scopeof === BlockTypes.DECISION_BLOCK) {
+        if (stack.at(-1)?.id !== currentScope.end) {
+          code += `${'  '.repeat(scope.length)}else\n`;
+          scope.push({ scopeof: 'else', end: currentScope.end });
+        }
+        continue;
+      } else if (currentScope.scopeof === BlockTypes.WHILE_LOOP_BLOCK) {
+        continue;
+      }
+    }
+
+    if (iter.type === BlockTypes.START_BLOCK) {
+      code += 'begin\n';
+      scope.push({ scopeof: iter.type, end: stopBlock.id });
+      stack.push(outgoers[0]);
+    } else if (iter.type === BlockTypes.STOP_BLOCK) {
+      code += 'end\n';
+      break;
+    } else if (iter.type === BlockTypes.LOAD_BLOCK) {
+      code += `${'  '.repeat(scope.length)}load ${iter.data.text}\n`;
+      stack.push(outgoers[0]);
+    } else if (iter.type === BlockTypes.STORE_BLOCK) {
+      code += `${'  '.repeat(scope.length)}store ${iter.data.text}\n`;
+      stack.push(outgoers[0]);
+    } else if (iter.type === BlockTypes.STATEMENT_BLOCK) {
+      code += `${'  '.repeat(scope.length)}${iter.data.text}\n`;
+      stack.push(outgoers[0]);
+    } else if (iter.type === BlockTypes.WHILE_LOOP_BLOCK) {
+      code += `${'  '.repeat(scope.length)}while (${iter.data.text})\n`;
+      scope.push({ scopeof: iter.type, end: iter.id });
+      if (outgoers[0].parentNode === iter.id) {
+        stack.push(outgoers[1], outgoers[0]);
+      } else {
+        stack.push(outgoers[0], outgoers[1]);
+      }
+    } else if (iter.type === BlockTypes.DECISION_BLOCK) {
+      code += `${'  '.repeat(scope.length)}if (${iter.data.text})\n`;
+      let falseBlockId = null;
+      const connectedEdgeList = getConnectedEdges([iter], pd.edges);
+      for (const edge of connectedEdgeList) {
+        if (edge.sourceHandle === DecisionBlockHandle.FALSE) falseBlockId = edge.target;
+      }
+      if (falseBlockId === outgoers[0].id) {
+        stack.push(outgoers[0], outgoers[1]);
+      } else {
+        stack.push(outgoers[1], outgoers[0]);
+      }
+      if (!mapping[iter.id]) mapDecisionPaths(iter, pd.blocks, pd.edges, mapping);
+      scope.push({ scopeof: iter.type, end: mapping[iter.id].id });
+    } else {
+      throw new Error('Unsupported block type: ' + iter.type);
     }
   }
 
