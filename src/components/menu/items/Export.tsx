@@ -9,6 +9,7 @@ import { ExportType, GlowTypes } from '../../../types';
 import React from 'react';
 import { InvalidDecisionError, MultipleStartError, NotConnectedError } from '../../../exceptions';
 import useBlockHelper from '../../../hooks/useBlockHelper';
+import { CopyBlock, a11yLight } from 'react-code-blocks';
 
 export function ExportModal({ show, onClose }: ExportModalProps) {
   const { toPNG, toCode } = useProjectHelper();
@@ -19,7 +20,7 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
   async function handleExport(type: ExportType) {
     try {
       if (type === ExportType.PNG) {
-        toPNG();
+        await toPNG();
       } else if (type === ExportType.CODE) {
         setCode(toCode());
       }
@@ -33,9 +34,13 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
       toast.error('Export failed! ' + e.message);
     }
   }
+  function handleClose() {
+    setCode('');
+    onClose();
+  }
 
   return (
-    <Modal show={show} size="lg" centered onHide={onClose} scrollable>
+    <Modal show={show} size="lg" centered onHide={handleClose} scrollable>
       <Modal.Header closeButton>
         <h4>
           <FontAwesomeIcon size="lg" className="me-2" icon={faFileExport} /> Export Project
@@ -44,25 +49,36 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
       <Modal.Body className="pb-5">
         <Container>
           <Row>
+            <div className="d-flex align-items-center">
+              <h4 className="me-3">Pseudocode</h4>
+              {code ? (
+                <Button size="sm" onClick={() => setCode('')} variant="outline-success">
+                  Close
+                </Button>
+              ) : (
+                <Button size="sm" onClick={() => handleExport(ExportType.CODE)} variant="outline-info">
+                  Generate
+                </Button>
+              )}
+            </div>
+          </Row>
+          {code && (
+            <Row>
+              <div className="border border-3 my-2" style={{ fontFamily: 'Roboto Mono, monospace' }}>
+                <CopyBlock text={code} codeBlock language="text" showLineNumbers={true} theme={a11yLight} wrapLongLines={false} />
+              </div>
+              <div className="text-center"></div>
+            </Row>
+          )}
+          <Row className="mt-4">
             <Col className="text-center">
               <Button onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
             </Col>
-            <Col className="text-center">
-              <Button onClick={() => handleExport(ExportType.CODE)}>Generate Source Code</Button>
-            </Col>
-          </Row>
-          <Row className="mt-5">
-            {code && (
-              <>
-                <h4>Pseudocode</h4>
-                <code>{code}</code>
-              </>
-            )}
           </Row>
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" size="sm" onClick={onClose}>
+        <Button variant="primary" size="sm" onClick={handleClose}>
           Cancel
         </Button>
       </Modal.Footer>
