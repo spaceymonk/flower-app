@@ -7,13 +7,22 @@ import useBlockHelper from './useBlockHelper';
 import useFlowParser from './useFlowParser';
 
 const useSimulation = () => {
-  const speedInMsRef = React.useRef(500);
-  const jumpNextBlockRef = React.useRef(false);
-  const actionRef = React.useRef(SimulationActions.none);
+  const speedInMsRef = React.useRef<number>(500);
+  const jumpNextBlockRef = React.useRef<boolean>(false);
+  const actionRef = React.useRef<SimulationActions>(SimulationActions.none);
 
   const flowParser = useFlowParser();
   const { highlightBlocks } = useBlockHelper();
   const { isRunning, setRunning } = useSimulationContext();
+
+  const abort = React.useCallback(
+    (msg: string | null = null) => {
+      if (msg) toast.error(msg);
+      setRunning(false);
+      actionRef.current = SimulationActions.none;
+    },
+    [setRunning]
+  );
 
   const stop = React.useCallback(() => {
     if (isRunning()) {
@@ -33,17 +42,22 @@ const useSimulation = () => {
         actionRef.current = SimulationActions.none;
         toast.info('Simulation ended!');
       } else {
-        if (actionRef.current === SimulationActions.continue) {
-          flowParser.process();
-        } else if (actionRef.current === SimulationActions.debug && jumpNextBlockRef.current) {
-          jumpNextBlockRef.current = false;
-          flowParser.process();
+        try {
+          if (actionRef.current === SimulationActions.continue) {
+            flowParser.process();
+          } else if (actionRef.current === SimulationActions.debug && jumpNextBlockRef.current) {
+            jumpNextBlockRef.current = false;
+            flowParser.process();
+          }
+          setTimeout(simulationLoop, speedInMsRef.current);
+        } catch (e: any) {
+          console.error(e);
+          abort(e.message);
         }
-        setTimeout(simulationLoop, speedInMsRef.current);
       }
     };
     simulationLoop();
-  }, [setRunning, flowParser, highlightBlocks]);
+  }, [setRunning, flowParser, highlightBlocks, abort]);
 
   const start = React.useCallback(() => {
     actionRef.current = SimulationActions.debug;
@@ -57,11 +71,9 @@ const useSimulation = () => {
       } else if (e instanceof MultipleStartError || e instanceof MultipleStartError) {
         highlightBlocks(e.blockIdList, GlowTypes.ERROR);
       }
-      toast.error(e.message);
-      setRunning(false);
-      actionRef.current = SimulationActions.none;
+      abort(e.message);
     }
-  }, [flowParser, run, setRunning, highlightBlocks]);
+  }, [flowParser, run, abort, highlightBlocks]);
 
   const next = React.useCallback(() => {
     if (isRunning()) {

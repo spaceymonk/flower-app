@@ -81,5 +81,5 @@ export type SimulationContextType = {
   setWatchList: React.Dispatch<React.SetStateAction<any[]>>;
   getVariableTable: () => {};
   setVariableTable: React.Dispatch<React.SetStateAction<{}>>;
-  currentBlockRef: React.MutableRefObject<any>;
+  currentBlockRef: React.MutableRefObject<Block | null>;
 };
