@@ -21,6 +21,10 @@ function ProjectTitleModal({ show, onClose }: PropTypes.InferProps<typeof Projec
     }
   };
 
+  React.useEffect(() => {
+    setNewTitle(getTitle());
+  }, [getTitle]);
+
   return (
     <Modal show={show} centered>
       <Modal.Body>
