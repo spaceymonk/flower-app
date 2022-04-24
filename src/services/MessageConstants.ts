@@ -22,8 +22,7 @@ const T = {
     },
     start: {
       title: 'Start Block',
-      description:
-        'Marks the start of the flow. This is the main entry point of the program and there can be only be one.',
+      description: 'Marks the start of the flow. This is the main entry point of the program and there can be only be one.',
     },
     stop: {
       title: 'Stop Block',
@@ -56,6 +55,10 @@ const T = {
   watchesSidebar: {
     title: 'Watches',
     tooltip: 'Open watchlist',
+    table: {
+      name: 'Name',
+      value: 'Value',
+    },
   },
   notFound: {
     title: 'Requested page could not found!',
