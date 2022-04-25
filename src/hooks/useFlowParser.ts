@@ -9,7 +9,7 @@ import { evalBranchingBlock, evalStatementBlock, evalStoreBlock } from '../servi
 
 const useFlowParser = () => {
   const { getEdges, getBlocks } = useAppContext();
-  const { currentBlockRef, getVariableTable, setVariableTable } = useSimulationContext();
+  const { currentBlockRef, variableTableRef } = useSimulationContext();
   const { highlightBlocks } = useBlockHelper();
 
   const updateCurrentBlock = React.useCallback(
@@ -50,19 +50,18 @@ const useFlowParser = () => {
 
   const process = React.useCallback(() => {
     console.log('[parser] processing: ', currentBlockRef.current);
-    const memory = getVariableTable();
     const block = throwErrorIfNull(currentBlockRef.current);
 
     let nextBlock = null;
     if (block.type === BlockTypes.STATEMENT_BLOCK) {
-      evalStatementBlock(block, memory);
+      evalStatementBlock(block, variableTableRef.current);
     } else if (block.type === BlockTypes.STORE_BLOCK) {
-      evalStoreBlock(block, memory);
+      evalStoreBlock(block, variableTableRef.current);
     } else if (block.type === BlockTypes.DECISION_BLOCK) {
-      const branch = evalBranchingBlock(block, memory);
+      const branch = evalBranchingBlock(block, variableTableRef.current);
       nextBlock = next(branch === true ? DecisionBlockHandle.TRUE : DecisionBlockHandle.FALSE);
     } else if (block.type === BlockTypes.WHILE_LOOP_BLOCK) {
-      const branch = evalBranchingBlock(block, memory);
+      const branch = evalBranchingBlock(block, variableTableRef.current);
       nextBlock = next(branch === true ? ContainerBlockHandle.INNER_SOURCE : ContainerBlockHandle.OUTER_SOURCE);
     }
     // @todo: implement load block type
@@ -70,9 +69,8 @@ const useFlowParser = () => {
       nextBlock = next(null);
     }
 
-    setVariableTable(memory);
     updateCurrentBlock(throwErrorIfNull(nextBlock));
-  }, [currentBlockRef, getVariableTable, next, setVariableTable, updateCurrentBlock]);
+  }, [currentBlockRef, variableTableRef, next, updateCurrentBlock]);
 
   return {
     initialize,

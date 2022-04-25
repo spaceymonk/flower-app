@@ -28,10 +28,14 @@ const displayValue = (value: any): string => {
 }
 
 function WatchSidebar() {
-  const { isRunning, getVariableTable } = useSimulationContext();
+  const { isRunning, variableTableRef } = useSimulationContext();
   const [showSidebar, toggleSidebar] = useToggle();
+  const [variableTable, setVariableTable] = React.useState<Memory>(variableTableRef.current);
 
-  const variableTable: Memory = React.useMemo(getVariableTable, [getVariableTable]);
+  React.useEffect(()=>{
+    setVariableTable(variableTableRef.current);
+  }, [variableTableRef]);
+
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { Node, Edge, OnEdgesChange, OnNodesChange } from 'react-flow-renderer';
+import { Memory } from '../services/SimulationHelper';
 
 export type ProjectData = {
   title: string;
@@ -77,9 +78,6 @@ export type AppContextType = {
 export type SimulationContextType = {
   isRunning: () => boolean;
   setRunning: React.Dispatch<React.SetStateAction<boolean>>;
-  getWatchList: () => any[];
-  setWatchList: React.Dispatch<React.SetStateAction<any[]>>;
-  getVariableTable: () => {};
-  setVariableTable: React.Dispatch<React.SetStateAction<{}>>;
+  variableTableRef: React.MutableRefObject<Memory>;
   currentBlockRef: React.MutableRefObject<Block | null>;
 };
