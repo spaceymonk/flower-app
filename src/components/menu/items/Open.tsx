@@ -11,6 +11,7 @@ import { throwErrorIfNull } from '../../../util';
 import { ProjectData } from '../../../types';
 import { open } from '../../../services/ProjectHelper';
 import { useProjectHelper } from '../../../hooks/useProjectHelper';
+import { useSimulationContext } from '../../../providers/SimulationProvider';
 
 export function OpenModal({ show, onClose }: OpenModalProps) {
   const [file, setFile] = React.useState<File | null>(null);
@@ -94,10 +95,11 @@ export interface OpenModalProps extends PropTypes.InferProps<typeof OpenModal.pr
 
 export function OpenMenuItem() {
   const [show, toggleShow] = useToggle();
+  const { isRunning } = useSimulationContext();
   return (
     <>
       <OpenModal show={show} onClose={toggleShow} />
-      <NavDropdown.Item onClick={toggleShow}>
+      <NavDropdown.Item onClick={toggleShow} disabled={isRunning()}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faFolder} /> Open
       </NavDropdown.Item>
     </>

@@ -6,8 +6,10 @@ import { toast } from 'react-toastify';
 import { useReactFlow } from 'react-flow-renderer';
 import InitialValues from '../../../config/InitialValues';
 import { useProjectHelper } from '../../../hooks/useProjectHelper';
+import { useSimulationContext } from '../../../providers/SimulationProvider';
 
 export function NewMenuItem() {
+  const { isRunning } = useSimulationContext();
   const { load } = useProjectHelper();
   const { fitView } = useReactFlow();
 
@@ -20,7 +22,7 @@ export function NewMenuItem() {
     }
   }
   return (
-    <NavDropdown.Item onClick={handleClick}>
+    <NavDropdown.Item onClick={handleClick} disabled={isRunning()}>
       <FontAwesomeIcon size="sm" className="me-2" icon={faStarOfLife} /> New
     </NavDropdown.Item>
   );
