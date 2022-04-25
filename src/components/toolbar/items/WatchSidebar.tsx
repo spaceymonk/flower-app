@@ -10,7 +10,7 @@ import { Memory } from '../../../services/SimulationHelper';
 
 const displayValue = (value: any): string => {
   if (typeof value === 'string') {
-    return value;
+    return '"' + value + '"';
   }
   if (typeof value === 'number') {
     return value.toFixed(2);

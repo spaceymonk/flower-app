@@ -6,37 +6,37 @@ export type Memory = {
   [key: string]: any;
 };
 
-const lValuePattern = /^([a-zA-Z_][a-zA-Z0-9_]*)(\[(.*)\])?$/;
+const stmtPattern = /^(([a-zA-Z_][a-zA-Z0-9_]*)(\[(.*)\])?\s*=\s*)?(.*)$/;
 
 export const evalStatementBlock = (block: Block, memory: Memory = {}): void => {
   const code = throwErrorIfUndefined(block.data.text).trim();
-  const tokens = code.split(' ');
-  if (tokens.length < 3) {
-    throw new Error('Syntax error: invalid statement block');
-  }
-  const lValue = tokens[0];
-  const operator = tokens[1];
-  const rValue = tokens.slice(2).join(' ');
-  const match = lValue.match(lValuePattern);
 
-  if (!match) {
-    throw new Error('Syntax error: invalid l-value');
+  const stmtMatch = code.match(stmtPattern);
+  if (!stmtMatch) {
+    throw new Error(`Invalid statement: ${code}`);
   }
-  if (operator !== '=') {
-    throw new Error('Syntax error: invalid operator');
+
+  const lValue = stmtMatch[2];
+  const lValueIndex = stmtMatch[4];
+  const rValue = stmtMatch[5];
+
+  if (!rValue) {
+    throw new Error(`Invalid statement: ${code}`);
   }
 
   const ast = parse(rValue);
   const result = evaluate(ast, memory);
 
-  const lValueName = match[1];
-  if (match[3] !== undefined) {
-    const lValueIndex = match[3];
-    const indexAst = parse(lValueIndex);
-    const indexResult = evaluate(indexAst, memory);
-    memory[lValueName][indexResult] = result;
+  if (lValue) {
+    if (lValueIndex) {
+      const indexAst = parse(lValueIndex);
+      const indexResult = evaluate(indexAst, memory);
+      memory[lValue][indexResult] = result;
+    } else {
+      memory[lValue] = result;
+    }
   } else {
-    memory[lValueName] = result;
+    console.log('result', result);
   }
 };
 
