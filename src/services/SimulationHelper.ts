@@ -1,6 +1,7 @@
 import { Block } from '../types';
 import { parse, eval as evaluate } from 'expression-eval';
 import { throwErrorIfUndefined } from '../util';
+import { toast } from 'react-toastify';
 
 export type Memory = {
   [key: string]: any;
@@ -47,13 +48,31 @@ export const evalStoreBlock = (block: Block, memory: Memory = {}): void => {
     const variable = t.trim();
     const ast = parse(variable);
     const value = evaluate(ast, memory);
-    console.log('OUTPUT: ', value);
+    toast.info(`${variable} = ${value}`);
   });
+};
+
+export const evalLoadBlock = (block: Block, inputParams: string, memory: Memory = {}): void => {
+  const code = throwErrorIfUndefined(block.data.text).trim();
+  const tokens = code.split(', '); // @todo: bettter splitting!!!
+
+  if (inputParams === '') {
+    throw new Error('No input parameters');
+  }
+  const params = inputParams.split('\n');
+
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i].trim();
+    const param = params[i];
+    const ast = parse(param);
+    const value = evaluate(ast, memory);
+    memory[token] = value;
+  }
 };
 
 export const evalBranchingBlock = (block: Block, memory: Memory = {}): boolean => {
   const code = throwErrorIfUndefined(block.data.text).trim();
   const ast = parse(code.trim());
-  const result = evaluate(ast, memory);
+  const result = !!evaluate(ast, memory);
   return result;
 };

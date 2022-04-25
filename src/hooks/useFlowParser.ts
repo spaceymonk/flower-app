@@ -5,10 +5,10 @@ import { useSimulationContext } from '../providers/SimulationProvider';
 import { Block, BlockTypes, ContainerBlockHandle, DecisionBlockHandle, GlowTypes } from '../types';
 import { throwErrorIfNull, throwErrorIfUndefined } from '../util';
 import { validateFlow } from '../services/FlowParser';
-import { evalBranchingBlock, evalStatementBlock, evalStoreBlock } from '../services/SimulationHelper';
+import { evalBranchingBlock, evalLoadBlock, evalStatementBlock, evalStoreBlock } from '../services/SimulationHelper';
 
 const useFlowParser = () => {
-  const { getEdges, getBlocks } = useAppContext();
+  const { getEdges, getBlocks, getInputParams } = useAppContext();
   const { currentBlockRef, variableTableRef } = useSimulationContext();
   const { highlightBlocks } = useBlockHelper();
 
@@ -63,14 +63,15 @@ const useFlowParser = () => {
     } else if (block.type === BlockTypes.WHILE_LOOP_BLOCK) {
       const branch = evalBranchingBlock(block, variableTableRef.current);
       nextBlock = next(branch === true ? ContainerBlockHandle.INNER_SOURCE : ContainerBlockHandle.OUTER_SOURCE);
+    } else if (block.type === BlockTypes.LOAD_BLOCK) {
+      evalLoadBlock(block, getInputParams(), variableTableRef.current);
     }
-    // @todo: implement load block type
     if (!nextBlock) {
       nextBlock = next(null);
     }
 
     updateCurrentBlock(throwErrorIfNull(nextBlock));
-  }, [currentBlockRef, variableTableRef, next, updateCurrentBlock]);
+  }, [currentBlockRef, updateCurrentBlock, variableTableRef, next, getInputParams]);
 
   return {
     initialize,
