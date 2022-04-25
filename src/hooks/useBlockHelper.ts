@@ -38,9 +38,9 @@ const useBlockHelper = () => {
     ),
     focusBlock: React.useCallback(
       (block: Block) => {
-        blockService.focusBlock(block, setCenter);
+        blockService.focusBlock(block, getBlocks(), setCenter);
       },
-      [setCenter]
+      [setCenter, getBlocks]
     ),
     findDirectChildBlocks: React.useCallback(
       (blockId: string) => {

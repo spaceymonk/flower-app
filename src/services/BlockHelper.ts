@@ -75,11 +75,20 @@ export const highlightBlocks = (ids: string[] | null, glowType: GlowTypes = Glow
 /* -------------------------------------------------------------------------- */
 /*                                 focusBlock                                 */
 /* -------------------------------------------------------------------------- */
-export const focusBlock = (block: Block, setCenter: SetCenter) => {
+export const focusBlock = (block: Block, blockList: Block[], setCenter: SetCenter) => {
   const w = block.width || 0;
   const h = block.height || 0;
-  const x = block.position.x + w / 2;
-  const y = block.position.y + h / 2;
+  let x = block.position.x + w / 2;
+  let y = block.position.y + h / 2;
+  let parentBlockId = block.parentNode;
+  while (parentBlockId) {
+    const parentBlock = findById(blockList, parentBlockId);
+    if (parentBlock) {
+      x += parentBlock.position.x;
+      y += parentBlock.position.y;
+      parentBlockId = parentBlock.parentNode;
+    }
+  }
   const zoom = 1.85;
   setCenter(x, y, { zoom, duration: 1000 });
 };
