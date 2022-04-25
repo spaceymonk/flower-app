@@ -6,36 +6,17 @@ import T from '../../../services/MessageConstants';
 import CustomOverlay from '../../common/CustomOverlay';
 import useToggle from '../../../hooks/useToggle';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
-import { Memory } from '../../../services/SimulationHelper';
-
-const displayValue = (value: any): string => {
-  if (typeof value === 'string') {
-    return '"' + value + '"';
-  }
-  if (typeof value === 'number') {
-    return value.toFixed(2);
-  }
-  if (typeof value === 'boolean') {
-    return value ? 'true' : 'false';
-  }
-  if (value === null) {
-    return 'null';
-  }
-  if (Array.isArray(value)) {
-    return `[${value.map(v => displayValue(v)).join(', ')}]`;
-  }
-  return '-';
-}
+import { displayValue, Memory } from '../../../services/SimulationHelper';
 
 function WatchSidebar() {
   const { isRunning, variableTableRef } = useSimulationContext();
   const [showSidebar, toggleSidebar] = useToggle();
   const [variableTable, setVariableTable] = React.useState<Memory>(variableTableRef.current);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
+    console.log('WatchSidebar: useEffect');
     setVariableTable(variableTableRef.current);
   }, [variableTableRef]);
-
 
   return (
     <>

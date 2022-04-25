@@ -46,7 +46,8 @@ const useFlowParser = () => {
     const edges = getEdges();
     const [startBlock] = validateFlow(nodes, edges);
     updateCurrentBlock(startBlock);
-  }, [getBlocks, getEdges, updateCurrentBlock]);
+    variableTableRef.current = {};
+  }, [getBlocks, getEdges, updateCurrentBlock, variableTableRef]);
 
   const process = React.useCallback(() => {
     console.log('[parser] processing: ', currentBlockRef.current);

@@ -9,6 +9,25 @@ export type Memory = {
 
 const stmtPattern = /^(([a-zA-Z_][a-zA-Z0-9_]*)(\[(.*)\])?\s*=\s*)?(.*)$/;
 
+export const displayValue = (value: any): string => {
+  if (typeof value === 'string') {
+    return '"' + value + '"';
+  }
+  if (typeof value === 'number') {
+    return value.toFixed(2);
+  }
+  if (typeof value === 'boolean') {
+    return value ? 'T' : '';
+  }
+  if (value === null) {
+    return 'null';
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map((v) => displayValue(v)).join(', ')}]`;
+  }
+  return '-';
+};
+
 export const evalStatementBlock = (block: Block, memory: Memory = {}): void => {
   const code = throwErrorIfUndefined(block.data.text).trim();
 
@@ -48,7 +67,7 @@ export const evalStoreBlock = (block: Block, memory: Memory = {}): void => {
     const variable = t.trim();
     const ast = parse(variable);
     const value = evaluate(ast, memory);
-    toast.info(`${variable} = ${value}`);
+    toast.info(`${variable} = ${displayValue(value)}`);
   });
 };
 
