@@ -10,7 +10,7 @@ import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.REACT_APP_BASENAME}>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="*" element={<NotFound />} />
