@@ -48,7 +48,7 @@ export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
         <FloatingLabel label={T.blocks.label}>
           <Form.Control
             placeholder={T.blocks.label}
-            as="textarea"
+            type="text"
             value={text}
             onChange={(event) => setText(event.target.value)}
             onKeyDown={(event) => {
