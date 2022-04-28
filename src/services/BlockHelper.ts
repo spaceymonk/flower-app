@@ -194,7 +194,6 @@ export const removeBlockParent = (
       b.position = positionGen.nextPosition();
       removeChildEdges(b, edgeList, removeEdges);
       affectedBlocks.push(...normalizeBlockOrder(b, blockList));
-      console.log(affectedBlocks);
     });
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
     return [...remainingBlocks, ...affectedBlocks];

@@ -9,12 +9,15 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
   const [running, setRunning] = React.useState(false);
   const variableTableRef = React.useRef<Memory> ({});
   const currentBlockRef = React.useRef<Block | null>(null);
+  const inputParamCursor = React.useRef<number>(0);
+
 
   const value: SimulationContextType = {
     isRunning: () => running,
     setRunning,
     variableTableRef,
     currentBlockRef,
+    inputParamCursor,
   };
   return <SimulationContext.Provider value={value}>{props.children}</SimulationContext.Provider>;
 };

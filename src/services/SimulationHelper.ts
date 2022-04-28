@@ -55,8 +55,6 @@ export const evalStatementBlock = (block: Block, memory: Memory = {}): void => {
     } else {
       memory[lValue] = result;
     }
-  } else {
-    console.log('result', result);
   }
 };
 
@@ -71,7 +69,7 @@ export const evalStoreBlock = (block: Block, memory: Memory = {}): void => {
   });
 };
 
-export const evalLoadBlock = (block: Block, inputParams: string, memory: Memory = {}): void => {
+export const evalLoadBlock = (block: Block, inputParams: string, inputParamIter: React.MutableRefObject<number>, memory: Memory = {}): void => {
   const code = throwErrorIfUndefined(block.data.text).trim();
   const tokens = code.split(', '); // @todo: bettter splitting!!!
 
@@ -82,10 +80,14 @@ export const evalLoadBlock = (block: Block, inputParams: string, memory: Memory 
 
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i].trim();
-    const param = params[i];
+    const param = params.at(inputParamIter.current);
+    if (param === undefined) {
+      throw new Error(`No input parameter at line ${inputParamIter.current + 1}`);
+    }
     const ast = parse(param);
     const value = evaluate(ast, memory);
     memory[token] = value;
+    inputParamIter.current = inputParamIter.current + 1;
   }
 };
 

@@ -64,7 +64,6 @@ export const createEdge = (connection: Connection): Edge => {
 /*                              isValidConnection                             */
 /* -------------------------------------------------------------------------- */
 export const isValidConnection = (connection: Connection, blockList: Block[]): boolean => {
-  console.log(connection);
   // refuse self connection
   if (connection.source === connection.target) {
     return false;

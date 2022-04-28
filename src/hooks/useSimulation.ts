@@ -26,7 +26,6 @@ const useSimulation = () => {
 
   const stop = React.useCallback(() => {
     if (isRunning()) {
-      console.log('[simulation] stop');
       actionRef.current = SimulationActions.stop;
     }
   }, [isRunning]);
@@ -35,7 +34,6 @@ const useSimulation = () => {
     setRunning(true);
     toast.info('Simulation started!');
     const simulationLoop = () => {
-      console.log('[simualtion] timeout', actionRef.current);
       if (actionRef.current === SimulationActions.stop || !flowParser.hasNext()) {
         highlightBlocks(null);
         setRunning(false);
@@ -77,14 +75,12 @@ const useSimulation = () => {
 
   const next = React.useCallback(() => {
     if (isRunning()) {
-      console.log('[simulation] next');
       jumpNextBlockRef.current = true;
     }
   }, [isRunning]);
 
   const continueFn = React.useCallback(() => {
     if (isRunning()) {
-      console.log('[simulation] continue');
       if (actionRef.current === SimulationActions.continue) {
         actionRef.current = SimulationActions.debug;
         jumpNextBlockRef.current = false;
