@@ -6,17 +6,28 @@ import T from '../../../services/MessageConstants';
 import CustomOverlay from '../../common/CustomOverlay';
 import useToggle from '../../../hooks/useToggle';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
-import { displayValue, Memory } from '../../../services/SimulationHelper';
+import { displayValue } from '../../../services/SimulationHelper';
 
 function WatchSidebar() {
   const { isRunning, variableTableRef } = useSimulationContext();
   const [showSidebar, toggleSidebar] = useToggle();
-  const [variableTable, setVariableTable] = React.useState<Memory>(variableTableRef.current);
+
+  /* --------------------------- anti-pattern start --------------------------- */
+  const [, forceRender] = React.useState<Date>(new Date());
+  const intervalRef = React.useRef<NodeJS.Timeout>();
 
   React.useEffect(() => {
-    console.log('WatchSidebar: useEffect');
-    setVariableTable(variableTableRef.current);
-  }, [variableTableRef]);
+    if (isRunning()) {
+      intervalRef.current = setInterval(() => {
+        forceRender(new Date());
+      }, 200);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    }
+  }, [isRunning]);
+  /* ---------------------------- anti-pattern end ---------------------------- */
 
   return (
     <>
@@ -39,10 +50,10 @@ function WatchSidebar() {
               </tr>
             </thead>
             <tbody>
-              {Object.keys(variableTable).map((key) => (
+              {Object.keys(variableTableRef.current).map((key) => (
                 <tr key={key}>
                   <td>{key}</td>
-                  <td>{displayValue(variableTable[key])}</td>
+                  <td>{displayValue(variableTableRef.current[key])}</td>
                 </tr>
               ))}
             </tbody>

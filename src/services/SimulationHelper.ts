@@ -28,7 +28,7 @@ export const displayValue = (value: any): string => {
   return '-';
 };
 
-export const evalStatementBlock = (block: Block, memory: Memory = {}): void => {
+export const evalStatementBlock = (block: Block, memory: React.MutableRefObject<Memory>): void => {
   const code = throwErrorIfUndefined(block.data.text).trim();
 
   const stmtMatch = code.match(stmtPattern);
@@ -45,31 +45,36 @@ export const evalStatementBlock = (block: Block, memory: Memory = {}): void => {
   }
 
   const ast = parse(rValue);
-  const result = evaluate(ast, memory);
+  const result = evaluate(ast, memory.current);
 
   if (lValue) {
     if (lValueIndex) {
       const indexAst = parse(lValueIndex);
-      const indexResult = evaluate(indexAst, memory);
-      memory[lValue][indexResult] = result;
+      const indexResult = evaluate(indexAst, memory.current);
+      memory.current[lValue][indexResult] = result;
     } else {
-      memory[lValue] = result;
+      memory.current[lValue] = result;
     }
   }
 };
 
-export const evalStoreBlock = (block: Block, memory: Memory = {}): void => {
+export const evalStoreBlock = (block: Block, memory: React.MutableRefObject<Memory>): void => {
   const code = throwErrorIfUndefined(block.data.text).trim();
   const tokens = code.split(', '); // @todo: bettter splitting!!!
   tokens.forEach((t) => {
     const variable = t.trim();
     const ast = parse(variable);
-    const value = evaluate(ast, memory);
+    const value = evaluate(ast, memory.current);
     toast.info(`${variable} = ${displayValue(value)}`);
   });
 };
 
-export const evalLoadBlock = (block: Block, inputParams: string, inputParamIter: React.MutableRefObject<number>, memory: Memory = {}): void => {
+export const evalLoadBlock = (
+  block: Block,
+  inputParams: string,
+  inputParamIter: React.MutableRefObject<number>,
+  memory: React.MutableRefObject<Memory>
+): void => {
   const code = throwErrorIfUndefined(block.data.text).trim();
   const tokens = code.split(', '); // @todo: bettter splitting!!!
 
@@ -85,15 +90,15 @@ export const evalLoadBlock = (block: Block, inputParams: string, inputParamIter:
       throw new Error(`No input parameter at line ${inputParamIter.current + 1}`);
     }
     const ast = parse(param);
-    const value = evaluate(ast, memory);
-    memory[token] = value;
+    const value = evaluate(ast, memory.current);
+    memory.current[token] = value;
     inputParamIter.current = inputParamIter.current + 1;
   }
 };
 
-export const evalBranchingBlock = (block: Block, memory: Memory = {}): boolean => {
+export const evalBranchingBlock = (block: Block, memory: React.MutableRefObject<Memory>): boolean => {
   const code = throwErrorIfUndefined(block.data.text).trim();
   const ast = parse(code.trim());
-  const result = !!evaluate(ast, memory);
+  const result = !!evaluate(ast, memory.current);
   return result;
 };

@@ -55,17 +55,17 @@ const useFlowParser = () => {
 
     let nextBlock = null;
     if (block.type === BlockTypes.STATEMENT_BLOCK) {
-      evalStatementBlock(block, variableTableRef.current);
+      evalStatementBlock(block, variableTableRef);
     } else if (block.type === BlockTypes.STORE_BLOCK) {
-      evalStoreBlock(block, variableTableRef.current);
+      evalStoreBlock(block, variableTableRef);
     } else if (block.type === BlockTypes.DECISION_BLOCK) {
-      const branch = evalBranchingBlock(block, variableTableRef.current);
+      const branch = evalBranchingBlock(block, variableTableRef);
       nextBlock = next(branch === true ? DecisionBlockHandle.TRUE : DecisionBlockHandle.FALSE);
     } else if (block.type === BlockTypes.WHILE_LOOP_BLOCK) {
-      const branch = evalBranchingBlock(block, variableTableRef.current);
+      const branch = evalBranchingBlock(block, variableTableRef);
       nextBlock = next(branch === true ? ContainerBlockHandle.INNER_SOURCE : ContainerBlockHandle.OUTER_SOURCE);
     } else if (block.type === BlockTypes.LOAD_BLOCK) {
-      evalLoadBlock(block, getInputParams(), inputParamCursor, variableTableRef.current);
+      evalLoadBlock(block, getInputParams(), inputParamCursor, variableTableRef);
     }
     if (!nextBlock) {
       nextBlock = next(null);
