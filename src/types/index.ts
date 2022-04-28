@@ -80,4 +80,5 @@ export type SimulationContextType = {
   setRunning: React.Dispatch<React.SetStateAction<boolean>>;
   variableTableRef: React.MutableRefObject<Memory>;
   currentBlockRef: React.MutableRefObject<Block | null>;
+  inputParamCursor: React.MutableRefObject<number>;
 };

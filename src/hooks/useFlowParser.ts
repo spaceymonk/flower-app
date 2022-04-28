@@ -9,7 +9,7 @@ import { evalBranchingBlock, evalLoadBlock, evalStatementBlock, evalStoreBlock }
 
 const useFlowParser = () => {
   const { getEdges, getBlocks, getInputParams } = useAppContext();
-  const { currentBlockRef, variableTableRef } = useSimulationContext();
+  const { currentBlockRef, variableTableRef, inputParamCursor } = useSimulationContext();
   const { highlightBlocks } = useBlockHelper();
 
   const updateCurrentBlock = React.useCallback(
@@ -46,11 +46,11 @@ const useFlowParser = () => {
     const edges = getEdges();
     const [startBlock] = validateFlow(nodes, edges);
     updateCurrentBlock(startBlock);
+    inputParamCursor.current = 0;
     variableTableRef.current = {};
-  }, [getBlocks, getEdges, updateCurrentBlock, variableTableRef]);
+  }, [getBlocks, getEdges, inputParamCursor, updateCurrentBlock, variableTableRef]);
 
   const process = React.useCallback(() => {
-    console.log('[parser] processing: ', currentBlockRef.current);
     const block = throwErrorIfNull(currentBlockRef.current);
 
     let nextBlock = null;
@@ -65,14 +65,14 @@ const useFlowParser = () => {
       const branch = evalBranchingBlock(block, variableTableRef.current);
       nextBlock = next(branch === true ? ContainerBlockHandle.INNER_SOURCE : ContainerBlockHandle.OUTER_SOURCE);
     } else if (block.type === BlockTypes.LOAD_BLOCK) {
-      evalLoadBlock(block, getInputParams(), variableTableRef.current);
+      evalLoadBlock(block, getInputParams(), inputParamCursor, variableTableRef.current);
     }
     if (!nextBlock) {
       nextBlock = next(null);
     }
 
     updateCurrentBlock(throwErrorIfNull(nextBlock));
-  }, [currentBlockRef, updateCurrentBlock, variableTableRef, next, getInputParams]);
+  }, [currentBlockRef, updateCurrentBlock, variableTableRef, next, getInputParams, inputParamCursor]);
 
   return {
     initialize,
