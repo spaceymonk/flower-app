@@ -126,11 +126,11 @@
   right: 3px !important;
 }
 .handle-container {
-  width: 0;
-  height: 0;
-  border-radius: 0;
-  border-style: solid;
-  background-color: transparent;
+  width: 0 !important;
+  height: 0 !important;
+  border-radius: 0 !important;
+  border-style: solid !important;
+  background-color: transparent !important;
 }
 .handle-container.target {
   top: calc(100% - 10px);
