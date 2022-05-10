@@ -60,6 +60,11 @@ export enum SimulationActions {
   debug,
 }
 
+export type Point2D = {
+  x: number;
+  y: number;
+};
+
 export interface Block extends Node<BlockData> {}
 
 export type AppContextType = {
