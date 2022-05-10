@@ -12,16 +12,16 @@ abstract class Block {
   public width: number;
   public height: number;
 
-  constructor(type: BlockTypes, position: Point2D, text: string | undefined, name: string | undefined, parentNodeId: string | null) {
+  constructor(type: BlockTypes, position: Point2D) {
     this.id = uuid();
     this.glow = GlowTypes.NONE;
     this.width = 0;
     this.height = 0;
     this.type = type;
     this.position = position;
-    this.text = text;
-    this.name = name;
-    this.parentNodeId = parentNodeId;
+    this.text = undefined;
+    this.name = undefined;
+    this.parentNodeId = null;
   }
 
   abstract isContainer(): boolean;
