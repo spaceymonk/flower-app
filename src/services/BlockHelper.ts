@@ -1,120 +1,46 @@
-import { Edge, getConnectedEdges, SetCenter, XYPosition } from 'react-flow-renderer';
-import { toast } from 'react-toastify';
-import { v4 as uuid } from 'uuid';
-import { BlockTypes, Block, BlockData, GlowTypes, ContainerBlockHandle } from '../types';
-import { PositionGenerator, SetBlocks } from './common';
+import { CreateBlockDto } from '../dto/CreateBlockDto';
+import Block from '../model/Block';
+import DecisionBlock from '../model/block/DecisionBlock';
+import LoadBlock from '../model/block/LoadBlock';
+import StartBlock from '../model/block/StartBlock';
+import StatementBlock from '../model/block/StatementBlock';
+import StopBlock from '../model/block/StopBlock';
+import StoreBlock from '../model/block/StoreBlock';
+import WhileLoopBlock from '../model/block/WhileLoopBlock';
+import { BlockTypes } from '../types';
 
-/* -------------------------------------------------------------------------- */
-/*                                 createBlock                                */
-/* -------------------------------------------------------------------------- */
-export const createBlock = (type: BlockTypes, pos: XYPosition): Block => {
-  return {
-    id: uuid(),
-    type: type,
-    position: pos,
-    data: { text: undefined, glow: undefined, name: undefined },
-    parentNode: undefined,
-  };
-};
-
-/* -------------------------------------------------------------------------- */
-/*                               updateBlockData                              */
-/* -------------------------------------------------------------------------- */
-export const updateBlockData = (id: string, changeData: BlockData, setBlocks: SetBlocks): void => {
-  setBlocks((blocks) =>
-    blocks.map((b) => {
-      if (b.id === id) {
-        b.data = {
-          ...b.data,
-          ...changeData,
-        };
-      }
-      return b;
-    })
-  );
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                 removeBlock                                */
-/* -------------------------------------------------------------------------- */
-export const removeBlock = (block: Block, setBlocks: SetBlocks): void => {
-  setBlocks((blocks) => {
-    const newBlocks: Block[] = [];
-    blocks.forEach((b) => {
-      if (b.id !== block.id) {
-        if (b.parentNode === block.id) {
-          b.parentNode = undefined;
-          b.extent = undefined;
-          b.position = { x: b.position.x + block.position.x, y: b.position.y + block.position.y };
-        }
-        newBlocks.push(b);
-      }
-    });
-    return newBlocks;
-  });
-};
-
-/* -------------------------------------------------------------------------- */
-/*                               highlightBlocks                              */
-/* -------------------------------------------------------------------------- */
-export const highlightBlocks = (ids: string[] | null, glowType: GlowTypes = GlowTypes.NONE, setBlocks: SetBlocks): void => {
-  setBlocks((blocks) =>
-    blocks.map((b) => {
-      if (ids === null) {
-        updateBlockData(b.id, { glow: GlowTypes.NONE }, setBlocks);
-      } else if (ids.includes(b.id)) {
-        updateBlockData(b.id, { glow: glowType }, setBlocks);
-      } else {
-        updateBlockData(b.id, { glow: GlowTypes.NONE }, setBlocks);
-      }
-      return b;
-    })
-  );
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                 focusBlock                                 */
-/* -------------------------------------------------------------------------- */
-export const focusBlock = (block: Block, blockList: Block[], setCenter: SetCenter) => {
-  const w = block.width || 0;
-  const h = block.height || 0;
-  let x = block.position.x + w / 2;
-  let y = block.position.y + h / 2;
-  let parentBlockId = block.parentNode;
-  while (parentBlockId) {
-    const parentBlock = findById(blockList, parentBlockId);
-    if (parentBlock) {
-      x += parentBlock.position.x;
-      y += parentBlock.position.y;
-      parentBlockId = parentBlock.parentNode;
+export class BlockCreateFactory {
+  static create(dto: CreateBlockDto): Block {
+    if (dto.type === BlockTypes.STATEMENT_BLOCK) {
+      return new StatementBlock(dto.position);
+    } else if (dto.type === BlockTypes.DECISION_BLOCK) {
+      return new DecisionBlock(dto.position);
+    } else if (dto.type === BlockTypes.LOAD_BLOCK) {
+      return new LoadBlock(dto.position);
+    } else if (dto.type === BlockTypes.STORE_BLOCK) {
+      return new StoreBlock(dto.position);
+    } else if (dto.type === BlockTypes.START_BLOCK) {
+      return new StartBlock(dto.position);
+    } else if (dto.type === BlockTypes.STOP_BLOCK) {
+      return new StopBlock(dto.position);
+    } else if (dto.type === BlockTypes.WHILE_LOOP_BLOCK) {
+      return new WhileLoopBlock(dto.position);
+    } else {
+      throw new Error('Unknown block type');
     }
   }
-  const zoom = 1.85;
-  setCenter(x, y, { zoom, duration: 1000 });
-};
+}
 
-/* -------------------------------------------------------------------------- */
-/*                            findDirectChildBlocks                           */
-/* -------------------------------------------------------------------------- */
-export const findDirectChildBlocks = (blockId: string, blockList: Block[]): Block[] => {
-  const childBlocks = blockList.filter((b) => b.parentNode === blockId);
-  return childBlocks;
-};
-/* -------------------------------------------------------------------------- */
-/*                         checkRecursiveParentPresent                        */
-/* -------------------------------------------------------------------------- */
-const checkRecursiveParentPresent = (blockList: Block[], parentBlock: Block, children: Block[]): boolean => {
-  let parentBlockIter = findParentBlock(blockList, parentBlock);
-  while (parentBlockIter) {
-    for (const child of children) {
-      if (child.id === parentBlockIter.id) {
-        return true;
-      }
+export const includesBlock = (blockList: Block[], block: Block): boolean => {
+  for (let i = 0; i < blockList.length; i++) {
+    if (blockList[i].id === block.id) {
+      return true;
     }
-    parentBlockIter = findParentBlock(blockList, parentBlockIter);
   }
   return false;
 };
+
+/* ----------------------------------- OLD ---------------------------------- */
 
 /* --------------------------- normalizeBlockOrder -------------------------- */
 function normalizeBlockOrder(block: Block, blockList: Block[], result: Block[] = []): Block[] {
@@ -198,53 +124,4 @@ export const removeBlockParent = (
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
     return [...remainingBlocks, ...affectedBlocks];
   });
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                includesBlock                               */
-/* -------------------------------------------------------------------------- */
-export const includesBlock = (blockList: Block[], block: Block): boolean => {
-  for (let i = 0; i < blockList.length; i++) {
-    if (blockList[i].id === block.id) {
-      return true;
-    }
-  }
-  return false;
-};
-
-/* -------------------------------------------------------------------------- */
-/*                               findParentBlock                              */
-/* -------------------------------------------------------------------------- */
-export const findParentBlock = (blockList: Block[], block: Block): Block | undefined => {
-  for (let i = 0; i < blockList.length; i++) {
-    if (blockList[i].id === block.parentNode) {
-      return blockList[i];
-    }
-  }
-  return undefined;
-};
-
-/* -------------------------------------------------------------------------- */
-/*                          findAllAvailableChildren                          */
-/* -------------------------------------------------------------------------- */
-export const findAllAvailableChildren = (blockList: Block[], block: Block, childNodes: Block[]): Block[] => {
-  let availableChildren: Block[] = [];
-  for (const b of blockList) {
-    if (!(b.id === block.id || b.type === BlockTypes.START_BLOCK || b.type === BlockTypes.STOP_BLOCK || includesBlock(childNodes, b))) {
-      availableChildren.push(b);
-    }
-  }
-  return availableChildren;
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                  findById                                  */
-/* -------------------------------------------------------------------------- */
-export const findById = (blockList: Block[], id: string): Block | undefined => {
-  for (let i = 0; i < blockList.length; i++) {
-    if (blockList[i].id === id) {
-      return blockList[i];
-    }
-  }
-  return undefined;
 };

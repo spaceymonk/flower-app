@@ -12,11 +12,11 @@ abstract class Block {
   public width: number;
   public height: number;
 
-  constructor(type: BlockTypes, position: Point2D) {
+  constructor(type: BlockTypes, position: Point2D, width: number = 200, height: number = 60) {
     this.id = uuid();
     this.glow = GlowTypes.NONE;
-    this.width = 0;
-    this.height = 0;
+    this.width = width;
+    this.height = height;
     this.type = type;
     this.position = position;
     this.text = undefined;
@@ -25,6 +25,9 @@ abstract class Block {
   }
 
   abstract isContainer(): boolean;
+  isSentinel(): boolean {
+    return false;
+  }
 }
 
 export default Block;
