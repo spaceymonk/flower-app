@@ -5,18 +5,18 @@ import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
 import InitialValues from '../../../config/InitialValues';
 import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
-import { useReactFlow } from 'react-flow-renderer';
 import PropTypes from 'prop-types';
 import { throwErrorIfNull } from '../../../util';
 import { ProjectData } from '../../../types';
 import { open } from '../../../services/ProjectHelper';
 import { useProjectHelper } from '../../../hooks/useProjectHelper';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
+import useCanvasHelper from '../../../hooks/useCanvasHelper';
 
 export function OpenModal({ show, onClose }: OpenModalProps) {
   const [file, setFile] = React.useState<File | null>(null);
   const { load } = useProjectHelper();
-  const { fitView } = useReactFlow();
+  const { fitView } = useCanvasHelper();
 
   const handleFileSelection = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;

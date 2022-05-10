@@ -1,17 +1,22 @@
 import React from 'react';
 import { useAppContext } from '../providers/AppProvider';
-import { useReactFlow } from 'react-flow-renderer';
 import * as blockService from '../services/BlockHelper';
 import useEdgeHelper from './useEdgeHelper';
 import { Block, BlockData, GlowTypes } from '../types';
+import useCanvasHelper from './useCanvasHelper';
 
 const useBlockHelper = () => {
   const { setBlocks, getBlocks, getEdges } = useAppContext();
   const { removeEdges } = useEdgeHelper();
-  const { addNodes, setCenter } = useReactFlow();
+  const { setCenter } = useCanvasHelper();
 
   return {
-    addBlock: addNodes,
+    addBlock: React.useCallback(
+      (block: Block) => {
+        setBlocks((bs) => bs.concat(block));
+      },
+      [setBlocks]
+    ),
     findById: React.useCallback(
       (id: string) => {
         return blockService.findById(getBlocks(), id);
