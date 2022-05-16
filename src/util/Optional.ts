@@ -1,4 +1,4 @@
-import { throwErrorIfUndefined } from '../util';
+import { throwErrorIfUndefined } from '.';
 
 export class Optional<T> {
   private _value: T | undefined;

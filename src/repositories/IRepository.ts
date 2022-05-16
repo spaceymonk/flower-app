@@ -1,4 +1,4 @@
-import { Optional } from '../types/Optional';
+import { Optional } from '../util/Optional';
 
 export interface IRepository<Entity> {
   save(entity: Entity): void;

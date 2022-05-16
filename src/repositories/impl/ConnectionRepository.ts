@@ -1,7 +1,7 @@
 import Block from '../../model/Block';
 import Connection from '../../model/Connection';
 import { includesConnection } from '../../services/ConnectionHelper';
-import { Optional } from '../../types/Optional';
+import { Optional } from '../../util/Optional';
 import { IConnectionRepository } from '../IConnectionRepository';
 
 export class ConnectionRepository implements IConnectionRepository {
