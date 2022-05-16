@@ -6,6 +6,7 @@ export interface IRepository<Entity> {
   saveAll(entities: Entity[]): void;
   deleteAll(entities: Entity[]): void;
   findById(id: string): Optional<Entity>;
+  findAllByIds(ids: string[]): Entity[];
   existsById(id: string): boolean;
   getAll(): Entity[];
 }

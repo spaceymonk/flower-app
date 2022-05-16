@@ -11,6 +11,9 @@ export class BlockRepository implements IBlockRepository {
     this._getBlocks = getBlocks;
     this._setBlocks = setBlocks;
   }
+  findAllByIds(ids: string[]): Block[] {
+    return this._getBlocks().filter((b) => ids.includes(b.id));
+  }
   getAll(): Block[] {
     return this._getBlocks();
   }

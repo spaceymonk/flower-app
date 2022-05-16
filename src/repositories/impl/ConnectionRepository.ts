@@ -15,6 +15,9 @@ export class ConnectionRepository implements IConnectionRepository {
     this._getConnections = getConnections;
     this._setConnections = setConnections;
   }
+  findAllByIds(ids: string[]): Connection[] {
+    return this._getConnections().filter((c) => ids.includes(c.id));
+  }
   findAllBySourceId(id: string): Connection[] {
     return this._getConnections().filter((c) => c.sourceId === id);
   }
@@ -24,7 +27,7 @@ export class ConnectionRepository implements IConnectionRepository {
   findAllBySourceIdAndTargetId(sourceId: string, targetId: string): Connection[] {
     return this._getConnections().filter((c) => c.sourceId === sourceId && c.targetId === targetId);
   }
-  findConnectedByBlocks(blocks: Block[]): Connection[] {
+  findByBlocks(blocks: Block[]): Connection[] {
     return this._getConnections().filter((c) => blocks.some((b) => b.id === c.sourceId || b.id === c.targetId));
   }
   save(connection: Connection): void {

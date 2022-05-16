@@ -127,7 +127,7 @@ export class BlockService implements IBlockService {
 
   private stripConnections(b: Block) {
     const connectedConnections = this.connectionRepository
-      .findConnectedByBlocks(Array.of(b))
+      .findByBlocks(Array.of(b))
       .filter(
         (e) =>
           !(
