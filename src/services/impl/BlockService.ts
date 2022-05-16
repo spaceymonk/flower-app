@@ -6,8 +6,8 @@ import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { ContainerBlockHandle, GlowTypes } from '../../types';
 import { ICanvas } from '../../types/ICanvas';
-import { BlockCreateFactory, includesBlock } from '../BlockHelper';
-import { PositionGenerator } from '../common';
+import { BlockCreateFactory, includesBlock } from '../helpers/BlockHelper';
+import { PositionGenerator } from '../../util/PositionGenerator';
 import { IBlockService } from '../IBlockService';
 
 export class BlockService implements IBlockService {

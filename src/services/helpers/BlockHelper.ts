@@ -1,13 +1,13 @@
-import { CreateBlockDto } from '../dto/CreateBlockDto';
-import Block from '../model/Block';
-import DecisionBlock from '../model/block/DecisionBlock';
-import LoadBlock from '../model/block/LoadBlock';
-import StartBlock from '../model/block/StartBlock';
-import StatementBlock from '../model/block/StatementBlock';
-import StopBlock from '../model/block/StopBlock';
-import StoreBlock from '../model/block/StoreBlock';
-import WhileLoopBlock from '../model/block/WhileLoopBlock';
-import { BlockTypes } from '../types';
+import { CreateBlockDto } from '../../dto/CreateBlockDto';
+import Block from '../../model/Block';
+import DecisionBlock from '../../model/block/DecisionBlock';
+import LoadBlock from '../../model/block/LoadBlock';
+import StartBlock from '../../model/block/StartBlock';
+import StatementBlock from '../../model/block/StatementBlock';
+import StopBlock from '../../model/block/StopBlock';
+import StoreBlock from '../../model/block/StoreBlock';
+import WhileLoopBlock from '../../model/block/WhileLoopBlock';
+import { BlockTypes } from '../../types';
 
 export class BlockCreateFactory {
   static create(dto: CreateBlockDto): Block {

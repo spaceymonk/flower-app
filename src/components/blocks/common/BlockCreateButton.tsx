@@ -3,7 +3,7 @@ import T from '../../../config/MessageConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import useBlockHelper from '../../../hooks/useBlockHelper';
-import { createBlock } from '../../../services/BlockHelper';
+import { createBlock } from '../../../services/helpers/BlockHelper';
 import PropTypes from 'prop-types';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { BlockTypes } from '../../../types';

@@ -1,6 +1,6 @@
 import { IBlockRepository } from '../IBlockRepository';
 import Block from '../../model/Block';
-import { includesBlock } from '../../services/BlockHelper';
+import { includesBlock } from '../../services/helpers/BlockHelper';
 import { Optional } from '../../types/Optional';
 
 export class BlockRepository implements IBlockRepository {

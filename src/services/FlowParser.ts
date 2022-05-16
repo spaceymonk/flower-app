@@ -3,7 +3,7 @@ import { MultipleStartError, MultipleStopError, NoStartError, NoStopError, NotCo
 import { InvalidDecisionError } from '../exceptions/InvalidDecisionError';
 import { Block, BlockTypes } from '../types';
 import { throwErrorIfUndefined } from '../util';
-import { includesBlock } from './BlockHelper';
+import { includesBlock } from './helpers/BlockHelper';
 
 export type PathMapping = { [key: string]: Block };
 
