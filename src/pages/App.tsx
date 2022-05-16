@@ -7,7 +7,6 @@ import Toolbar from '../components/toolbar/Toolbar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import useAlert from '../hooks/useAlert';
 import { AppProvider } from '../providers/AppProvider';
 import { SimulationProvider } from '../providers/SimulationProvider';
 import { throwErrorIfNull } from '../util';
@@ -28,7 +27,16 @@ function App() {
     );
   }, [windowDim.height]);
 
-  useAlert();
+  const alertUser = React.useCallback((e) => {
+    e.preventDefault();
+    e.returnValue = '';
+  }, []);
+  React.useEffect(() => {
+    window.addEventListener('beforeunload', alertUser);
+    return () => {
+      window.removeEventListener('beforeunload', alertUser);
+    };
+  }, [alertUser]);
 
   return (
     <AppProvider>
