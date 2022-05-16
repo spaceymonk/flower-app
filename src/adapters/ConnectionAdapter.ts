@@ -20,7 +20,7 @@ class ConnectionAdapter implements Edge {
     return this._logic.targetId;
   }
   get markerEnd(): EdgeMarkerType {
-    return MarkerType.ArrowClosed;
+    return { type: MarkerType.ArrowClosed, color: '#505050' };
   }
   get sourceHandle(): string | undefined {
     return this._logic.sourceHandle || undefined;
