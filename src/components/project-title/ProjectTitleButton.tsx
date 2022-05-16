@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Tooltip } from 'react-bootstrap';
-import T from '../../services/MessageConstants';
+import T from '../../config/MessageConstants';
 import CustomOverlay from '../common/CustomOverlay';
 import useToggle from '../../hooks/useToggle';
 import ProjectTitleModal from './ProjectTitleModal';

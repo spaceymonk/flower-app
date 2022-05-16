@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, FloatingLabel } from 'react-bootstrap';
-import T from '../../../services/MessageConstants';
+import T from '../../../config/MessageConstants';
 import useBlockHelper from '../../../hooks/useBlockHelper';
 import { BaseModal } from './BaseModal';
 import { Block } from '../../../types';

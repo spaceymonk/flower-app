@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import T from '../../../services/MessageConstants';
+import T from '../../../config/MessageConstants';
 import useBlockHelper from '../../../hooks/useBlockHelper';
 import PropTypes from 'prop-types';
 import { Block } from '../../../types';

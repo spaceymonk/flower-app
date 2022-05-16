@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlasses } from '@fortawesome/free-solid-svg-icons';
 import { Button, Offcanvas, Table, Tooltip } from 'react-bootstrap';
-import T from '../../../services/MessageConstants';
+import T from '../../../config/MessageConstants';
 import CustomOverlay from '../../common/CustomOverlay';
 import useToggle from '../../../hooks/useToggle';
 import { useSimulationContext } from '../../../providers/SimulationProvider';

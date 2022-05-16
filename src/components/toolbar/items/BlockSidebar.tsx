@@ -2,7 +2,7 @@ import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Button, Offcanvas, Tooltip } from 'react-bootstrap';
-import T from '../../../services/MessageConstants';
+import T from '../../../config/MessageConstants';
 import CustomOverlay from '../../common/CustomOverlay';
 import {
   DecisionBlockCreateButton,

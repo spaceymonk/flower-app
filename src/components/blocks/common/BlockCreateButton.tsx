@@ -1,5 +1,5 @@
 import { Card } from 'react-bootstrap';
-import T from '../../../services/MessageConstants';
+import T from '../../../config/MessageConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import useBlockHelper from '../../../hooks/useBlockHelper';

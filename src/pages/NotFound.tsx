@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container, Card } from 'react-bootstrap';
 import Footer from '../components/common/Footer';
 import Navbar from '../components/common/Navbar';
-import T from '../services/MessageConstants';
+import T from '../config/MessageConstants';
 
 function NotFound() {
   return (

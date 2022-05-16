@@ -1,7 +1,7 @@
 import React from 'react';
 import { faRepeat } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
-import T from '../../../services/MessageConstants';
+import T from '../../../config/MessageConstants';
 import BlockCreateButton from '../common/BlockCreateButton';
 import { ContainerNode } from '../common/ContainerNode';
 import { Block, BlockTypes, ContainerBlockHandle } from '../../../types';
