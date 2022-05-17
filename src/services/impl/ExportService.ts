@@ -17,12 +17,12 @@ export class ExportService implements IExportService {
     this._connectionRepository = connectionRepository;
   }
 
-  async toPNG(title: string): Promise<void> {
+  public async toPNG(title: string): Promise<void> {
     const blob = await domtoimage.toBlob(throwErrorIfNull(document.getElementById('board')), { bgcolor: '#fff' });
     FileSaver.saveAs(blob, title + '.png');
   }
 
-  toCode(pd: ProjectData): string {
+  public toCode(pd: ProjectData): string {
     type Scope = { scopeof: string; end: string };
 
     const [startBlock, stopBlock] = validateFlow(pd.blocks, pd.edges);

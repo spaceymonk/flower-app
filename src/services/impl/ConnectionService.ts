@@ -9,12 +9,13 @@ import { IConnectionService } from '../IConnectionService';
 export class ConnectionService implements IConnectionService {
   private _connectionRepository: IConnectionRepository;
   private _blockRepository: IBlockRepository;
+
   constructor(connectionRepository: IConnectionRepository, blockRepository: IBlockRepository) {
     this._connectionRepository = connectionRepository;
     this._blockRepository = blockRepository;
   }
 
-  create(createConnectionDto: CreateConnectionDto): Connection | null {
+  public create(createConnectionDto: CreateConnectionDto): Connection | null {
     const connection = new Connection(
       createConnectionDto.sourceId,
       createConnectionDto.targetId,
@@ -28,7 +29,7 @@ export class ConnectionService implements IConnectionService {
     return null;
   }
 
-  update(id: string, updateConnectionDto: UpdateConnectionDto): Connection | null {
+  public update(id: string, updateConnectionDto: UpdateConnectionDto): Connection | null {
     const newConnection = new Connection(
       updateConnectionDto.sourceId,
       updateConnectionDto.targetId,
@@ -44,7 +45,7 @@ export class ConnectionService implements IConnectionService {
     return null;
   }
 
-  isValidConnection(c: Connection): boolean {
+  public isValidConnection(c: Connection): boolean {
     // refuse self connection
     if (c.sourceId === c.targetId) {
       return false;
@@ -68,7 +69,7 @@ export class ConnectionService implements IConnectionService {
 
     return true;
   }
-  isValidOnConnect(c: Connection): boolean {
+  public isValidOnConnect(c: Connection): boolean {
     const connectionList = this._connectionRepository.getAll();
     for (const e of connectionList) {
       // there can be only one edge with same source data between two nodes
@@ -78,7 +79,7 @@ export class ConnectionService implements IConnectionService {
     }
     return true;
   }
-  isValidOnUpdate(oldConnection: Connection, newConnection: Connection): boolean {
+  public isValidOnUpdate(oldConnection: Connection, newConnection: Connection): boolean {
     const connectionList = this._connectionRepository.getAll();
 
     for (const e of connectionList) {

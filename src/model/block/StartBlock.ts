@@ -5,7 +5,7 @@ class StartBlock extends SimpleBlock {
   constructor(position: Point2D) {
     super(BlockTypes.START_BLOCK, position);
   }
-  isSentinel(): boolean {
+  override isSentinel(): boolean {
     return true;
   }
 }

@@ -12,13 +12,13 @@ export class ProjectService implements IProjectService {
     this._appContext = appContext;
   }
 
-  load(pd: ProjectData): void {
+  public load(pd: ProjectData): void {
     this._appContext.setEdges(pd.edges);
     this._appContext.setBlocks(pd.blocks);
     this._appContext.setTitle(pd.title);
     this._appContext.setInputParams(pd.inputParams);
   }
-  save(pd: ProjectData): void {
+  public save(pd: ProjectData): void {
     window.localStorage.clear();
     window.localStorage.setItem(nameof<ProjectData>('blocks'), JSON.stringify(pd.blocks));
     window.localStorage.setItem(nameof<ProjectData>('edges'), JSON.stringify(pd.edges));
@@ -26,11 +26,11 @@ export class ProjectService implements IProjectService {
     window.localStorage.setItem(nameof<ProjectData>('inputParams'), pd.inputParams);
     InitialValues.refresh();
   }
-  download(pd: ProjectData): void {
+  public download(pd: ProjectData): void {
     const blob = new Blob([JSON.stringify(pd, null, 2)], { type: 'application/json' });
     FileSaver.saveAs(blob, pd.title + '.json');
   }
-  open(file: Blob, onOpen?: (content: ProjectData) => void): void {
+  public open(file: Blob, onOpen?: (content: ProjectData) => void): void {
     const fileReader = new FileReader();
     const handleFileRead = () => {
       try {

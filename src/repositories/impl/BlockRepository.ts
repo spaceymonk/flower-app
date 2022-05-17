@@ -11,25 +11,26 @@ export class BlockRepository implements IBlockRepository {
     this._getBlocks = getBlocks;
     this._setBlocks = setBlocks;
   }
-  findAllByIds(ids: string[]): Block[] {
+
+  public findAllByIds(ids: string[]): Block[] {
     return this._getBlocks().filter((b) => ids.includes(b.id));
   }
-  getAll(): Block[] {
+  public getAll(): Block[] {
     return this._getBlocks();
   }
-  save(block: Block): void {
+  public save(block: Block): void {
     this._setBlocks((blocks) => blocks.map((b) => (b.id === block.id ? block : b)));
   }
-  delete(block: Block): void {
+  public delete(block: Block): void {
     this._setBlocks((blocks) => blocks.filter((b) => b.id !== block.id));
   }
-  getDirectChildren(pid: string): Block[] {
+  public getDirectChildren(pid: string): Block[] {
     return this._getBlocks().filter((b) => b.parentNodeId === pid);
   }
-  existsById(id: string): boolean {
+  public existsById(id: string): boolean {
     return this._getBlocks().some((b) => b.id === id);
   }
-  saveAll(bs: Block[]): void {
+  public saveAll(bs: Block[]): void {
     this._setBlocks((blocks) =>
       blocks.map((b) => {
         const block = bs.find((b2) => b2.id === b.id);
@@ -37,10 +38,10 @@ export class BlockRepository implements IBlockRepository {
       })
     );
   }
-  deleteAll(bs: Block[]): void {
+  public deleteAll(bs: Block[]): void {
     this._setBlocks((blocks) => blocks.filter((b) => !includesBlock(bs, b)));
   }
-  findById(id: string): Optional<Block> {
+  public findById(id: string): Optional<Block> {
     return new Optional(this._getBlocks().find((b) => b.id === id));
   }
 }
