@@ -1,11 +1,12 @@
-import { Node, Edge, OnEdgesChange, OnNodesChange } from 'react-flow-renderer';
+import Block from '../model/Block';
+import Connection from '../model/Connection';
 import { Memory } from '../services/SimulationHelper';
 
 export type ProjectData = {
   title: string;
   inputParams: string;
   blocks: Block[];
-  edges: Edge[];
+  connections: Connection[];
 };
 
 export enum ExportType {
@@ -65,8 +66,6 @@ export type Point2D = {
   y: number;
 };
 
-export interface Block extends Node<BlockData> {}
-
 export type AppContextType = {
   getTitle: () => string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -74,10 +73,8 @@ export type AppContextType = {
   setInputParams: React.Dispatch<React.SetStateAction<string>>;
   getBlocks: () => Block[];
   setBlocks: React.Dispatch<React.SetStateAction<Block[]>>;
-  getEdges: () => Edge[];
-  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
-  onEdgesChange: OnEdgesChange;
-  onBlocksChange: OnNodesChange;
+  getConnections: () => Connection[];
+  setConnections: React.Dispatch<React.SetStateAction<Connection[]>>;
 };
 
 export type SimulationContextType = {

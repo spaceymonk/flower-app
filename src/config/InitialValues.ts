@@ -1,8 +1,9 @@
-import { Edge } from 'react-flow-renderer';
-import { Block, ProjectData } from '../types';
+import { ProjectData } from '../types';
 
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { nameof } from '../util';
+import Block from '../model/Block';
+import Connection from '../model/Connection';
 
 export const ProjectNameOptions = {
   dictionaries: [colors, adjectives, animals],
@@ -12,7 +13,7 @@ export const ProjectNameOptions = {
 class Initial {
   public title: string = '';
   public defaultBlocks: Block[] = [];
-  public defaultEdges: Edge[] = [];
+  public defaultConnections: Connection[] = [];
   public inputParams: string = '';
 
   constructor() {
@@ -21,9 +22,9 @@ class Initial {
 
   refresh(): void {
     const storageNodes = window.localStorage.getItem(nameof<ProjectData>('blocks')) || '[]';
-    const storageEdges = window.localStorage.getItem(nameof<ProjectData>('edges')) || '[]';
+    const storageConnections = window.localStorage.getItem(nameof<ProjectData>('connections')) || '[]';
     this.defaultBlocks = JSON.parse(storageNodes);
-    this.defaultEdges = JSON.parse(storageEdges);
+    this.defaultConnections = JSON.parse(storageConnections);
     this.title = window.localStorage.getItem(nameof<ProjectData>('title')) || uniqueNamesGenerator(ProjectNameOptions);
     this.inputParams = window.localStorage.getItem(nameof<ProjectData>('inputParams')) || '';
   }
@@ -32,7 +33,7 @@ class Initial {
     return {
       title: uniqueNamesGenerator(ProjectNameOptions),
       blocks: [],
-      edges: [],
+      connections: [],
       inputParams: '',
     };
   }
@@ -41,7 +42,7 @@ class Initial {
     return {
       title: this.title,
       blocks: this.defaultBlocks,
-      edges: this.defaultEdges,
+      connections: this.defaultConnections,
       inputParams: this.inputParams,
     };
   }

@@ -5,7 +5,7 @@ import Block from '../../model/Block';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { ContainerBlockHandle, GlowTypes } from '../../types';
-import { ICanvas } from '../../types/ICanvas';
+import { ICanvasFacade } from '../../types/ICanvasFacade';
 import { BlockCreateFactory, includesBlock } from '../helpers/BlockHelper';
 import { PositionGenerator } from '../../util/PositionGenerator';
 import { IBlockService } from '../IBlockService';
@@ -13,9 +13,9 @@ import { IBlockService } from '../IBlockService';
 export class BlockService implements IBlockService {
   private blockRepository: IBlockRepository;
   private connectionRepository: IConnectionRepository;
-  private canvasService: ICanvas;
+  private canvasService: ICanvasFacade;
 
-  constructor(blockRepository: IBlockRepository, connectionRepository: IConnectionRepository, canvasService: ICanvas) {
+  constructor(blockRepository: IBlockRepository, connectionRepository: IConnectionRepository, canvasService: ICanvasFacade) {
     this.blockRepository = blockRepository;
     this.connectionRepository = connectionRepository;
     this.canvasService = canvasService;

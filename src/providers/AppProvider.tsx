@@ -1,16 +1,20 @@
 import React from 'react';
-import { useNodesState, useEdgesState } from 'react-flow-renderer';
 import InitialValues from '../config/InitialValues';
 import { throwErrorIfNull } from '../util';
 import { AppContextType } from '../types';
+import Block from '../model/Block';
+import Connection from '../model/Connection';
 
 const AppContext = React.createContext<AppContextType | null>(null);
 
+/**
+ * This component is used to provide the project data to all the components.
+ */
 export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => {
   const [title, setTitle] = React.useState<string>(InitialValues.title);
   const [inputParams, setInputParams] = React.useState<string>(InitialValues.inputParams);
-  const [blocks, setBlocks, onBlocksChange] = useNodesState(InitialValues.defaultBlocks);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(InitialValues.defaultEdges);
+  const [blocks, setBlocks] = React.useState<Block[]>(InitialValues.defaultBlocks);
+  const [connections, setConnections] = React.useState<Connection[]>(InitialValues.defaultConnections);
 
   const value: AppContextType = {
     getTitle: () => title,
@@ -19,10 +23,8 @@ export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => 
     setInputParams,
     getBlocks: () => blocks,
     setBlocks,
-    getEdges: () => edges,
-    setEdges,
-    onEdgesChange,
-    onBlocksChange,
+    getConnections: () => connections,
+    setConnections,
   };
 
   return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;

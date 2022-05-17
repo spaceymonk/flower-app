@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { AppProvider } from '../providers/AppProvider';
 import { SimulationProvider } from '../providers/SimulationProvider';
 import { throwErrorIfNull } from '../util';
+import { ServiceProvider } from '../providers/ServiceProvider';
 
 function App() {
   const [boardHeight, setBoardHeight] = React.useState(1);
@@ -18,6 +19,7 @@ function App() {
   const footerRef = React.useRef(null);
   const windowDim = useWindowDimensions();
 
+  // This is a workaround for the issue that the board is not rendered correctly when the window is resized.
   React.useEffect(() => {
     setBoardHeight(
       windowDim.height -
@@ -27,6 +29,7 @@ function App() {
     );
   }, [windowDim.height]);
 
+  // Alert user if user leaves the page
   const alertUser = React.useCallback((e) => {
     e.preventDefault();
     e.returnValue = '';
@@ -42,22 +45,24 @@ function App() {
     <AppProvider>
       <SimulationProvider>
         <ReactFlowProvider>
-          <MenubarWrapper ref={menubarRef} />
-          <Toolbar ref={toolbarRef} />
-          <Board height={boardHeight} />
-          <Footer ref={footerRef} />
-          <ToastContainer
-            position="bottom-center"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            limit={2}
-          />
+          <ServiceProvider>
+            <MenubarWrapper ref={menubarRef} />
+            <Toolbar ref={toolbarRef} />
+            <Board height={boardHeight} />
+            <Footer ref={footerRef} />
+            <ToastContainer
+              position="bottom-center"
+              autoClose={5000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick={true}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              limit={2}
+            />
+          </ServiceProvider>
         </ReactFlowProvider>
       </SimulationProvider>
     </AppProvider>
