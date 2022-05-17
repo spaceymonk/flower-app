@@ -1,22 +1,23 @@
 import React from 'react';
 import { Form, FloatingLabel } from 'react-bootstrap';
 import T from '../../../config/MessageConstants';
-import useBlockHelper from '../../../hooks/useBlockHelper';
 import { BaseModal } from './BaseModal';
-import { Block } from '../../../types';
 import PropTypes from 'prop-types';
+import Block from '../../../model/Block';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 export function BlockModal({ block, onClose, show }: BlockModalProps) {
-  const { updateBlockData } = useBlockHelper();
-  const [text, setText] = React.useState(block.data.text || '');
+  const { blockService } = useServiceContext();
+
+  const [text, setText] = React.useState(block.text);
 
   function handleSave() {
-    updateBlockData(block.id, { text });
+    blockService.update(block.id, { text });
     onClose();
   }
 
   React.useEffect(() => {
-    setText(block.data.text || '');
+    setText(block.text);
   }, [block]);
 
   return (

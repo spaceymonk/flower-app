@@ -1,34 +1,34 @@
 import React from 'react';
 import { Form, FloatingLabel, Button, ListGroup, Tooltip, Stack, Container, Row, Col } from 'react-bootstrap';
 import T from '../../../config/MessageConstants';
-import useBlockHelper from '../../../hooks/useBlockHelper';
 import { BaseModal } from './BaseModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faRemove } from '@fortawesome/free-solid-svg-icons';
 import CustomOverlay from '../../common/CustomOverlay';
 import Select from 'react-select';
-import { Block } from '../../../types';
 import PropTypes from 'prop-types';
-import BlockOption from './BlockOption';
+import BlockOption from '../BlockOption';
+import Block from '../../../model/Block';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
-  const { updateBlockData, findDirectChildBlocks, updateBlockParent, removeBlockParent, findAllAvailableChildren } = useBlockHelper();
+  const { blockService, blockRepository } = useServiceContext();
 
-  const [text, setText] = React.useState(block.data.text || '');
+  const [text, setText] = React.useState(block.text);
   const [selectedChild, setSelectedChild] = React.useState<{ value: string; block: Block } | null>(null);
   const [childNodes, setChildNodes] = React.useState<Block[]>([]);
   const [removedChildren, setRemovedChildren] = React.useState<Block[]>([]);
-  const availableNodes = React.useMemo(() => findAllAvailableChildren(block, childNodes), [childNodes, findAllAvailableChildren, block]);
+  const availableNodes = React.useMemo(() => blockService.getAllAvailableChildren(block.id, childNodes), [blockService, block, childNodes]);
 
   React.useEffect(() => {
-    setChildNodes(findDirectChildBlocks(block.id));
-    setText(block.data.text || '');
-  }, [findDirectChildBlocks, block]);
+    setChildNodes(blockRepository.getDirectChildren(block.id));
+    setText(block.text);
+  }, [block, blockRepository]);
 
   const handleSave = () => {
-    updateBlockData(block.id, { text });
-    updateBlockParent(block, childNodes);
-    removeBlockParent(block, removedChildren);
+    blockService.update(block.id, { text });
+    blockService.addParentTo(block, childNodes);
+    blockService.removeParentFrom(block, removedChildren);
     setRemovedChildren([]);
     onClose();
   };

@@ -3,36 +3,35 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCancel, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import T from '../../../config/MessageConstants';
-import useBlockHelper from '../../../hooks/useBlockHelper';
 import PropTypes from 'prop-types';
-import { Block } from '../../../types';
-import { throwErrorIfUndefined } from '../../../util';
+import { useServiceContext } from '../../../providers/ServiceProvider';
+import Block from '../../../model/Block';
 
 export function BaseModal({ show, children, onSave, onClose, block }: BaseModalProps) {
-  const { removeBlock, updateBlockData } = useBlockHelper();
-  const [name, setName] = React.useState(block.data.name || block.id);
+  const { blockRepository, blockService } = useServiceContext();
+  const [name, setName] = React.useState(block.name || block.id);
   function handleDelete() {
-    removeBlock(block);
+    blockRepository.delete(block);
     onClose();
   }
   function handleNameField() {
     if (name.trim().length === 0 || name.trim() === block.id) {
-      updateBlockData(block.id, { name: undefined });
+      blockService.update(block.id, { name: undefined });
       setName(block.id);
     } else {
-      updateBlockData(block.id, { name: name });
+      blockService.update(block.id, { name: name });
     }
   }
 
   React.useEffect(() => {
-    setName(block.data.name || block.id);
+    setName(block.name || block.id);
   }, [block]);
 
   return (
     <Modal show={show} centered className="node-modal">
       {block && (
         <Modal.Header className="overflow-auto">
-          <strong className="me-5 me-sm-auto">{throwErrorIfUndefined(block.type).toUpperCase()}</strong>
+          <strong className="me-5 me-sm-auto">{block.type.toUpperCase()}</strong>
           <Form.Control
             className="w-75 text-muted small p-0 text-end fst-italic"
             size="sm"

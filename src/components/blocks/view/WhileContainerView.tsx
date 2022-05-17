@@ -1,16 +1,13 @@
-import React from 'react';
-import { faRepeat } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
-import BlockCreateButton from '../common/BlockCreateButton';
-import { ContainerNode } from '../common/ContainerNode';
-import { Block, BlockTypes, ContainerBlockHandle } from '../../../types';
+import { ContainerBlockView } from './ContainerBlockView';
+import { ContainerBlockHandle } from '../../../types';
 
-export function NodeComponent(block: Block) {
+export function WhileLoopBlockView(block: Block) {
   const processed = block.data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <ContainerNode block={block}>
+    <ContainerBlockView block={block}>
       <Handle type="target" id={ContainerBlockHandle.OUTER_TARGET} position={Position.Top} className="handle" />
       <Handle type="source" id={ContainerBlockHandle.INNER_SOURCE} position={Position.Bottom} className="handle-container source" />
       <div className="w-100">
@@ -19,17 +16,6 @@ export function NodeComponent(block: Block) {
       </div>
       <Handle type="target" id={ContainerBlockHandle.INNER_TARGET} position={Position.Top} className="handle-container target" />
       <Handle type="source" id={ContainerBlockHandle.OUTER_SOURCE} position={Position.Bottom} className="handle" />
-    </ContainerNode>
-  );
-}
-
-export function CreateButton() {
-  return (
-    <BlockCreateButton
-      type={BlockTypes.WHILE_LOOP_BLOCK}
-      title={T.blocks.while.title}
-      description={T.blocks.while.description}
-      icon={faRepeat}
-    />
+    </ContainerBlockView>
   );
 }

@@ -1,7 +1,7 @@
 import { Container, Row, Col, Badge, Tooltip } from 'react-bootstrap';
-import { Block } from '../../../types';
-import CustomOverlay from '../../common/CustomOverlay';
+import CustomOverlay from '../common/CustomOverlay';
 import PropTypes from 'prop-types';
+import Block from '../../model/Block';
 
 function BlockOption({ block }: BlockOptionProps) {
   return (
@@ -12,11 +12,11 @@ function BlockOption({ block }: BlockOptionProps) {
             {block.type}
           </Badge>
         </Col>
-        {block.data.name ? (
+        {block.name ? (
           <>
-            <CustomOverlay overlay={<Tooltip>{block.data.name}</Tooltip>}>
+            <CustomOverlay overlay={<Tooltip>{block.name}</Tooltip>}>
               <Col sm={6} className="text-truncate fw-bold small text-center">
-                <span>{block.data.name}</span>
+                <span>{block.name}</span>
               </Col>
             </CustomOverlay>
             <CustomOverlay overlay={<Tooltip>{block.id}</Tooltip>}>

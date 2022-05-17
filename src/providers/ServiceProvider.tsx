@@ -1,6 +1,6 @@
 import React from 'react';
 import { useReactFlow } from 'react-flow-renderer';
-import CanvasHelperAdapter from '../adapters/CanvasHelperAdapter';
+import CanvasFacade from '../adapters/CanvasFacade';
 import { IBlockRepository } from '../repositories/IBlockRepository';
 import { IConnectionRepository } from '../repositories/IConnectionRepository';
 import { BlockRepository } from '../repositories/impl/BlockRepository';
@@ -37,7 +37,7 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
   const appContext = useAppContext();
   const reactFlowInstance = useReactFlow();
 
-  const canvasFacade = React.useMemo<ICanvasFacade>(() => new CanvasHelperAdapter(reactFlowInstance), [reactFlowInstance]);
+  const canvasFacade = React.useMemo<ICanvasFacade>(() => new CanvasFacade(reactFlowInstance), [reactFlowInstance]);
   const blockRepository = React.useMemo<IBlockRepository>(() => new BlockRepository(appContext.getBlocks, appContext.setBlocks), [appContext]);
   const connectionRepository = React.useMemo<IConnectionRepository>(
     () => new ConnectionRepository(appContext.getConnections, appContext.setConnections),

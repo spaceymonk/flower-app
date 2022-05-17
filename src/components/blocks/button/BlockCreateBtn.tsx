@@ -2,23 +2,19 @@ import { Card } from 'react-bootstrap';
 import T from '../../../config/MessageConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import useBlockHelper from '../../../hooks/useBlockHelper';
-import { createBlock } from '../../../services/helpers/BlockHelper';
 import PropTypes from 'prop-types';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { BlockTypes } from '../../../types';
-import useCanvasHelper from '../../../hooks/useCanvasHelper';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 function BlockCreateButton({ title, description, icon, type }: BlockCreateButtonProps) {
-  const { getViewport } = useCanvasHelper();
-  const { addBlock } = useBlockHelper();
+  const { blockService, canvasFacade } = useServiceContext();
 
   function handleClick() {
     try {
-      const viewport = getViewport();
-      const pos = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
-      const block = createBlock(type, pos);
-      addBlock(block);
+      const viewport = canvasFacade.getViewport();
+      const position = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
+      blockService.create({ type, position });
       toast.success(T.blocks.creationSuccess);
     } catch {
       toast.error(T.blocks.creationFailed);

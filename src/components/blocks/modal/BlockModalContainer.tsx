@@ -1,9 +1,10 @@
 import React from 'react';
 import { DecisionBlockModal, LoadBlockkModal, StartBlockModal, StatementBlockModal, StoreBlockModal, StopBlockModal, WhileLoopBlockModal } from '..';
 import useToggle from '../../../hooks/useToggle';
-import { Block, BlockTypes } from '../../../types';
+import { BlockTypes } from '../../../types';
 import PropTypes from 'prop-types';
 import { throwErrorIfUndefined } from '../../../util';
+import Block from '../../../model/Block';
 
 export function BlockModalContainer({ block }: BlockModalContainerProps) {
   const [activeModal, setActiveModal] = React.useState<string | null>(null);

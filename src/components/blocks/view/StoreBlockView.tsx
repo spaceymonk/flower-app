@@ -1,16 +1,12 @@
-import React from 'react';
-import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
-import { BlockNode } from '../common/BlockNode';
-import BlockCreateButton from '../common/BlockCreateButton';
-import { Block, BlockTypes } from '../../../types';
+import { BlockView } from './BlockView';
 
-export function NodeComponent(block: Block) {
+export function StoreBlockView(block: Block) {
   const processed = block.data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <BlockNode block={block}>
+    <BlockView block={block}>
       <Handle type="target" position={Position.Top} className="handle" />
       <div className="w-100">
         <div className="header">STORE</div>
@@ -20,17 +16,6 @@ export function NodeComponent(block: Block) {
         </div>
       </div>
       <Handle type="source" position={Position.Bottom} className="handle" />
-    </BlockNode>
-  );
-}
-
-export function CreateButton() {
-  return (
-    <BlockCreateButton
-      type={BlockTypes.STORE_BLOCK}
-      title={T.blocks.store.title}
-      description={T.blocks.store.description}
-      icon={faPrint}
-    />
+    </BlockView>
   );
 }

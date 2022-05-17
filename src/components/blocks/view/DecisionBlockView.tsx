@@ -1,16 +1,13 @@
-import React from 'react';
-import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
-import { BlockNode } from '../common/BlockNode';
-import BlockCreateButton from '../common/BlockCreateButton';
-import { Block, BlockTypes, DecisionBlockHandle } from '../../../types';
+import { BlockView } from './BlockView';
+import { DecisionBlockHandle } from '../../../types';
 
-export function NodeComponent(block: Block) {
+export function DecisionBlockView(block: Block) {
   const processed = block.data.text; //todo: handle special keywords by bolding them etc.
 
   return (
-    <BlockNode className="node-decision" block={block}>
+    <BlockView className="node-decision" block={block}>
       <Handle type="target" position={Position.Top} className="handle" />
       <div className="decision-fields false">F</div>
       <div className="w-100">
@@ -23,17 +20,6 @@ export function NodeComponent(block: Block) {
       <div className="decision-fields true">T</div>
       <Handle id={DecisionBlockHandle.FALSE} type="source" position={Position.Left} className="handle" />
       <Handle id={DecisionBlockHandle.TRUE} type="source" position={Position.Right} className="handle " />
-    </BlockNode>
-  );
-}
-
-export function CreateButton() {
-  return (
-    <BlockCreateButton
-      type={BlockTypes.DECISION_BLOCK}
-      title={T.blocks.decision.title}
-      description={T.blocks.decision.description}
-      icon={faCodeBranch}
-    />
+    </BlockView>
   );
 }

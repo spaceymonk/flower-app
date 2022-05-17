@@ -2,7 +2,7 @@ import { ReactFlowInstance } from 'react-flow-renderer';
 import { Point2D } from '../types';
 import { ICanvasFacade } from '../types/ICanvasFacade';
 
-class CanvasHelperAdapter implements ICanvasFacade {
+class CanvasFacade implements ICanvasFacade {
   private _logic: ReactFlowInstance;
   constructor(logic: ReactFlowInstance) {
     this._logic = logic;
@@ -18,4 +18,4 @@ class CanvasHelperAdapter implements ICanvasFacade {
   }
 }
 
-export default CanvasHelperAdapter;
+export default CanvasFacade;

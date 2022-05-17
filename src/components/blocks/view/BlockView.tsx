@@ -1,7 +1,7 @@
-import { Block, GlowTypes } from '../../../types';
+import { GlowTypes } from '../../../types';
 import PropTypes from 'prop-types';
 
-export function BlockNode({ block, className, ...props }: BlockNodeProps) {
+export function BlockView({ block, className, ...props }: BlockNodeProps) {
   let glowClass = '';
   if (block.data?.glow === GlowTypes.NORMAL) glowClass = 'glow__normal';
   if (block.data?.glow === GlowTypes.ERROR) glowClass = 'glow__error';
@@ -9,7 +9,7 @@ export function BlockNode({ block, className, ...props }: BlockNodeProps) {
   return <div {...props} className={`d-flex node ${glowClass} ${className || ''}`} />;
 }
 
-BlockNode.propTypes = {
+BlockView.propTypes = {
   block: PropTypes.object.isRequired,
   className: PropTypes.string,
 };

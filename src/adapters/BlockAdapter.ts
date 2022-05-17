@@ -1,5 +1,5 @@
 import { CoordinateExtent, Node, XYPosition } from 'react-flow-renderer';
-import Block from '../model/block/Block';
+import Block from '../model/Block';
 import { BlockData } from '../types';
 
 class BlockAdapter implements Node<BlockData> {

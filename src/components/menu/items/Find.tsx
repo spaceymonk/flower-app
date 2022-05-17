@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown, Modal, Button, ListGroup } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import PropTypes from 'prop-types';
-import BlockOption from '../../blocks/common/BlockOption';
+import BlockOption from '../../blocks/BlockOption';
 import { useAppContext } from '../../../providers/AppProvider';
 import { Block } from '../../../types';
 import React from 'react';

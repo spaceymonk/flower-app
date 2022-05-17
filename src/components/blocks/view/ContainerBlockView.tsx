@@ -1,12 +1,12 @@
 import React from 'react';
 import { useViewport } from 'react-flow-renderer';
-import { BlockNode, BlockNodeProps } from './BlockNode';
+import { BlockView, BlockNodeProps } from './BlockView';
 import { ResizableBox } from 'react-resizable';
-import useBlockHelper from '../../../hooks/useBlockHelper';
 import PropTypes from 'prop-types';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
-export function ContainerNode({ block, ...props }: ContainerNodeProps) {
-  const { updateBlockData } = useBlockHelper();
+export function ContainerBlockView({ block, ...props }: ContainerNodeProps) {
+  const { blockService } = useServiceContext();
   const { zoom } = useViewport();
 
   const handleResizeStart = React.useCallback((e) => {
@@ -15,9 +15,9 @@ export function ContainerNode({ block, ...props }: ContainerNodeProps) {
   }, []);
   const handleResize = React.useCallback(
     (event, { size }) => {
-      updateBlockData(block.id, { width: size.width, height: size.height });
+      blockService.update(block.id, { width: size.width, height: size.height });
     },
-    [block.id, updateBlockData]
+    [block.id, blockService]
   );
 
   return (
@@ -30,12 +30,12 @@ export function ContainerNode({ block, ...props }: ContainerNodeProps) {
       onResizeStart={handleResizeStart}
       onResize={handleResize}
     >
-      <BlockNode {...props} className="node-container" block={block} />
+      <BlockView {...props} className="node-container" block={block} />
     </ResizableBox>
   );
 }
 
-ContainerNode.propTypes = {
+ContainerBlockView.propTypes = {
   block: PropTypes.object.isRequired,
 };
 

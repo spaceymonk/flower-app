@@ -5,7 +5,7 @@ abstract class Block {
   public id: string;
   public type: BlockTypes;
   public position: Point2D;
-  public text: string | undefined;
+  public text: string;
   public glow: GlowTypes;
   public name: string | undefined;
   public parentNodeId: string | null;
@@ -19,7 +19,7 @@ abstract class Block {
     this.height = height;
     this.type = type;
     this.position = position;
-    this.text = undefined;
+    this.text = '';
     this.name = undefined;
     this.parentNodeId = null;
   }
