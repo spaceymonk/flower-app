@@ -83,4 +83,6 @@ export type SimulationContextType = {
   variableTableRef: React.MutableRefObject<Memory>;
   currentBlockRef: React.MutableRefObject<Block | null>;
   inputParamCursor: React.MutableRefObject<number>;
+  getSpeedInMs: () => number;
+  setSpeedInMs: (val: number) => number;
 };
