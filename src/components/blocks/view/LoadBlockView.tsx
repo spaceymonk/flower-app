@@ -1,9 +1,10 @@
 import { Handle, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
+import Block from '../../../model/Block';
 import { BlockView } from './BlockView';
 
 export function LoadBlockView(block: Block) {
-  const processed = block.data.text; //todo: handle special keywords by bolding them etc.
+  const processed = block.text; //todo: handle special keywords by bolding them etc.
 
   return (
     <BlockView block={block}>

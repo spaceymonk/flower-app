@@ -24,8 +24,8 @@ export function ContainerBlockView({ block, ...props }: ContainerNodeProps) {
     <ResizableBox
       // @ts-ignore: invalid @types/react-resizable package
       transformScale={zoom}
-      width={block.data.width || 200}
-      height={block.data.height || 200}
+      width={block.width || 200}
+      height={block.height || 200}
       minConstraints={[200, 200]}
       onResizeStart={handleResizeStart}
       onResize={handleResize}

@@ -1,4 +1,5 @@
 import { Handle, Position } from 'react-flow-renderer';
+import Block from '../../../model/Block';
 import { BlockView } from './BlockView';
 
 export function StartBlockView(block: Block) {
