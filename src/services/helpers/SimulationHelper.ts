@@ -1,10 +1,11 @@
-import { Edge, getConnectedEdges, getOutgoers } from 'react-flow-renderer';
-import { MultipleStartError, MultipleStopError, NoStartError, NoStopError, NotConnectedError } from '../exceptions';
-import { InvalidDecisionError } from '../exceptions/InvalidDecisionError';
-import { Block, BlockTypes } from '../types';
-import { throwErrorIfUndefined } from '../util';
-import { includesBlock } from './helpers/BlockHelper';
+import { Edge, getOutgoers, getConnectedEdges } from 'react-flow-renderer';
+import { InvalidDecisionError, NotConnectedError, MultipleStartError, MultipleStopError, NoStartError, NoStopError } from '../../exceptions';
+import Block from '../../model/Block';
+import { BlockTypes } from '../../types';
+import { throwErrorIfUndefined } from '../../util';
+import { includesBlock } from './BlockHelper';
 
+export type Memory = { [key: string]: any };
 export type PathMapping = { [key: string]: Block };
 
 /* -------------------------------------------------------------------------- */
@@ -67,4 +68,26 @@ export const validateFlow = (blocks: Block[], edges: Edge[]): [Block, Block] => 
   if (stopBlocks.length === 0) throw new NoStopError();
 
   return [startBlocks[0], stopBlocks[0]];
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                displayValue                                */
+/* -------------------------------------------------------------------------- */
+export const displayValue = (value: any): string => {
+  if (typeof value === 'string') {
+    return '"' + value + '"';
+  }
+  if (typeof value === 'number') {
+    return value.toFixed(2);
+  }
+  if (typeof value === 'boolean') {
+    return value ? 'T' : 'F';
+  }
+  if (value === null) {
+    return 'null';
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map((v) => displayValue(v)).join(', ')}]`;
+  }
+  return '-';
 };

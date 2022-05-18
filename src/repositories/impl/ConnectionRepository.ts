@@ -15,6 +15,9 @@ export class ConnectionRepository implements IConnectionRepository {
     this._getConnections = getConnections;
     this._setConnections = setConnections;
   }
+  findBySourceHandleAndSourceId(handleId: string | null, sourceId: string): Optional<Connection> {
+    return new Optional(this._getConnections().find((c) => c.sourceHandle === handleId && c.sourceId === sourceId));
+  }
   public findAllByIds(ids: string[]): Connection[] {
     return this._getConnections().filter((c) => ids.includes(c.id));
   }

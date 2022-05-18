@@ -1,95 +1,70 @@
-import { toast } from 'react-toastify';
-import { InvalidDecisionError, MultipleStartError, MultipleStopError, NotConnectedError } from '../../exceptions';
-import { GlowTypes, SimulationActions, SimulationContextType } from '../../types';
+import Block from '../../model/Block';
+import { IBlockRepository } from '../../repositories/IBlockRepository';
+import { IConnectionRepository } from '../../repositories/IConnectionRepository';
+import { AppContextType, GlowTypes, SimulationContextType } from '../../types';
+import { throwErrorIfNull } from '../../util';
+import { validateFlow } from '../FlowParser';
 import { IBlockService } from '../IBlockService';
 import { ISimulationService } from '../ISimulationService';
 
 export class SimulationService implements ISimulationService {
-  private _context: SimulationContextType;
   private _blockService: IBlockService;
+  private _blockRepository: IBlockRepository;
+  private _connectionRepository: IConnectionRepository;
+  private _simulationContext: SimulationContextType;
+  private _appContext: AppContextType;
 
-  private _action: SimulationActions = SimulationActions.none;
-  private _jumpNextBlock = false;
+  private _inputParamCursor: number = 0;
 
-  constructor(simulationContext: SimulationContextType, blockService: IBlockService) {
-    this._context = simulationContext;
+  constructor(
+    blockService: IBlockService,
+    blockRepository: IBlockRepository,
+    connectionRepository: IConnectionRepository,
+    context: SimulationContextType,
+    appContext: AppContextType
+  ) {
     this._blockService = blockService;
+    this._blockRepository = blockRepository;
+    this._connectionRepository = connectionRepository;
+    this._simulationContext = context;
+    this._appContext = appContext;
   }
 
-  public start(): void {
-    if (this._context.isRunning()) {
-      toast.error('Simulation already running!');
-      return;
-    }
-    this._action = SimulationActions.debug;
-    this._jumpNextBlock = false;
-    try {
-      flowParser.initialize();
-      this.run();
-    } catch (e: any) {
-      if (e instanceof NotConnectedError || e instanceof InvalidDecisionError) {
-        this._blockService.highlight([e.blockId], GlowTypes.ERROR);
-      } else if (e instanceof MultipleStartError || e instanceof MultipleStopError) {
-        this._blockService.highlight(e.blockIdList, GlowTypes.ERROR);
-      }
-      this.abort(e.message);
-    }
+  public initialize(): void {
+    const blocks = this._blockRepository.getAll();
+    const connections = this._connectionRepository.getAll();
+    const [startBlock] = validateFlow(blocks, connections);
+    this.updateCurrentBlock(startBlock);
+    this._inputParamCursor = 0;
+    this._simulationContext.variableTableRef.current = {};
   }
 
-  public stop(): void {
-    if (this._context.isRunning()) {
-      this._action = SimulationActions.stop;
-    }
+  public hasNext(): boolean {
+    const currentBlock = this._simulationContext.currentBlockRef.current;
+    if (currentBlock === null) return false;
+    return this._connectionRepository.findAllBySourceId(currentBlock.id).length > 0;
   }
 
-  public next(): void {
-    if (this._context.isRunning()) {
-      this._jumpNextBlock = true;
-    }
+  public process(): void {
+    const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
+    const nextBlock = currentBlock.eval(this._simulationContext.variableTableRef, {
+      inputParams: this._appContext.getInputParams(),
+      inputParamCursor: this._inputParamCursor,
+    });
+    this.next(nextBlock);
   }
 
-  public resume(): void {
-    if (this._context.isRunning()) {
-      if (this._action === SimulationActions.continue) {
-        this._action = SimulationActions.debug;
-        this._jumpNextBlock = false;
-      } else if (this._action === SimulationActions.debug) {
-        this._action = SimulationActions.continue;
-        this._jumpNextBlock = false;
-      }
-    }
+  private next(handleId: string | null): void {
+    const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
+    const c = this._connectionRepository
+      .findBySourceHandleAndSourceId(handleId, currentBlock)
+      .orElseThrow(new Error('No connection found for current block'));
+    const b = this._blockRepository.findById(c.targetId).orElseThrow(new Error('No block found for connection'));
+    this.updateCurrentBlock(b);
   }
 
-  public run(): void {
-    this._context.setRunning(true);
-    toast.info('Simulation started!');
-    const simulationLoop = () => {
-      if (this._action === SimulationActions.stop || !flowParser.hasNext()) {
-        this._blockService.highlight(null, GlowTypes.NONE);
-        this._context.setRunning(false);
-        this._action = SimulationActions.none;
-        toast.info('Simulation ended!');
-      } else {
-        try {
-          if (this._action === SimulationActions.continue) {
-            flowParser.process();
-          } else if (this._action === SimulationActions.debug && this._jumpNextBlock) {
-            this._jumpNextBlock = false;
-            flowParser.process();
-          }
-          setTimeout(simulationLoop, this._context.getSpeedInMs());
-        } catch (e: any) {
-          console.error(e);
-          this.abort(e.message);
-        }
-      }
-    };
-    simulationLoop();
-  }
-
-  private abort(msg: string | null = null) {
-    if (msg) toast.error(msg);
-    this._context.setRunning(false);
-    this._action = SimulationActions.none;
+  private updateCurrentBlock(block: Block): void {
+    this._simulationContext.currentBlockRef.current = block;
+    this._blockService.highlight([block.id], GlowTypes.NORMAL);
   }
 }

@@ -1,6 +1,6 @@
 import Block from '../model/Block';
 import Connection from '../model/Connection';
-import { Memory } from '../services/SimulationHelper';
+import { Memory } from '../services/helpers/SimulationHelper';
 
 export type ProjectData = {
   title: string;
@@ -82,7 +82,6 @@ export type SimulationContextType = {
   setRunning: React.Dispatch<React.SetStateAction<boolean>>;
   variableTableRef: React.MutableRefObject<Memory>;
   currentBlockRef: React.MutableRefObject<Block | null>;
-  inputParamCursor: React.MutableRefObject<number>;
   getSpeedInMs: () => number;
   setSpeedInMs: (val: number) => number;
 };

@@ -1,6 +1,5 @@
 export interface ISimulationService {
-  start(): void;
-  stop(): void;
-  next(): void;
-  resume(): void;
+  hasNext(): boolean;
+  initialize(): void;
+  process(): void;
 }

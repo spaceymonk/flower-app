@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import { Memory } from '../services/helpers/SimulationHelper';
 import { BlockTypes, GlowTypes, Point2D } from '../types';
 
 abstract class Block {
@@ -24,6 +25,10 @@ abstract class Block {
     this._parentNodeId = null;
   }
 
+  public abstract eval(
+    memoryRef: React.MutableRefObject<Memory>,
+    options: { inputParams: string; inputParamIter: React.MutableRefObject<number> }
+  ): string | null;
   public abstract isContainer(): boolean;
   public isSentinel(): boolean {
     return false;

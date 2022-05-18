@@ -6,7 +6,7 @@ import T from '../../../config/MessageConstants';
 import CustomOverlay from '../../common/CustomOverlay';
 import useToggle from '../../../hooks/useToggle';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
-import { displayValue } from '../../../services/SimulationHelper';
+import { displayValue } from '../../../services/helpers/SimulationHelper';
 
 function WatchSidebar() {
   const { isRunning, variableTableRef } = useSimulationContext();
