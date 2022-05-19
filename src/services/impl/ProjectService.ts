@@ -2,14 +2,30 @@ import FileSaver from 'file-saver';
 import { toast } from 'react-toastify';
 import InitialValues from '../../config/InitialValues';
 import { ProjectDataSchema } from '../../config/ProjectDataValidation';
+import { IBlockRepository } from '../../repositories/IBlockRepository';
+import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { AppContextType, ProjectData } from '../../types';
 import { nameof, throwErrorIfNull } from '../../util';
 import { IProjectService } from '../IProjectService';
 
 export class ProjectService implements IProjectService {
   private _appContext: AppContextType;
-  constructor(appContext: AppContextType) {
+  private _blocksRepository: IBlockRepository;
+  private _connectionRepository: IConnectionRepository;
+
+  constructor(appContext: AppContextType, blocksRepository: IBlockRepository, connectionRepository: IConnectionRepository) {
     this._appContext = appContext;
+    this._blocksRepository = blocksRepository;
+    this._connectionRepository = connectionRepository;
+  }
+
+  public snapshot(): ProjectData {
+    return {
+      blocks: this._blocksRepository.getAll(),
+      connections: this._connectionRepository.getAll(),
+      title: this._appContext.getTitle(),
+      inputParams: this._appContext.getInputParams(),
+    };
   }
 
   public load(pd: ProjectData): void {

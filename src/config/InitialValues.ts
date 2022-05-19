@@ -21,6 +21,7 @@ class Initial {
   }
 
   refresh(): void {
+    // @todo: better serializer required for class instances
     const storageNodes = window.localStorage.getItem(nameof<ProjectData>('blocks')) || '[]';
     const storageConnections = window.localStorage.getItem(nameof<ProjectData>('connections')) || '[]';
     this.defaultBlocks = JSON.parse(storageNodes);
