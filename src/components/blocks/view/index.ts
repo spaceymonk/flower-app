@@ -7,8 +7,8 @@ import { StoreBlockView } from './StoreBlockView';
 import { WhileLoopBlockView } from './WhileContainerView';
 
 export const nodeTypes = {
-  statement: DecisionBlockView,
-  decision: StatementBlockView,
+  statement: StatementBlockView,
+  decision: DecisionBlockView,
   start: StartBlockView,
   stop: StopBlockView,
   load: LoadBlockView,

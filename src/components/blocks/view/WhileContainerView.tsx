@@ -1,10 +1,14 @@
-import { Handle, Position } from 'react-flow-renderer';
+import { Handle, Node, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
 import { ContainerBlockView } from './ContainerBlockView';
-import { ContainerBlockHandle } from '../../../types';
-import Block from '../../../model/Block';
+import { BlockData, ContainerBlockHandle } from '../../../types';
+import React from 'react';
+import { useServiceContext } from '../../../providers/ServiceProvider';
+import { BlockNotFoundError } from '../../../exceptions/BlockNotFoundError';
 
-export function WhileLoopBlockView(block: Block) {
+export function WhileLoopBlockView(node: Node<BlockData>) {
+  const { blockRepository } = useServiceContext();
+  const block = React.useMemo(() => blockRepository.findById(node.id).orElseThrow(new BlockNotFoundError(node.id)), [blockRepository, node.id]);
   const processed = block.text; //todo: handle special keywords by bolding them etc.
 
   return (
