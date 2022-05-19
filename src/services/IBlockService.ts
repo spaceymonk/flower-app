@@ -12,4 +12,5 @@ export interface IBlockService {
   addParentTo(p: Block, acs: Block[]): void;
   removeParentFrom(p: Block, rcs: Block[]): void;
   getAllAvailableChildren(id: string, excludeList: Block[]): Block[];
+  getOutgoers(block: Block): Block[];
 }

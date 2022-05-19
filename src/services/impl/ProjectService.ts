@@ -13,7 +13,7 @@ export class ProjectService implements IProjectService {
   }
 
   public load(pd: ProjectData): void {
-    this._appContext.setEdges(pd.edges);
+    this._appContext.setConnections(pd.connections);
     this._appContext.setBlocks(pd.blocks);
     this._appContext.setTitle(pd.title);
     this._appContext.setInputParams(pd.inputParams);
@@ -21,7 +21,7 @@ export class ProjectService implements IProjectService {
   public save(pd: ProjectData): void {
     window.localStorage.clear();
     window.localStorage.setItem(nameof<ProjectData>('blocks'), JSON.stringify(pd.blocks));
-    window.localStorage.setItem(nameof<ProjectData>('edges'), JSON.stringify(pd.edges));
+    window.localStorage.setItem(nameof<ProjectData>('connections'), JSON.stringify(pd.connections));
     window.localStorage.setItem(nameof<ProjectData>('title'), pd.title);
     window.localStorage.setItem(nameof<ProjectData>('inputParams'), pd.inputParams);
     InitialValues.refresh();

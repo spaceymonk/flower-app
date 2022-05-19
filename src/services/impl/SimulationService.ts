@@ -3,11 +3,12 @@ import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { AppContextType, GlowTypes, SimulationContextType } from '../../types';
 import { throwErrorIfNull } from '../../util';
-import { validateFlow } from '../FlowParser';
 import { IBlockService } from '../IBlockService';
+import { IFlowService } from '../IFlowService';
 import { ISimulationService } from '../ISimulationService';
 
 export class SimulationService implements ISimulationService {
+  private _flowService: IFlowService;
   private _blockService: IBlockService;
   private _blockRepository: IBlockRepository;
   private _connectionRepository: IConnectionRepository;
@@ -17,12 +18,14 @@ export class SimulationService implements ISimulationService {
   private _inputParamCursor: number = 0;
 
   constructor(
+    flowService: IFlowService,
     blockService: IBlockService,
     blockRepository: IBlockRepository,
     connectionRepository: IConnectionRepository,
     context: SimulationContextType,
     appContext: AppContextType
   ) {
+    this._flowService = flowService;
     this._blockService = blockService;
     this._blockRepository = blockRepository;
     this._connectionRepository = connectionRepository;
@@ -31,9 +34,7 @@ export class SimulationService implements ISimulationService {
   }
 
   public initialize(): void {
-    const blocks = this._blockRepository.getAll();
-    const connections = this._connectionRepository.getAll();
-    const [startBlock] = validateFlow(blocks, connections);
+    const [startBlock] = this._flowService.validate();
     this.updateCurrentBlock(startBlock);
     this._inputParamCursor = 0;
     this._simulationContext.variableTableRef.current = {};

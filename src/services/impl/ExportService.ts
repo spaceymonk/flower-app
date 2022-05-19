@@ -1,31 +1,36 @@
 import FileSaver from 'file-saver';
-import { ProjectData, BlockTypes, DecisionBlockHandle } from '../../types';
+import { BlockTypes, DecisionBlockHandle } from '../../types';
 import { throwErrorIfNull } from '../../util';
-import { validateFlow, PathMapping, mapDecisionPaths } from '../FlowParser';
 import { IExportService } from '../IExportService';
 import domtoimage from 'dom-to-image';
 import Block from '../../model/Block';
-import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
+import { IBlockService } from '../IBlockService';
+import { IFlowService } from '../IFlowService';
+import { PathMapping } from '../helpers/SimulationHelper';
+import InitialValues from '../../config/InitialValues';
 
 export class ExportService implements IExportService {
-  private _blockRepository: IBlockRepository;
+  private _flowService: IFlowService;
+  private _blockService: IBlockService;
   private _connectionRepository: IConnectionRepository;
 
-  constructor(blockRepository: IBlockRepository, connectionRepository: IConnectionRepository) {
-    this._blockRepository = blockRepository;
+  constructor(flowService: IFlowService, blockService: IBlockService, connectionRepository: IConnectionRepository) {
+    this._flowService = flowService;
+    this._blockService = blockService;
     this._connectionRepository = connectionRepository;
   }
 
-  public async toPNG(title: string): Promise<void> {
+  public async toPNG(): Promise<void> {
+    const pd = InitialValues.get();
     const blob = await domtoimage.toBlob(throwErrorIfNull(document.getElementById('board')), { bgcolor: '#fff' });
-    FileSaver.saveAs(blob, title + '.png');
+    FileSaver.saveAs(blob, pd.title + '.png');
   }
 
-  public toCode(pd: ProjectData): string {
+  public toCode(): string {
     type Scope = { scopeof: string; end: string };
 
-    const [startBlock, stopBlock] = validateFlow(pd.blocks, pd.edges);
+    const [startBlock, stopBlock] = this._flowService.validate();
     const stack: Block[] = [startBlock];
     let mapping: PathMapping = {};
     let scope: Scope[] = [];
@@ -33,7 +38,7 @@ export class ExportService implements IExportService {
 
     while (stack.length !== 0) {
       const iter: Block = stack.pop() as Block;
-      const outgoers: Block[] = this._blockRepository.findAllByIds(this._connectionRepository.findAllBySourceId(iter.id).map((c) => c.targetId));
+      const outgoers: Block[] = this._blockService.getOutgoers(iter);
 
       if (scope.at(-1)?.end === iter.id) {
         let currentScope = scope.pop() as Scope;
@@ -89,7 +94,7 @@ export class ExportService implements IExportService {
         } else {
           stack.push(outgoers[1], outgoers[0]);
         }
-        if (!mapping[iter.id]) mapDecisionPaths(iter, pd.blocks, pd.edges, mapping);
+        if (!mapping[iter.id]) this._flowService.mapDecisionPaths(iter, mapping);
         scope.push({ scopeof: iter.type, end: mapping[iter.id].id });
       } else {
         throw new Error('Unsupported block type: ' + iter.type);

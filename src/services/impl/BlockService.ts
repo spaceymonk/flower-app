@@ -11,49 +11,49 @@ import { PositionGenerator } from '../../util/PositionGenerator';
 import { IBlockService } from '../IBlockService';
 
 export class BlockService implements IBlockService {
-  private blockRepository: IBlockRepository;
-  private connectionRepository: IConnectionRepository;
-  private canvasService: ICanvasFacade;
+  private _blockRepository: IBlockRepository;
+  private _connectionRepository: IConnectionRepository;
+  private _canvasService: ICanvasFacade;
 
   constructor(blockRepository: IBlockRepository, connectionRepository: IConnectionRepository, canvasService: ICanvasFacade) {
-    this.blockRepository = blockRepository;
-    this.connectionRepository = connectionRepository;
-    this.canvasService = canvasService;
+    this._blockRepository = blockRepository;
+    this._connectionRepository = connectionRepository;
+    this._canvasService = canvasService;
   }
 
   public create(dto: CreateBlockDto): Block {
     const b = BlockCreateFactory.create(dto);
-    this.blockRepository.save(b);
+    this._blockRepository.save(b);
     return b;
   }
 
   public update(id: string, dto: UpdateBlockDto): Block {
-    const b = this.blockRepository.findById(id).orElseThrow(new Error('Block not found'));
+    const b = this._blockRepository.findById(id).orElseThrow(new Error('Block not found'));
     if (dto.height) b.height = dto.height;
     if (dto.width) b.width = dto.width;
     if (dto.text) b.text = dto.text;
     if (dto.name) b.name = dto.name;
     if (dto.position) b.position = dto.position;
     if (dto.glow) b.glow = dto.glow;
-    this.blockRepository.save(b);
+    this._blockRepository.save(b);
     return b;
   }
 
   public delete(id: string): void {
-    const block = this.blockRepository.findById(id).orElseThrow(new Error('Block not found'));
+    const block = this._blockRepository.findById(id).orElseThrow(new Error('Block not found'));
     if (block.isContainer()) {
-      const children = this.blockRepository.getDirectChildren(block.id);
+      const children = this._blockRepository.getDirectChildren(block.id);
       children.forEach((c) => {
         c.parentNodeId = null;
         c.position = { x: c.position.x + block.position.x, y: c.position.y + block.position.y };
       });
-      this.blockRepository.saveAll(children);
+      this._blockRepository.saveAll(children);
     }
-    this.blockRepository.delete(block);
+    this._blockRepository.delete(block);
   }
 
   public highlight(ids: string[] | null, glowType: GlowTypes = GlowTypes.NONE): void {
-    const blocks = this.blockRepository.getAll();
+    const blocks = this._blockRepository.getAll();
     blocks.forEach((b) => {
       if (ids && ids.includes(b.id)) {
         b.glow = glowType;
@@ -61,7 +61,7 @@ export class BlockService implements IBlockService {
         b.glow = GlowTypes.NONE;
       }
     });
-    this.blockRepository.saveAll(blocks);
+    this._blockRepository.saveAll(blocks);
   }
 
   public focus(block: Block): void {
@@ -71,7 +71,7 @@ export class BlockService implements IBlockService {
     let y = block.position.y + h / 2;
     let parentBlockId = block.parentNodeId;
     while (parentBlockId) {
-      const parentBlockOpt = this.blockRepository.findById(parentBlockId);
+      const parentBlockOpt = this._blockRepository.findById(parentBlockId);
       if (parentBlockOpt.isPresent) {
         const parentBlock = parentBlockOpt.value;
         x += parentBlock.position.x;
@@ -80,11 +80,16 @@ export class BlockService implements IBlockService {
       }
     }
     const zoom = 1.85;
-    this.canvasService.setCenter({ x, y }, zoom);
+    this._canvasService.setCenter({ x, y }, zoom);
+  }
+
+  public getOutgoers(block: Block): Block[] {
+    const cIds = this._connectionRepository.findAllBySourceId(block.id).map((c) => c.targetId);
+    return this._blockRepository.findAllByIds(cIds);
   }
 
   public getAllAvailableChildren(id: string, excludeList: Block[] = []): Block[] {
-    return this.blockRepository.getAll().filter((b) => !(b.id === id || b.isSentinel() || includesBlock(excludeList, b)));
+    return this._blockRepository.getAll().filter((b) => !(b.id === id || b.isSentinel() || includesBlock(excludeList, b)));
   }
 
   public addParentTo(parentBlock: Block, childrenToBeAdded: Block[]): void {
@@ -94,7 +99,7 @@ export class BlockService implements IBlockService {
     }
     const positionGen = new PositionGenerator({ x: 0, y: 0 }, 15);
 
-    const blocks = this.blockRepository.getAll();
+    const blocks = this._blockRepository.getAll();
     const affectedBlocks: Block[] = [];
     childrenToBeAdded.forEach((childToBeAdded) => {
       // if block is not already a child of the parent
@@ -106,13 +111,13 @@ export class BlockService implements IBlockService {
       }
     });
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
-    this.blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
+    this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
 
   public removeParentFrom(parentBlock: Block, childrenToBeRemoved: Block[]): void {
     const positionGen = new PositionGenerator({ x: parentBlock.position.x, y: parentBlock.position.y }, -15);
 
-    const blocks = this.blockRepository.getAll();
+    const blocks = this._blockRepository.getAll();
 
     const affectedBlocks: Block[] = [];
     childrenToBeRemoved.forEach((b) => {
@@ -122,11 +127,11 @@ export class BlockService implements IBlockService {
       affectedBlocks.push(...this.normalizeBlockOrder(b));
     });
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
-    this.blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
+    this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
 
   private stripConnections(b: Block) {
-    const connectedConnections = this.connectionRepository
+    const connectedConnections = this._connectionRepository
       .findByBlocks(Array.of(b))
       .filter(
         (e) =>
@@ -135,23 +140,23 @@ export class BlockService implements IBlockService {
             (e.targetId === b.id && e.targetHandle === ContainerBlockHandle.INNER_TARGET)
           )
       );
-    this.connectionRepository.deleteAll(connectedConnections);
+    this._connectionRepository.deleteAll(connectedConnections);
   }
 
   private isIndirectChild(b: Block, cs: Block[]): boolean {
     if (b.parentNodeId === null) return false;
-    let parentBlockOpt = this.blockRepository.findById(b.parentNodeId);
+    let parentBlockOpt = this._blockRepository.findById(b.parentNodeId);
     while (parentBlockOpt.isPresent) {
       if (includesBlock(cs, parentBlockOpt.value)) return true;
       if (parentBlockOpt.value.parentNodeId === null) return false;
-      parentBlockOpt = this.blockRepository.findById(parentBlockOpt.value.parentNodeId);
+      parentBlockOpt = this._blockRepository.findById(parentBlockOpt.value.parentNodeId);
     }
     return false;
   }
 
   private normalizeBlockOrder(block: Block, result: Block[] = []): Block[] {
     result.push(block);
-    const children = this.blockRepository.getDirectChildren(block.id);
+    const children = this._blockRepository.getDirectChildren(block.id);
     children.forEach((child) => this.normalizeBlockOrder(child, result));
     return result;
   }
