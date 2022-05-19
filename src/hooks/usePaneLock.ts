@@ -1,10 +1,11 @@
 import React from 'react';
+import { useServiceContext } from '../providers/ServiceProvider';
 import { useSimulationContext } from '../providers/SimulationProvider';
-import useBlockHelper from './useBlockHelper';
+import { GlowTypes } from '../types';
 
 const usePaneLock = () => {
   const { isRunning } = useSimulationContext();
-  const { highlightBlocks } = useBlockHelper();
+  const { blockService } = useServiceContext();
 
   const [nodesDraggable, setNodesDraggable] = React.useState(true);
   const [nodesConnectable, setNodesConnectable] = React.useState(true);
@@ -12,9 +13,9 @@ const usePaneLock = () => {
 
   const onPaneClick = React.useCallback(() => {
     if (!isRunning()) {
-      highlightBlocks(null); // clear highlighs
+      blockService.highlight(null, GlowTypes.NONE); // clear highlighs
     }
-  }, [highlightBlocks, isRunning]);
+  }, [blockService, isRunning]);
 
   React.useEffect(() => {
     if (isRunning()) {

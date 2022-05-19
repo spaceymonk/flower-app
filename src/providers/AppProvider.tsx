@@ -4,6 +4,9 @@ import { throwErrorIfNull } from '../util';
 import { AppContextType } from '../types';
 import Block from '../model/Block';
 import Connection from '../model/Connection';
+import { useEdgesState, useNodesState } from 'react-flow-renderer';
+import BlockAdapter from '../adapters/BlockAdapter';
+import ConnectionAdapter from '../adapters/ConnectionAdapter';
 
 const AppContext = React.createContext<AppContextType | null>(null);
 
@@ -16,6 +19,9 @@ export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => 
   const [blocks, setBlocks] = React.useState<Block[]>(InitialValues.defaultBlocks);
   const [connections, setConnections] = React.useState<Connection[]>(InitialValues.defaultConnections);
 
+  const nodesState = useNodesState(InitialValues.defaultBlocks.map((b) => new BlockAdapter(b)));
+  const edgesState = useEdgesState(InitialValues.defaultConnections.map((c) => new ConnectionAdapter(c)));
+
   const value: AppContextType = {
     getTitle: () => title,
     setTitle,
@@ -25,6 +31,8 @@ export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => 
     setBlocks,
     getConnections: () => connections,
     setConnections,
+    nodesState,
+    edgesState,
   };
 
   return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;

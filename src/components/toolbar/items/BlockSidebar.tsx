@@ -4,15 +4,7 @@ import React from 'react';
 import { Button, Offcanvas, Tooltip } from 'react-bootstrap';
 import T from '../../../config/MessageConstants';
 import CustomOverlay from '../../common/CustomOverlay';
-import {
-  DecisionBlockCreateButton,
-  StatementBlockCreateButton,
-  StartBlockCreateButton,
-  StopBlockCreateButton,
-  LoadBlockCreateButton,
-  StoreBlockCreateButton,
-  WhileLoopBlockCreateButton,
-} from '../../blocks';
+import * as BlockCreateButtons from '../../blocks/button';
 import useToggle from '../../../hooks/useToggle';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
 
@@ -33,13 +25,13 @@ function BlockSidebar() {
           <Offcanvas.Title>{T.blockSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <StartBlockCreateButton />
-          <StopBlockCreateButton />
-          <StatementBlockCreateButton />
-          <DecisionBlockCreateButton />
-          <LoadBlockCreateButton />
-          <StoreBlockCreateButton />
-          <WhileLoopBlockCreateButton />
+          <BlockCreateButtons.StartBlockCreateBtn />
+          <BlockCreateButtons.StopBlockCreateBtn />
+          <BlockCreateButtons.StatementBlockCreateBtn />
+          <BlockCreateButtons.DecisionBlockCreateBtn />
+          <BlockCreateButtons.LoadBlockCreateBtn />
+          <BlockCreateButtons.StoreBlockCreateBtn />
+          <BlockCreateButtons.WhileLoopBlockCreateBtn />
         </Offcanvas.Body>
       </Offcanvas>
     </>

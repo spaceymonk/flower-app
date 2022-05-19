@@ -1,3 +1,4 @@
+// @ts-ignore
 import { v4 as uuid } from 'uuid';
 
 class Connection {

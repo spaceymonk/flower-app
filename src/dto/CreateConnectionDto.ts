@@ -1,6 +1,6 @@
 export interface CreateConnectionDto {
   sourceId: string;
   targetId: string;
-  sourceHandle: string;
-  targetHandle: string;
+  sourceHandle: string | null;
+  targetHandle: string | null;
 }

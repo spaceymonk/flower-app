@@ -1,3 +1,4 @@
+// @ts-ignore
 import { v4 as uuid } from 'uuid';
 import { Memory } from '../services/helpers/SimulationHelper';
 import { BlockTypes, GlowTypes, Point2D } from '../types';

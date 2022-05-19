@@ -8,14 +8,21 @@ import { ConnectionRepository } from '../repositories/impl/ConnectionRepository'
 import { IBlockService } from '../services/IBlockService';
 import { IConnectionService } from '../services/IConnectionService';
 import { IExportService } from '../services/IExportService';
+import { IFlowService } from '../services/IFlowService';
 import { BlockService } from '../services/impl/BlockService';
 import { ConnectionService } from '../services/impl/ConnectionService';
 import { ExportService } from '../services/impl/ExportService';
+import { FlowService } from '../services/impl/FlowService';
 import { ProjectService } from '../services/impl/ProjectService';
+import { SimulationControllerService } from '../services/impl/SimulationControllerService';
+import { SimulationService } from '../services/impl/SimulationService';
 import { IProjectService } from '../services/IProjectService';
+import { ISimulationControllerService } from '../services/ISimulationControllerService';
+import { ISimulationService } from '../services/ISimulationService';
 import { ICanvasFacade } from '../types/ICanvasFacade';
 import { throwErrorIfNull } from '../util';
 import { useAppContext } from './AppProvider';
+import { useSimulationContext } from './SimulationProvider';
 
 type ServiceContextType = {
   canvasFacade: ICanvasFacade;
@@ -25,15 +32,18 @@ type ServiceContextType = {
   connectionRepository: IConnectionRepository;
   projectService: IProjectService;
   exportService: IExportService;
+  flowService: IFlowService;
+  simulationService: ISimulationService;
+  simulationControllerService: ISimulationControllerService;
 };
 
 const ServiceContext = React.createContext<ServiceContextType | null>(null);
-
 
 /**
  * This component is used to inject services to all the components.
  */
 export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>) => {
+  const simulationContext = useSimulationContext();
   const appContext = useAppContext();
   const reactFlowInstance = useReactFlow();
 
@@ -48,13 +58,27 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     [connectionRepository, blockRepository]
   );
   const projectService = React.useMemo<IProjectService>(() => new ProjectService(appContext), [appContext]);
-  const exportService = React.useMemo<IExportService>(
-    () => new ExportService(blockRepository, connectionRepository),
-    [blockRepository, connectionRepository]
-  );
   const blockService = React.useMemo<IBlockService>(
     () => new BlockService(blockRepository, connectionRepository, canvasFacade),
     [blockRepository, canvasFacade, connectionRepository]
+  );
+  const flowService = React.useMemo<IFlowService>(
+    () => new FlowService(blockService, blockRepository, connectionRepository),
+    [blockRepository, blockService, connectionRepository]
+  );
+  const exportService = React.useMemo<IExportService>(
+    () => new ExportService(flowService, blockService, connectionRepository),
+    [blockService, connectionRepository, flowService]
+  );
+
+  const simulationService = React.useMemo<ISimulationService>(
+    () => new SimulationService(flowService, blockService, blockRepository, connectionRepository, simulationContext, appContext),
+    [appContext, blockRepository, blockService, connectionRepository, flowService, simulationContext]
+  );
+
+  const simulationControllerService = React.useMemo<ISimulationControllerService>(
+    () => new SimulationControllerService(simulationContext, blockService, simulationService),
+    [blockService, simulationContext, simulationService]
   );
 
   const value: ServiceContextType = {
@@ -65,6 +89,9 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     connectionRepository: connectionRepository,
     projectService: projectService,
     exportService: exportService,
+    flowService: flowService,
+    simulationService: simulationService,
+    simulationControllerService: simulationControllerService,
   };
 
   return <ServiceContext.Provider value={value}>{props.children}</ServiceContext.Provider>;

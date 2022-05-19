@@ -4,20 +4,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import InitialValues from '../../../config/InitialValues';
-import { useProjectHelper } from '../../../hooks/useProjectHelper';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
-import useCanvasHelper from '../../../hooks/useCanvasHelper';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 export function NewMenuItem() {
   const { isRunning } = useSimulationContext();
-  const { load } = useProjectHelper();
-  const { fitView } = useCanvasHelper();
+  const { projectService, canvasFacade } = useServiceContext();
 
   function handleClick() {
     const ans = window.confirm('All changes will be lost?');
     if (ans) {
-      load(InitialValues.empty());
-      fitView();
+      projectService.load(InitialValues.empty());
+      canvasFacade.fitView();
       toast.info('New project created.');
     }
   }

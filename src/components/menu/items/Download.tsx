@@ -2,12 +2,13 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useProjectHelper } from '../../../hooks/useProjectHelper';
+import InitialValues from '../../../config/InitialValues';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 export function DownloadMenuItem() {
-  const { download } = useProjectHelper();
+  const { projectService } = useServiceContext();
   function handleClick() {
-    download();
+    projectService.download(InitialValues.get());
     toast.info('The download should begin shortly...');
   }
   return (
