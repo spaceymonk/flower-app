@@ -9,6 +9,7 @@ import { ICanvasFacade } from '../../types/ICanvasFacade';
 import { BlockCreateFactory, includesBlock } from '../helpers/BlockHelper';
 import { PositionGenerator } from '../../util/PositionGenerator';
 import { IBlockService } from '../IBlockService';
+import { BlockNotFoundError } from '../../exceptions/BlockNotFoundError';
 
 export class BlockService implements IBlockService {
   private _blockRepository: IBlockRepository;
@@ -28,7 +29,7 @@ export class BlockService implements IBlockService {
   }
 
   public update(id: string, dto: UpdateBlockDto): Block {
-    const b = this._blockRepository.findById(id).orElseThrow(new Error('Block not found'));
+    const b = this._blockRepository.findById(id).orElseThrow(new BlockNotFoundError(id));
     if (dto.height) b.height = dto.height;
     if (dto.width) b.width = dto.width;
     if (dto.text) b.text = dto.text;
@@ -40,7 +41,7 @@ export class BlockService implements IBlockService {
   }
 
   public delete(id: string): void {
-    const block = this._blockRepository.findById(id).orElseThrow(new Error('Block not found'));
+    const block = this._blockRepository.findById(id).orElseThrow(new BlockNotFoundError(id));
     if (block.isContainer()) {
       const children = this._blockRepository.getDirectChildren(block.id);
       children.forEach((c) => {

@@ -3,7 +3,6 @@ import { DecisionBlockModal, LoadBlockkModal, StartBlockModal, StatementBlockMod
 import useToggle from '../../../hooks/useToggle';
 import { BlockTypes } from '../../../types';
 import PropTypes from 'prop-types';
-import { throwErrorIfUndefined } from '../../../util';
 import Block from '../../../model/Block';
 
 export function BlockModalContainer({ block }: BlockModalContainerProps) {
@@ -12,7 +11,7 @@ export function BlockModalContainer({ block }: BlockModalContainerProps) {
 
   React.useEffect(() => {
     if (block) {
-      setActiveModal(throwErrorIfUndefined(block.type));
+      setActiveModal(block.type);
       toggleModal();
     }
   }, [block, toggleModal]);

@@ -45,7 +45,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     connectionService.update(oldEdge.id, dto);
   };
   const handleNodeDoubleClick = (event: any, node: Node<BlockData>) => {
-    const block = blockRepository.findById(node.id).orElseThrow(new Error('Block not found'));
+    const block = blockRepository.findById(node.id).orElse(null);
     setDblClkNode(block);
   };
 

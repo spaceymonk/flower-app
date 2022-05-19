@@ -48,7 +48,10 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
   const reactFlowInstance = useReactFlow();
 
   const canvasFacade = React.useMemo<ICanvasFacade>(() => new CanvasFacade(reactFlowInstance), [reactFlowInstance]);
-  const blockRepository = React.useMemo<IBlockRepository>(() => new BlockRepository(appContext.getBlocks, appContext.setBlocks), [appContext]);
+  const blockRepository = React.useMemo<IBlockRepository>(
+    () => new BlockRepository(appContext.getBlocks, appContext.setBlocks, appContext.nodesState[1]),
+    [appContext]
+  );
   const connectionRepository = React.useMemo<IConnectionRepository>(
     () => new ConnectionRepository(appContext.getConnections, appContext.setConnections),
     [appContext]
@@ -57,7 +60,7 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     () => new ConnectionService(connectionRepository, blockRepository),
     [connectionRepository, blockRepository]
   );
-  const projectService = React.useMemo<IProjectService>(() => new ProjectService(appContext), [appContext]);
+  const projectService = React.useMemo<IProjectService>(() => new ProjectService(appContext, blockRepository, connectionRepository), [appContext, blockRepository, connectionRepository]);
   const blockService = React.useMemo<IBlockService>(
     () => new BlockService(blockRepository, connectionRepository, canvasFacade),
     [blockRepository, canvasFacade, connectionRepository]
