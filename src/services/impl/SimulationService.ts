@@ -58,7 +58,7 @@ export class SimulationService implements ISimulationService {
   private next(handleId: string | null): void {
     const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
     const c = this._connectionRepository
-      .findBySourceHandleAndSourceId(handleId, currentBlock)
+      .findBySourceHandleAndSourceId(handleId, currentBlock.id)
       .orElseThrow(new Error('No connection found for current block'));
     const b = this._blockRepository.findById(c.targetId).orElseThrow(new Error('No block found for connection'));
     this.updateCurrentBlock(b);

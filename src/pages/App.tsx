@@ -14,9 +14,9 @@ import { ServiceProvider } from '../providers/ServiceProvider';
 
 function App() {
   const [boardHeight, setBoardHeight] = React.useState(1);
-  const toolbarRef = React.useRef(null);
-  const menubarRef = React.useRef(null);
-  const footerRef = React.useRef(null);
+  const toolbarRef = React.useRef<HTMLDivElement>(null);
+  const menubarRef = React.useRef<HTMLDivElement>(null);
+  const footerRef = React.useRef<HTMLDivElement>(null);
   const windowDim = useWindowDimensions();
 
   // This is a workaround for the issue that the board is not rendered correctly when the window is resized.

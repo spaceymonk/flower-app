@@ -53,7 +53,7 @@ export class ProjectService implements IProjectService {
     const fileReader = new FileReader();
     const handleFileRead = () => {
       try {
-        const content: ProjectData = JSON.parse(throwErrorIfNull(fileReader.result));
+        const content: ProjectData = JSON.parse(throwErrorIfNull(fileReader.result).toString());
         const result = ProjectDataSchema.validate(content);
         if (result.error) {
           throw new Error(result.error.message);
