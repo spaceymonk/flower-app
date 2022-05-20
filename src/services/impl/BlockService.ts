@@ -94,6 +94,11 @@ export class BlockService implements IBlockService {
   }
 
   public addParentTo(parentBlock: Block, childrenToBeAdded: Block[]): void {
+    if (!parentBlock.isContainer()) {
+      toast.error('Can only add children to container blocks');
+      return;
+    }
+    if (childrenToBeAdded.length === 0) return;
     if (this.isIndirectChild(parentBlock, childrenToBeAdded)) {
       toast.error('Cannot add parent block as child');
       return;
@@ -113,10 +118,16 @@ export class BlockService implements IBlockService {
     });
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
     this._blockRepository.clear();
+    console.log('after clear', this._blockRepository.getAll());
     this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
 
   public removeParentFrom(parentBlock: Block, childrenToBeRemoved: Block[]): void {
+    if (!parentBlock.isContainer()) {
+      toast.error('Can only remove children from container blocks');
+      return;
+    }
+    if (childrenToBeRemoved.length === 0) return;
     const positionGen = new PositionGenerator({ x: parentBlock.position.x, y: parentBlock.position.y }, -15);
 
     const blocks = this._blockRepository.getAll();

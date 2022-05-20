@@ -60,8 +60,8 @@ export class BlockRepository implements IBlockRepository {
     bs.forEach((b) => this.delete(b));
   }
   public clear(): void {
-    this._setBlocks([]);
-    this._setNodes([]);
+    this._setNodes(() => []);
+    this._setBlocks(() => []);
   }
   public findById(id: string): Optional<Block> {
     return new Optional(this._getBlocks().find((b) => b.id === id));
