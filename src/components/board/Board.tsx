@@ -23,6 +23,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const { connectionService, blockRepository, blockService } = useServiceContext();
 
   const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
+  const [showModal, setShowModal] = React.useState(false);
 
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
@@ -41,7 +42,6 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     });
     onNodesChange(nodeChanges);
   };
-
   const handleEdgeChange = (edgeChanges: EdgeChange[]) => {
     edgeChanges.forEach((ec) => {
       if (ec.type === 'remove') {
@@ -75,6 +75,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const handleNodeDoubleClick = (event: any, node: Node<BlockData>) => {
     const block = blockRepository.findById(node.id).orElse(null);
     setDblClkNode(block);
+    setShowModal(true);
   };
 
   /* -------------------------------------------------------------------------- */
@@ -108,7 +109,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           </Controls>
         </ReactFlow>
       </div>
-      <BlockModalContainer block={dblClkNode} />
+      <BlockModalContainer block={dblClkNode} show={showModal} onClose={() => setShowModal(false)} />
     </>
   );
 }
