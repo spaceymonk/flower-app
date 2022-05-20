@@ -112,6 +112,7 @@ export class BlockService implements IBlockService {
       }
     });
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
+    this._blockRepository.clear();
     this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
 
@@ -128,6 +129,7 @@ export class BlockService implements IBlockService {
       affectedBlocks.push(...this.normalizeBlockOrder(b));
     });
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
+    this._blockRepository.clear();
     this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
 
