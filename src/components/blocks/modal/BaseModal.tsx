@@ -8,10 +8,10 @@ import { useServiceContext } from '../../../providers/ServiceProvider';
 import Block from '../../../model/Block';
 
 export function BaseModal({ show, children, onSave, onClose, block }: BaseModalProps) {
-  const { blockRepository, blockService } = useServiceContext();
+  const { blockService } = useServiceContext();
   const [name, setName] = React.useState(block.name || block.id);
   function handleDelete() {
-    blockRepository.delete(block);
+    blockService.delete(block.id);
     onClose();
   }
   function handleNameField() {
