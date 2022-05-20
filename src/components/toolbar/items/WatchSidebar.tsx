@@ -32,7 +32,7 @@ function WatchSidebar() {
   return (
     <>
       <CustomOverlay placement="bottom" overlay={<Tooltip>{T.watchesSidebar.tooltip}</Tooltip>}>
-        <Button onClick={toggleSidebar} disabled={!isRunning()}>
+        <Button onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faGlasses} />
         </Button>
       </CustomOverlay>
@@ -41,7 +41,7 @@ function WatchSidebar() {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>{T.watchesSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
+        <Offcanvas.Body style={{ filter: isRunning() ? 'opacity(1)' : 'opacity(.5)' }}>
           <Table>
             <thead>
               <tr>
