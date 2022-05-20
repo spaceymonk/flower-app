@@ -1,14 +1,16 @@
 import React from 'react';
 import { Handle, Node, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
-import { BlockNotFoundError } from '../../../exceptions/BlockNotFoundError';
 import { useServiceContext } from '../../../providers/ServiceProvider';
 import { BlockData } from '../../../types';
 import { BlockView } from './BlockView';
 
 export function StoreBlockView(node: Node<BlockData>) {
   const { blockRepository } = useServiceContext();
-  const block = React.useMemo(() => blockRepository.findById(node.id).orElseThrow(new BlockNotFoundError(node.id)), [blockRepository, node.id]);
+  const block = React.useMemo(() => blockRepository.findById(node.id).orElse(null), [blockRepository, node.id]);
+
+  if (block === null) return <></>;
+  
   const processed = block.text; //todo: handle special keywords by bolding them etc.
 
   return (

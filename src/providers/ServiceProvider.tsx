@@ -53,7 +53,7 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     [appContext]
   );
   const connectionRepository = React.useMemo<IConnectionRepository>(
-    () => new ConnectionRepository(appContext.getConnections, appContext.setConnections),
+    () => new ConnectionRepository(appContext.getConnections, appContext.setConnections, appContext.edgesState[1]),
     [appContext]
   );
   const connectionService = React.useMemo<IConnectionService>(

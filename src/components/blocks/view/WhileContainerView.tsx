@@ -4,11 +4,13 @@ import { ContainerBlockView } from './ContainerBlockView';
 import { BlockData, ContainerBlockHandle } from '../../../types';
 import React from 'react';
 import { useServiceContext } from '../../../providers/ServiceProvider';
-import { BlockNotFoundError } from '../../../exceptions/BlockNotFoundError';
 
 export function WhileLoopBlockView(node: Node<BlockData>) {
   const { blockRepository } = useServiceContext();
-  const block = React.useMemo(() => blockRepository.findById(node.id).orElseThrow(new BlockNotFoundError(node.id)), [blockRepository, node.id]);
+  const block = React.useMemo(() => blockRepository.findById(node.id).orElse(null), [blockRepository, node.id]);
+
+  if (block === null) return <></>;
+  
   const processed = block.text; //todo: handle special keywords by bolding them etc.
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactFlow, { Connection, Edge, Node } from 'react-flow-renderer';
+import ReactFlow, { Connection, Edge, EdgeChange, Node, NodeChange } from 'react-flow-renderer';
 import { Background, MiniMap, Controls, ControlButton } from 'react-flow-renderer';
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
@@ -14,17 +14,34 @@ import { BlockData } from '../../types';
 import { CreateConnectionDto } from '../../dto/CreateConnectionDto';
 import { throwErrorIfNull } from '../../util';
 import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
+import { UpdateBlockDto } from '../../dto/UpdateBlockDto';
 
 function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const paneLockConfigs = usePaneLock();
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
   const { nodesState, edgesState } = useAppContext();
-  const { connectionService, blockRepository } = useServiceContext();
+  const { connectionService, blockRepository, blockService } = useServiceContext();
 
   const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
 
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
+
+  const handleNodeChange = (nodeChanges: NodeChange[]) => {
+    nodeChanges.forEach((nc) => {
+      if (nc.type === 'position') {
+        const dto: UpdateBlockDto = { position: nc.position };
+        blockService.update(nc.id, dto);
+      } else if (nc.type === 'remove') {
+        blockService.delete(nc.id);
+      }
+    });
+    onNodesChange(nodeChanges);
+  };
+
+  const handleEdgeChange = (edgeChanges: EdgeChange[]) => {
+    onEdgesChange(edgeChanges);
+  }
 
   const handleConnectionCreate = (connection: Connection) => {
     const dto: CreateConnectionDto = {
@@ -55,8 +72,8 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
+          onNodesChange={handleNodeChange}
+          onEdgesChange={handleEdgeChange}
           onConnect={handleConnectionCreate}
           onEdgeUpdate={handleConnectionUpdate}
           fitView={true}

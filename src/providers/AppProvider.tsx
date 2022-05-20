@@ -20,7 +20,7 @@ export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => 
   const [connections, setConnections] = React.useState<Connection[]>(InitialValues.defaultConnections);
 
   const nodesState = useNodesState(InitialValues.defaultBlocks.map((b) => BlockAdapter.toNode(b)));
-  const edgesState = useEdgesState(InitialValues.defaultConnections.map((c) => new ConnectionAdapter(c)));
+  const edgesState = useEdgesState(InitialValues.defaultConnections.map((c) => ConnectionAdapter.toEdge(c)));
 
   const value: AppContextType = {
     getTitle: () => title,
