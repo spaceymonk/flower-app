@@ -15,8 +15,6 @@ export class SimulationService implements ISimulationService {
   private _simulationContext: SimulationContextType;
   private _appContext: AppContextType;
 
-  private _inputParamCursor: number = 0;
-
   constructor(
     flowService: IFlowService,
     blockService: IBlockService,
@@ -36,7 +34,7 @@ export class SimulationService implements ISimulationService {
   public initialize(): void {
     const [startBlock] = this._flowService.validate();
     this.updateCurrentBlock(startBlock);
-    this._inputParamCursor = 0;
+    this._simulationContext.inputParamCursorRef.current = 0;
     this._simulationContext.variableTableRef.current = {};
   }
 
@@ -50,7 +48,7 @@ export class SimulationService implements ISimulationService {
     const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
     const nextBlock = currentBlock.eval(this._simulationContext.variableTableRef, {
       inputParams: this._appContext.getInputParams(),
-      inputParamCursor: this._inputParamCursor,
+      inputParamIter: this._simulationContext.inputParamCursorRef,
     });
     this.next(nextBlock);
   }

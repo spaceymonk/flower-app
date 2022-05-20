@@ -10,9 +10,6 @@ export class SimulationControllerService implements ISimulationControllerService
   private _blockService: IBlockService;
   private _simulationService: ISimulationService;
 
-  private _action: SimulationActions = SimulationActions.none;
-  private _jumpNextBlock = false;
-
   constructor(simulationContext: SimulationContextType, blockService: IBlockService, simulationService: ISimulationService) {
     this._context = simulationContext;
     this._blockService = blockService;
@@ -24,8 +21,8 @@ export class SimulationControllerService implements ISimulationControllerService
       toast.error('Simulation already running!');
       return;
     }
-    this._action = SimulationActions.debug;
-    this._jumpNextBlock = false;
+    this._context.actionRef.current = SimulationActions.debug;
+    this._context.jumpNextBlockRef.current = false;
     try {
       this._simulationService.initialize();
       this.run();
@@ -41,24 +38,24 @@ export class SimulationControllerService implements ISimulationControllerService
 
   public stop(): void {
     if (this._context.isRunning()) {
-      this._action = SimulationActions.stop;
+      this._context.actionRef.current = SimulationActions.stop;
     }
   }
 
   public next(): void {
     if (this._context.isRunning()) {
-      this._jumpNextBlock = true;
+      this._context.jumpNextBlockRef.current = true;
     }
   }
 
   public resume(): void {
     if (this._context.isRunning()) {
-      if (this._action === SimulationActions.continue) {
-        this._action = SimulationActions.debug;
-        this._jumpNextBlock = false;
-      } else if (this._action === SimulationActions.debug) {
-        this._action = SimulationActions.continue;
-        this._jumpNextBlock = false;
+      if (this._context.actionRef.current === SimulationActions.continue) {
+        this._context.actionRef.current = SimulationActions.debug;
+        this._context.jumpNextBlockRef.current = false;
+      } else if (this._context.actionRef.current === SimulationActions.debug) {
+        this._context.actionRef.current = SimulationActions.continue;
+        this._context.jumpNextBlockRef.current = false;
       }
     }
   }
@@ -67,17 +64,17 @@ export class SimulationControllerService implements ISimulationControllerService
     this._context.setRunning(true);
     toast.info('Simulation started!');
     const simulationLoop = () => {
-      if (this._action === SimulationActions.stop || !this._simulationService.hasNext()) {
+      if (this._context.actionRef.current === SimulationActions.stop || !this._simulationService.hasNext()) {
         this._blockService.highlight(null, GlowTypes.NONE);
         this._context.setRunning(false);
-        this._action = SimulationActions.none;
+        this._context.actionRef.current = SimulationActions.none;
         toast.info('Simulation ended!');
       } else {
         try {
-          if (this._action === SimulationActions.continue) {
+          if (this._context.actionRef.current === SimulationActions.continue) {
             this._simulationService.process();
-          } else if (this._action === SimulationActions.debug && this._jumpNextBlock) {
-            this._jumpNextBlock = false;
+          } else if (this._context.actionRef.current === SimulationActions.debug && this._context.jumpNextBlockRef.current) {
+            this._context.jumpNextBlockRef.current = false;
             this._simulationService.process();
           }
           setTimeout(simulationLoop, this._context.getSpeedInMs());
@@ -93,6 +90,6 @@ export class SimulationControllerService implements ISimulationControllerService
   private abort(msg: string | null = null) {
     if (msg) toast.error(msg);
     this._context.setRunning(false);
-    this._action = SimulationActions.none;
+    this._context.actionRef.current = SimulationActions.none;
   }
 }

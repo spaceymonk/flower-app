@@ -1,3 +1,4 @@
+import React from 'react';
 import { Edge, Node, OnEdgesChange, OnNodesChange } from 'react-flow-renderer';
 import Block from '../model/Block';
 import Connection from '../model/Connection';
@@ -87,4 +88,7 @@ export type SimulationContextType = {
   currentBlockRef: React.MutableRefObject<Block | null>;
   getSpeedInMs: () => number;
   setSpeedInMs: (val: number) => number;
+  actionRef: React.MutableRefObject<SimulationActions>;
+  jumpNextBlockRef: React.MutableRefObject<boolean>;
+  inputParamCursorRef: React.MutableRefObject<number>;
 };
