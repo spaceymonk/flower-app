@@ -5,27 +5,25 @@ import PropTypes from 'prop-types';
 import Block from '../../../model/Block';
 
 export function BlockModalContainer({ block, show, onClose }: BlockModalContainerProps) {
-  const [activeModal, setActiveModal] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (block) {
-      setActiveModal(block.type);
-    }
-  }, [block]);
-
-  if (!block) return <></>;
-
-  return (
-    <div>
-      <StatementBlockModal block={block} show={show && activeModal === BlockTypes.STATEMENT_BLOCK} onClose={onClose} />
-      <DecisionBlockModal block={block} show={show && activeModal === BlockTypes.DECISION_BLOCK} onClose={onClose} />
-      <LoadBlockkModal block={block} show={show && activeModal === BlockTypes.LOAD_BLOCK} onClose={onClose} />
-      <StoreBlockModal block={block} show={show && activeModal === BlockTypes.STORE_BLOCK} onClose={onClose} />
-      <StartBlockModal block={block} show={show && activeModal === BlockTypes.START_BLOCK} onClose={onClose} />
-      <StopBlockModal block={block} show={show && activeModal === BlockTypes.STOP_BLOCK} onClose={onClose} />
-      <WhileLoopBlockModal block={block} show={show && activeModal === BlockTypes.WHILE_LOOP_BLOCK} onClose={onClose} />
-    </div>
-  );
+  if (!block) {
+    return <></>;
+  } else if (block.type === BlockTypes.DECISION_BLOCK) {
+    return <DecisionBlockModal block={block} show={show} onClose={onClose} />;
+  } else if (block.type === BlockTypes.LOAD_BLOCK) {
+    return <LoadBlockkModal block={block} show={show} onClose={onClose} />;
+  } else if (block.type === BlockTypes.START_BLOCK) {
+    return <StartBlockModal block={block} show={show} onClose={onClose} />;
+  } else if (block.type === BlockTypes.STORE_BLOCK) {
+    return <StoreBlockModal block={block} show={show} onClose={onClose} />;
+  } else if (block.type === BlockTypes.STOP_BLOCK) {
+    return <StopBlockModal block={block} show={show} onClose={onClose} />;
+  } else if (block.type === BlockTypes.WHILE_LOOP_BLOCK) {
+    return <WhileLoopBlockModal block={block} show={show} onClose={onClose} />;
+  } else if (block.type === BlockTypes.STATEMENT_BLOCK) {
+    return <StatementBlockModal block={block} show={show} onClose={onClose} />;
+  } else {
+    throw new Error(`Unknown block type: ${block.type}`);
+  }
 }
 
 BlockModalContainer.propTypes = {
