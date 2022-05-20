@@ -6,6 +6,7 @@ import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { AppContextType, ProjectData } from '../../types';
 import { nameof, throwErrorIfNull } from '../../util';
+import { BlockCreateFactory } from '../helpers/BlockHelper';
 import { IProjectService } from '../IProjectService';
 
 export class ProjectService implements IProjectService {
@@ -57,7 +58,14 @@ export class ProjectService implements IProjectService {
         if (result.error) {
           throw new Error(result.error.message);
         }
-        if (onOpen) onOpen(content);
+        if (onOpen) {
+          onOpen({
+            title: content.title,
+            blocks: content.blocks.map((b: any) => BlockCreateFactory.fromJSON(b)),
+            connections: content.connections,
+            inputParams: content.inputParams,
+          });
+        }
       } catch (e: any) {
         toast.error('Invalid project file: ' + e.message);
       }
