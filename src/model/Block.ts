@@ -35,9 +35,27 @@ abstract class Block {
     return false;
   }
 
+  /* ------------------------- Serializer/Deserializer ------------------------ */
+  public toJSON(): any {
+    return {
+      id: this._id,
+      type: this._type,
+      position: this._position,
+      text: this._text,
+      glow: this._glow,
+      name: this._name,
+      parentNodeId: this._parentNodeId,
+      width: this._width,
+      height: this._height,
+    };
+  }
+
   /* ------------------------------ Getter/Setter ----------------------------- */
   get id(): string {
     return this._id;
+  }
+  set id(id: string) {
+    this._id = id;
   }
   get type(): BlockTypes {
     return this._type;

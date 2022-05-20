@@ -1,9 +1,9 @@
-import { ProjectData } from '../types';
-
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { nameof } from '../util';
+import { ProjectData } from '../types';
 import Block from '../model/Block';
 import Connection from '../model/Connection';
+import { BlockCreateFactory } from '../services/helpers/BlockHelper';
 
 export const ProjectNameOptions = {
   dictionaries: [colors, adjectives, animals],
@@ -21,10 +21,9 @@ class LocalStorageManager {
   }
 
   refresh(): void {
-    // @todo: better serializer required for class instances
     const storageNodes = window.localStorage.getItem(nameof<ProjectData>('blocks')) || '[]';
     const storageConnections = window.localStorage.getItem(nameof<ProjectData>('connections')) || '[]';
-    this.defaultBlocks = JSON.parse(storageNodes);
+    this.defaultBlocks = JSON.parse(storageNodes).map((json: any) => BlockCreateFactory.fromJSON(json));
     this.defaultConnections = JSON.parse(storageConnections);
     this.title = window.localStorage.getItem(nameof<ProjectData>('title')) || uniqueNamesGenerator(ProjectNameOptions);
     this.inputParams = window.localStorage.getItem(nameof<ProjectData>('inputParams')) || '';

@@ -29,6 +29,18 @@ export class BlockCreateFactory {
       throw new Error('Unknown block type');
     }
   }
+
+  static fromJSON(json: any): Block {
+    const block = BlockCreateFactory.create({ type: json.type, position: json.position });
+    block.id = json.id;
+    block.text = json.text;
+    block.glow = json.glow;
+    block.name = json.name;
+    block.parentNodeId = json.parentNodeId;
+    block.width = json.width;
+    block.height = json.height;
+    return block;
+  }
 }
 
 export const includesBlock = (blockList: Block[], block: Block): boolean => {
