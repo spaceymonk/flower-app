@@ -2,21 +2,18 @@ import { faFolder, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
-import InitialValues from '../../../config/InitialValues';
+import LocalStorageManager from '../../../config/LocalStorageManager';
 import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
-import { useReactFlow } from 'react-flow-renderer';
 import PropTypes from 'prop-types';
 import { throwErrorIfNull } from '../../../util';
 import { ProjectData } from '../../../types';
-import { open } from '../../../services/ProjectHelper';
-import { useProjectHelper } from '../../../hooks/useProjectHelper';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 export function OpenModal({ show, onClose }: OpenModalProps) {
   const [file, setFile] = React.useState<File | null>(null);
-  const { load } = useProjectHelper();
-  const { fitView } = useReactFlow();
+  const {projectService, canvasFacade} = useServiceContext();
 
   const handleFileSelection = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;
@@ -30,11 +27,11 @@ export function OpenModal({ show, onClose }: OpenModalProps) {
 
   function handleOpen() {
     try {
-      open(throwErrorIfNull(file), (content: ProjectData) => {
-        load(content);
+      projectService.open(throwErrorIfNull(file, 'File could not opened!'), (content: ProjectData) => {
+        projectService.load(content);
         toast.success('Project loaded!');
       });
-      fitView();
+      canvasFacade.fitView();
       setFile(null);
       onClose();
     } catch (e) {
@@ -43,8 +40,8 @@ export function OpenModal({ show, onClose }: OpenModalProps) {
   }
   function handleRestoreCheckpoint() {
     try {
-      load(InitialValues.get());
-      fitView();
+      projectService.load(LocalStorageManager.get());
+      canvasFacade.fitView();
       onClose();
       toast.success('Last save restored!');
     } catch (e) {

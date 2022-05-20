@@ -3,10 +3,9 @@ import { Button, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import CustomOverlay from '../common/CustomOverlay';
-import { Edge, getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
-import useEdgeHelper from '../../hooks/useEdgeHelper';
+import { getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
 import PropTypes from 'prop-types';
-import { throwErrorIfUndefined } from '../../util';
+import { useServiceContext } from '../../providers/ServiceProvider';
 
 export default function CustomEdge({
   id,
@@ -22,13 +21,13 @@ export default function CustomEdge({
   const foreignObjectSize = 80;
   const edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
   const [edgeCenterX, edgeCenterY] = getEdgeCenter({ sourceX, sourceY, targetX, targetY });
-  const { removeEdges, findById } = useEdgeHelper();
+  const { connectionRepository } = useServiceContext();
   const [showBtn, toggleBtn] = React.useState(false);
 
   const handleClick = (evt: React.MouseEvent, id: string) => {
     evt.stopPropagation();
-    const edge = throwErrorIfUndefined<Edge>(findById(id));
-    removeEdges([edge]);
+    const edge = connectionRepository.findById(id).orElseThrow(new Error('Edge not found'));
+    connectionRepository.delete(edge);
   };
 
   let x = edgeCenterX - foreignObjectSize / 2;

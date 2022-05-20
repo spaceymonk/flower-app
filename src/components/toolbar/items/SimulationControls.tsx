@@ -3,26 +3,26 @@ import { Button, ButtonGroup, Form, Tooltip } from 'react-bootstrap';
 import { faArrowDown, faForwardStep, faPause, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CustomOverlay from '../../common/CustomOverlay';
-import useSimulation from '../../../hooks/useSimulation';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 const SimulationControls = () => {
-  const simulation = useSimulation();
-  const { isRunning } = useSimulationContext();
+  const { simulationControllerService } = useServiceContext();
+  const { isRunning, getSpeedInMs, setSpeedInMs } = useSimulationContext();
   const [pauseIcon, togglePauseIcon] = React.useState(false);
-  const [simulationSpeed, setSimulationSpeed] = React.useState(simulation.getSpeedInMs());
+  const [simulationSpeed, setSimulationSpeed] = React.useState(getSpeedInMs());
 
-  const handlePlayBtn = () => simulation.start();
-  const handleStopBtn = () => simulation.stop();
-  const handleNextBtn = () => simulation.next();
+  const handlePlayBtn = () => simulationControllerService.start();
+  const handleStopBtn = () => simulationControllerService.stop();
+  const handleNextBtn = () => simulationControllerService.next();
   const handleContinueBtn = () => {
     togglePauseIcon((s) => !s);
-    simulation.continueFn();
+    simulationControllerService.resume();
   };
   const handleSimulationSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const speed = parseInt(e.target.value, 10);
     setSimulationSpeed(speed);
-    simulation.setSpeedInMs(speed);
+    setSpeedInMs(speed);
   };
 
   React.useEffect(() => {

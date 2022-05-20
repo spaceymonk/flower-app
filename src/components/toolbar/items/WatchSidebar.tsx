@@ -2,11 +2,11 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlasses } from '@fortawesome/free-solid-svg-icons';
 import { Button, Offcanvas, Table, Tooltip } from 'react-bootstrap';
-import T from '../../../services/MessageConstants';
+import T from '../../../config/MessageConstants';
 import CustomOverlay from '../../common/CustomOverlay';
 import useToggle from '../../../hooks/useToggle';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
-import { displayValue } from '../../../services/SimulationHelper';
+import { displayValue } from '../../../services/helpers/SimulationHelper';
 
 function WatchSidebar() {
   const { isRunning, variableTableRef } = useSimulationContext();
@@ -32,7 +32,7 @@ function WatchSidebar() {
   return (
     <>
       <CustomOverlay placement="bottom" overlay={<Tooltip>{T.watchesSidebar.tooltip}</Tooltip>}>
-        <Button onClick={toggleSidebar} disabled={!isRunning()}>
+        <Button onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faGlasses} />
         </Button>
       </CustomOverlay>
@@ -41,7 +41,7 @@ function WatchSidebar() {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>{T.watchesSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
+        <Offcanvas.Body style={{ filter: isRunning() ? 'opacity(1)' : 'opacity(.5)' }}>
           <Table>
             <thead>
               <tr>

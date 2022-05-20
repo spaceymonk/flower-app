@@ -2,16 +2,16 @@ import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useProjectHelper } from '../../../hooks/useProjectHelper';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
 
 export function SaveMenuItem() {
-  const { save } = useProjectHelper();
   const { isRunning } = useSimulationContext();
+  const { projectService } = useServiceContext();
 
   function handleClick() {
     try {
-      save();
+      projectService.save(projectService.snapshot());
       toast.success('Changes saved!');
     } catch (e: any) {
       toast.error('Something went wrong! ' + e.message);

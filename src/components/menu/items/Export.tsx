@@ -4,31 +4,29 @@ import { NavDropdown, Modal, Button, Container, Row, Col } from 'react-bootstrap
 import useToggle from '../../../hooks/useToggle';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import { useProjectHelper } from '../../../hooks/useProjectHelper';
 import { ExportType, GlowTypes } from '../../../types';
 import React from 'react';
 import { InvalidDecisionError, MultipleStartError, NotConnectedError } from '../../../exceptions';
-import useBlockHelper from '../../../hooks/useBlockHelper';
 import { CopyBlock, a11yLight } from 'react-code-blocks';
+import { useServiceContext } from '../../../providers/ServiceProvider';
 
 export function ExportModal({ show, onClose }: ExportModalProps) {
-  const { toPNG, toCode } = useProjectHelper();
-  const { highlightBlocks } = useBlockHelper();
+  const { exportService, blockService} = useServiceContext();
 
   const [code, setCode] = React.useState('');
 
   async function handleExport(type: ExportType) {
     try {
       if (type === ExportType.PNG) {
-        await toPNG();
+        await exportService.toPNG();
       } else if (type === ExportType.CODE) {
-        setCode(toCode());
+        setCode(exportService.toCode());
       }
     } catch (e: any) {
       if (e instanceof NotConnectedError || e instanceof InvalidDecisionError) {
-        highlightBlocks([e.blockId], GlowTypes.ERROR);
+        blockService.highlight([e.blockId], GlowTypes.ERROR);
       } else if (e instanceof MultipleStartError || e instanceof MultipleStartError) {
-        highlightBlocks(e.blockIdList, GlowTypes.ERROR);
+        blockService.highlight(e.blockIdList, GlowTypes.ERROR);
       }
       onClose();
       toast.error('Export failed! ' + e.message);

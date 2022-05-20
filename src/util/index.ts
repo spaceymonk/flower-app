@@ -1,7 +1,7 @@
 // make sure that the string you type is a property on a given object.
 export const nameof = <T>(name: keyof T) => name;
 
-export const throwErrorIfNull = <T>(value: T | null, errorMsg = 'Value cannot be null'): any => {
+export const throwErrorIfNull = <T>(value: T | null, errorMsg = 'Value cannot be null'): T => {
   if (value === null) {
     throw new Error(errorMsg);
   }

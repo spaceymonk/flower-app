@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import T from '../../services/MessageConstants';
+import T from '../../config/MessageConstants';
 import PropTypes from 'prop-types';
 import { useAppContext } from '../../providers/AppProvider';
 import { validateTitle } from './ProjectTitle.service';

@@ -15,8 +15,17 @@ export function InputSelectModal({ show, onClose }: InputSelectModalProps) {
     onClose();
   };
 
+  const handleClose = () => {
+    setText(getInputParams());
+    onClose();
+  };
+
+  React.useEffect(() => {
+    setText(getInputParams());
+  }, [getInputParams]);
+
   return (
-    <Modal show={show} size="lg" centered onHide={onClose} scrollable>
+    <Modal show={show} size="lg" centered onHide={handleClose} scrollable>
       <Modal.Header closeButton>
         <h4>
           <FontAwesomeIcon size="lg" className="me-2" icon={faEnvelopeOpenText} /> Input Parameters
@@ -41,7 +50,7 @@ export function InputSelectModal({ show, onClose }: InputSelectModalProps) {
         <Button variant="success" size="sm" onClick={handleSave}>
           Save
         </Button>
-        <Button variant="primary" size="sm" onClick={onClose}>
+        <Button variant="primary" size="sm" onClick={handleClose}>
           Cancel
         </Button>
       </Modal.Footer>

@@ -3,21 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown, Modal, Button, ListGroup } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import PropTypes from 'prop-types';
-import BlockOption from '../../blocks/common/BlockOption';
-import { useAppContext } from '../../../providers/AppProvider';
-import { Block } from '../../../types';
+import BlockOption from '../../blocks/BlockOption';
 import React from 'react';
-import useBlockHelper from '../../../hooks/useBlockHelper';
+import { useServiceContext } from '../../../providers/ServiceProvider';
+import Block from '../../../model/Block';
 
 export function FindModal({ show, onClose }: FindModalProps) {
-  const { getBlocks } = useAppContext();
-  const { focusBlock } = useBlockHelper();
+  const {blockService, blockRepository} = useServiceContext();
 
-  const blockList = React.useMemo(() => getBlocks(), [getBlocks]);
+  const blockList = React.useMemo(() => blockRepository.getAll(), [blockRepository]);
 
   function handleSelect(b: Block) {
     onClose();
-    focusBlock(b);
+    blockService.focus(b);
   }
 
   return (

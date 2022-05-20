@@ -1,11 +1,14 @@
-import { Node, Edge, OnEdgesChange, OnNodesChange } from 'react-flow-renderer';
-import { Memory } from '../services/SimulationHelper';
+import React from 'react';
+import { Edge, Node, OnEdgesChange, OnNodesChange } from 'react-flow-renderer';
+import Block from '../model/Block';
+import Connection from '../model/Connection';
+import { Memory } from '../services/helpers/SimulationHelper';
 
 export type ProjectData = {
   title: string;
   inputParams: string;
   blocks: Block[];
-  edges: Edge[];
+  connections: Connection[];
 };
 
 export enum ExportType {
@@ -60,7 +63,10 @@ export enum SimulationActions {
   debug,
 }
 
-export interface Block extends Node<BlockData> {}
+export type Point2D = {
+  x: number;
+  y: number;
+};
 
 export type AppContextType = {
   getTitle: () => string;
@@ -69,10 +75,10 @@ export type AppContextType = {
   setInputParams: React.Dispatch<React.SetStateAction<string>>;
   getBlocks: () => Block[];
   setBlocks: React.Dispatch<React.SetStateAction<Block[]>>;
-  getEdges: () => Edge[];
-  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
-  onEdgesChange: OnEdgesChange;
-  onBlocksChange: OnNodesChange;
+  getConnections: () => Connection[];
+  setConnections: React.Dispatch<React.SetStateAction<Connection[]>>;
+  nodesState: [Node<BlockData>[], React.Dispatch<React.SetStateAction<Node<BlockData>[]>>, OnNodesChange];
+  edgesState: [Edge<any>[], React.Dispatch<React.SetStateAction<Edge<any>[]>>, OnEdgesChange];
 };
 
 export type SimulationContextType = {
@@ -80,5 +86,9 @@ export type SimulationContextType = {
   setRunning: React.Dispatch<React.SetStateAction<boolean>>;
   variableTableRef: React.MutableRefObject<Memory>;
   currentBlockRef: React.MutableRefObject<Block | null>;
-  inputParamCursor: React.MutableRefObject<number>;
+  getSpeedInMs: () => number;
+  setSpeedInMs: (val: number) => number;
+  actionRef: React.MutableRefObject<SimulationActions>;
+  jumpNextBlockRef: React.MutableRefObject<boolean>;
+  inputParamCursorRef: React.MutableRefObject<number>;
 };

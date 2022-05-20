@@ -7,18 +7,19 @@ import Toolbar from '../components/toolbar/Toolbar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import useAlert from '../hooks/useAlert';
 import { AppProvider } from '../providers/AppProvider';
 import { SimulationProvider } from '../providers/SimulationProvider';
 import { throwErrorIfNull } from '../util';
+import { ServiceProvider } from '../providers/ServiceProvider';
 
 function App() {
   const [boardHeight, setBoardHeight] = React.useState(1);
-  const toolbarRef = React.useRef(null);
-  const menubarRef = React.useRef(null);
-  const footerRef = React.useRef(null);
+  const toolbarRef = React.useRef<HTMLDivElement>(null);
+  const menubarRef = React.useRef<HTMLDivElement>(null);
+  const footerRef = React.useRef<HTMLDivElement>(null);
   const windowDim = useWindowDimensions();
 
+  // This is a workaround for the issue that the board is not rendered correctly when the window is resized.
   React.useEffect(() => {
     setBoardHeight(
       windowDim.height -
@@ -28,28 +29,40 @@ function App() {
     );
   }, [windowDim.height]);
 
-  useAlert();
+  // Alert user if user leaves the page
+  const alertUser = React.useCallback((e) => {
+    e.preventDefault();
+    e.returnValue = '';
+  }, []);
+  React.useEffect(() => {
+    window.addEventListener('beforeunload', alertUser);
+    return () => {
+      window.removeEventListener('beforeunload', alertUser);
+    };
+  }, [alertUser]);
 
   return (
     <AppProvider>
       <SimulationProvider>
         <ReactFlowProvider>
-          <MenubarWrapper ref={menubarRef} />
-          <Toolbar ref={toolbarRef} />
-          <Board height={boardHeight} />
-          <Footer ref={footerRef} />
-          <ToastContainer
-            position="bottom-center"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            limit={2}
-          />
+          <ServiceProvider>
+            <MenubarWrapper ref={menubarRef} />
+            <Toolbar ref={toolbarRef} />
+            <Board height={boardHeight} />
+            <Footer ref={footerRef} />
+            <ToastContainer
+              position="bottom-center"
+              autoClose={5000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick={true}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              limit={2}
+            />
+          </ServiceProvider>
         </ReactFlowProvider>
       </SimulationProvider>
     </AppProvider>
