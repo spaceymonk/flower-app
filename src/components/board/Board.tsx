@@ -27,6 +27,9 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
 
+  /* -------------------------------------------------------------------------- */
+  /*                              Adapter Functions                             */
+  /* -------------------------------------------------------------------------- */
   const handleNodeChange = (nodeChanges: NodeChange[]) => {
     nodeChanges.forEach((nc) => {
       if (nc.type === 'position') {
@@ -40,9 +43,13 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   };
 
   const handleEdgeChange = (edgeChanges: EdgeChange[]) => {
+    edgeChanges.forEach((ec) => {
+      if (ec.type === 'remove') {
+        connectionService.delete(ec.id);
+      }
+    });
     onEdgesChange(edgeChanges);
-  }
-
+  };
   const handleConnectionCreate = (connection: Connection) => {
     const dto: CreateConnectionDto = {
       sourceId: throwErrorIfNull(connection.source),
@@ -61,11 +68,18 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     };
     connectionService.update(oldEdge.id, dto);
   };
+
+  /* -------------------------------------------------------------------------- */
+  /*                            Behavioural Functions                           */
+  /* -------------------------------------------------------------------------- */
   const handleNodeDoubleClick = (event: any, node: Node<BlockData>) => {
     const block = blockRepository.findById(node.id).orElse(null);
     setDblClkNode(block);
   };
 
+  /* -------------------------------------------------------------------------- */
+  /*                                 JSX Return                                 */
+  /* -------------------------------------------------------------------------- */
   return (
     <>
       <div id="board" style={{ height: height + 'px', width: '100%' }}>

@@ -45,6 +45,11 @@ export class ConnectionService implements IConnectionService {
     return null;
   }
 
+  public delete(id: string): void {
+    const c = this._connectionRepository.findById(id).orElseThrow(new Error('Connection not found'));
+    this._connectionRepository.delete(c);
+  }
+
   public isValidConnection(c: Connection): boolean {
     // refuse self connection
     if (c.sourceId === c.targetId) {

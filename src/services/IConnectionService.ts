@@ -8,4 +8,5 @@ export interface IConnectionService {
   isValidOnUpdate(oldConnection: Connection, newConnection: Connection): boolean;
   create(createConnectionDto: CreateConnectionDto): Connection | null;
   update(id: string, updateConnectionDto: UpdateConnectionDto): Connection | null;
+  delete(id: string): void;
 }
