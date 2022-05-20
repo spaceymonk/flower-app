@@ -2,7 +2,7 @@ import { faFolder, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
-import InitialValues from '../../../config/InitialValues';
+import LocalStorageManager from '../../../config/LocalStorageManager';
 import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
 import PropTypes from 'prop-types';
@@ -40,7 +40,7 @@ export function OpenModal({ show, onClose }: OpenModalProps) {
   }
   function handleRestoreCheckpoint() {
     try {
-      projectService.load(InitialValues.get());
+      projectService.load(LocalStorageManager.get());
       canvasFacade.fitView();
       onClose();
       toast.success('Last save restored!');

@@ -1,6 +1,6 @@
 import FileSaver from 'file-saver';
 import { toast } from 'react-toastify';
-import InitialValues from '../../config/InitialValues';
+import LocalStorageManager from '../../config/LocalStorageManager';
 import { ProjectDataSchema } from '../../config/ProjectDataValidation';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
@@ -40,7 +40,7 @@ export class ProjectService implements IProjectService {
     window.localStorage.setItem(nameof<ProjectData>('connections'), JSON.stringify(pd.connections));
     window.localStorage.setItem(nameof<ProjectData>('title'), pd.title);
     window.localStorage.setItem(nameof<ProjectData>('inputParams'), pd.inputParams);
-    InitialValues.refresh();
+    LocalStorageManager.refresh();
   }
   public download(pd: ProjectData): void {
     const blob = new Blob([JSON.stringify(pd, null, 2)], { type: 'application/json' });

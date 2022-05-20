@@ -8,7 +8,7 @@ import { IConnectionRepository } from '../../repositories/IConnectionRepository'
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 import { PathMapping } from '../helpers/SimulationHelper';
-import InitialValues from '../../config/InitialValues';
+import LocalStorageManager from '../../config/LocalStorageManager';
 
 export class ExportService implements IExportService {
   private _flowService: IFlowService;
@@ -22,7 +22,7 @@ export class ExportService implements IExportService {
   }
 
   public async toPNG(): Promise<void> {
-    const pd = InitialValues.get();
+    const pd = LocalStorageManager.get();
     const blob = await domtoimage.toBlob(throwErrorIfNull(document.getElementById('board')), { bgcolor: '#fff' });
     FileSaver.saveAs(blob, pd.title + '.png');
   }

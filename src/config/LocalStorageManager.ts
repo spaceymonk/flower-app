@@ -10,7 +10,7 @@ export const ProjectNameOptions = {
   separator: '-',
 };
 
-class Initial {
+class LocalStorageManager {
   public title: string = '';
   public defaultBlocks: Block[] = [];
   public defaultConnections: Connection[] = [];
@@ -49,4 +49,4 @@ class Initial {
   }
 }
 
-export default new Initial();
+export default new LocalStorageManager();
