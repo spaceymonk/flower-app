@@ -11,25 +11,25 @@ export const ProjectNameOptions = {
 };
 
 class LocalStorageManager {
-  public title: string = '';
-  public defaultBlocks: Block[] = [];
-  public defaultConnections: Connection[] = [];
-  public inputParams: string = '';
+  private _title: string = '';
+  private _defaultBlocks: Block[] = [];
+  private _defaultConnections: Connection[] = [];
+  private _inputParams: string = '';
 
   constructor() {
     this.refresh();
   }
 
-  refresh(): void {
+  public refresh(): void {
     const storageNodes = window.localStorage.getItem(nameof<ProjectData>('blocks')) || '[]';
     const storageConnections = window.localStorage.getItem(nameof<ProjectData>('connections')) || '[]';
-    this.defaultBlocks = JSON.parse(storageNodes).map((json: any) => BlockCreateFactory.fromJSON(json));
-    this.defaultConnections = JSON.parse(storageConnections);
-    this.title = window.localStorage.getItem(nameof<ProjectData>('title')) || uniqueNamesGenerator(ProjectNameOptions);
-    this.inputParams = window.localStorage.getItem(nameof<ProjectData>('inputParams')) || '';
+    this._defaultBlocks = JSON.parse(storageNodes);
+    this._defaultConnections = JSON.parse(storageConnections);
+    this._title = window.localStorage.getItem(nameof<ProjectData>('title')) || uniqueNamesGenerator(ProjectNameOptions);
+    this._inputParams = window.localStorage.getItem(nameof<ProjectData>('inputParams')) || '';
   }
 
-  empty(): ProjectData {
+  public empty(): ProjectData {
     return {
       title: uniqueNamesGenerator(ProjectNameOptions),
       blocks: [],
@@ -38,12 +38,12 @@ class LocalStorageManager {
     };
   }
 
-  get(): ProjectData {
+  public get(): ProjectData {
     return {
-      title: this.title,
-      blocks: this.defaultBlocks,
-      connections: this.defaultConnections,
-      inputParams: this.inputParams,
+      title: this._title,
+      blocks: this._defaultBlocks.map((json: any) => BlockCreateFactory.fromJSON(json)),
+      connections: this._defaultConnections.map((json: any) => json),
+      inputParams: this._inputParams,
     };
   }
 }

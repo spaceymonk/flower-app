@@ -14,13 +14,14 @@ const AppContext = React.createContext<AppContextType | null>(null);
  * This component is used to provide the project data to all the components.
  */
 export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => {
-  const [title, setTitle] = React.useState<string>(LocalStorageManager.title);
-  const [inputParams, setInputParams] = React.useState<string>(LocalStorageManager.inputParams);
-  const [blocks, setBlocks] = React.useState<Block[]>(LocalStorageManager.defaultBlocks);
-  const [connections, setConnections] = React.useState<Connection[]>(LocalStorageManager.defaultConnections);
+  const projectData = LocalStorageManager.get();
+  const [title, setTitle] = React.useState<string>(projectData.title);
+  const [inputParams, setInputParams] = React.useState<string>(projectData.inputParams);
+  const [blocks, setBlocks] = React.useState<Block[]>(projectData.blocks);
+  const [connections, setConnections] = React.useState<Connection[]>(projectData.connections);
 
-  const nodesState = useNodesState(LocalStorageManager.defaultBlocks.map((b) => BlockAdapter.toNode(b)));
-  const edgesState = useEdgesState(LocalStorageManager.defaultConnections.map((c) => ConnectionAdapter.toEdge(c)));
+  const nodesState = useNodesState(projectData.blocks.map((b) => BlockAdapter.toNode(b)));
+  const edgesState = useEdgesState(projectData.connections.map((c) => ConnectionAdapter.toEdge(c)));
 
   const value: AppContextType = {
     getTitle: () => title,

@@ -32,10 +32,10 @@ export class ProjectService implements IProjectService {
   public load(pd: ProjectData): void {
     this._blocksRepository.clear();
     this._connectionRepository.clear();
-    this._blocksRepository.saveAll(pd.blocks);
-    this._connectionRepository.saveAll(pd.connections);
     this._appContext.setTitle(pd.title);
     this._appContext.setInputParams(pd.inputParams);
+    this._blocksRepository.saveAll(pd.blocks);
+    this._connectionRepository.saveAll(pd.connections);
   }
   public save(pd: ProjectData): void {
     window.localStorage.clear();

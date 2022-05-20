@@ -27,7 +27,7 @@ export function OpenModal({ show, onClose }: OpenModalProps) {
 
   function handleOpen() {
     try {
-      projectService.open(throwErrorIfNull(file), (content: ProjectData) => {
+      projectService.open(throwErrorIfNull(file, 'File could not opened!'), (content: ProjectData) => {
         projectService.load(content);
         toast.success('Project loaded!');
       });
