@@ -59,6 +59,10 @@ export class BlockRepository implements IBlockRepository {
   public deleteAll(bs: Block[]): void {
     bs.forEach((b) => this.delete(b));
   }
+  public clear(): void {
+    this._setBlocks([]);
+    this._setNodes([]);
+  }
   public findById(id: string): Optional<Block> {
     return new Optional(this._getBlocks().find((b) => b.id === id));
   }

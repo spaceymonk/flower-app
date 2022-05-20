@@ -65,6 +65,10 @@ export class ConnectionRepository implements IConnectionRepository {
   public deleteAll(cs: Connection[]): void {
     cs.forEach((c) => this.delete(c));
   }
+  public clear(): void {
+    this._setConnections(() => []);
+    this._setEdges(() => []);
+  }
   public findById(id: string): Optional<Connection> {
     return new Optional(this._getConnections().find((c) => c.id === id));
   }
