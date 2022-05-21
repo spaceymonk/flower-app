@@ -1,4 +1,4 @@
-import { Point2D } from '.';
+import { Point2D } from '../types';
 
 export interface ICanvasFacade {
   fitView(): void;

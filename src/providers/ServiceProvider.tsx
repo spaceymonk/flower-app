@@ -1,6 +1,6 @@
 import React from 'react';
 import { useReactFlow } from 'react-flow-renderer';
-import CanvasFacade from '../adapters/CanvasFacade';
+import CanvasFacade from '../services/impl/CanvasFacade';
 import { IBlockRepository } from '../repositories/IBlockRepository';
 import { IConnectionRepository } from '../repositories/IConnectionRepository';
 import { BlockRepository } from '../repositories/impl/BlockRepository';
@@ -19,10 +19,10 @@ import { SimulationService } from '../services/impl/SimulationService';
 import { IProjectService } from '../services/IProjectService';
 import { ISimulationControllerService } from '../services/ISimulationControllerService';
 import { ISimulationService } from '../services/ISimulationService';
-import { ICanvasFacade } from '../types/ICanvasFacade';
 import { throwErrorIfNull } from '../util';
 import { useAppContext } from './AppProvider';
 import { useSimulationContext } from './SimulationProvider';
+import { ICanvasFacade } from '../services/ICanvasFacade';
 
 type ServiceContextType = {
   canvasFacade: ICanvasFacade;

@@ -1,6 +1,6 @@
 import { ReactFlowInstance } from 'react-flow-renderer';
-import { Point2D } from '../types';
-import { ICanvasFacade } from '../types/ICanvasFacade';
+import { Point2D } from '../../types';
+import { ICanvasFacade } from '../ICanvasFacade';
 
 class CanvasFacade implements ICanvasFacade {
   private _logic: ReactFlowInstance;

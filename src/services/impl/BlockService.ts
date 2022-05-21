@@ -5,11 +5,11 @@ import Block from '../../model/Block';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { ContainerBlockHandle, GlowTypes } from '../../types';
-import { ICanvasFacade } from '../../types/ICanvasFacade';
 import { BlockCreateFactory, includesBlock } from '../helpers/BlockHelper';
 import { PositionGenerator } from '../../util/PositionGenerator';
 import { IBlockService } from '../IBlockService';
 import { BlockNotFoundError } from '../../exceptions/BlockNotFoundError';
+import { ICanvasFacade } from '../ICanvasFacade';
 
 export class BlockService implements IBlockService {
   private _blockRepository: IBlockRepository;
