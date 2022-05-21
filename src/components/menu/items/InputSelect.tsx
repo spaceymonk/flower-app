@@ -5,6 +5,15 @@ import { NavDropdown, Modal, Container, Form, Button } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import { useAppContext } from '../../../providers/AppProvider';
 import PropTypes from 'prop-types';
+import Editor from 'react-simple-code-editor';
+
+import './styles.css';
+
+const hightlightWithLineNumbers = (input: string) =>
+  input
+    .split('\n')
+    .map((line: string, i: number) => `<span class='editorLineNumber'>${i + 1}</span>${line}`)
+    .join('\n');
 
 export function InputSelectModal({ show, onClose }: InputSelectModalProps) {
   const { getInputParams, setInputParams } = useAppContext();
@@ -34,15 +43,16 @@ export function InputSelectModal({ show, onClose }: InputSelectModalProps) {
       <Modal.Body className="pb-5">
         <Container>
           <Form.Label className="mb-3">Enter input parameters of the project:</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={6}
+          <Editor
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onValueChange={(code) => setText(code)}
+            highlight={(code) => hightlightWithLineNumbers(code)}
             onKeyDown={(event) => {
               if (event.ctrlKey && event.key === 'Enter') handleSave();
             }}
-            placeholder="Input parameters"
+            padding={10}
+            textareaId="codeArea"
+            className="editor"
           />
         </Container>
       </Modal.Body>
