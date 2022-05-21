@@ -1,17 +1,19 @@
-import { faFileExport } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faFileExport, faGears } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NavDropdown, Modal, Button, Container, Row, Col } from 'react-bootstrap';
+import { NavDropdown, Modal, Button, Container, Row, Col, Tooltip } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { ExportType, GlowTypes } from '../../../types';
 import React from 'react';
 import { InvalidDecisionError, MultipleStartError, NotConnectedError } from '../../../exceptions';
-import { CopyBlock, a11yLight } from 'react-code-blocks';
 import { useServiceContext } from '../../../providers/ServiceProvider';
+import Editor from 'react-simple-code-editor';
+import { hightlightWithLineNumbers } from '../../common/EditorHelper';
+import CustomOverlay from '../../common/CustomOverlay';
 
 export function ExportModal({ show, onClose }: ExportModalProps) {
-  const { exportService, blockService} = useServiceContext();
+  const { exportService, blockService } = useServiceContext();
 
   const [code, setCode] = React.useState('');
 
@@ -36,6 +38,10 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
     setCode('');
     onClose();
   }
+  function handleCopy() {
+    navigator.clipboard.writeText(code);
+    toast.success('Code copied to clipboard!');
+  }
 
   return (
     <Modal show={show} size="lg" centered onHide={handleClose} scrollable>
@@ -44,33 +50,43 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
           <FontAwesomeIcon size="lg" className="me-2" icon={faFileExport} /> Export Project
         </h4>
       </Modal.Header>
-      <Modal.Body className="pb-5">
+      <Modal.Body className="pb-4">
         <Container>
           <Row>
             <div className="d-flex align-items-center">
               <h4 className="me-3">Pseudocode</h4>
-              {code ? (
-                <Button size="sm" onClick={() => setCode('')} variant="outline-success">
-                  Close
-                </Button>
-              ) : (
-                <Button size="sm" onClick={() => handleExport(ExportType.CODE)} variant="outline-info">
-                  Generate
-                </Button>
+              {code ? <></> : (
+                <CustomOverlay overlay={<Tooltip>Generate</Tooltip>}>
+                  <Button size="sm" onClick={() => handleExport(ExportType.CODE)} variant="info">
+                    <FontAwesomeIcon icon={faGears} />
+                  </Button>
+                </CustomOverlay>
               )}
             </div>
           </Row>
           {code && (
             <Row>
-              <div className="border border-3 my-2" style={{ fontFamily: 'Roboto Mono, monospace' }}>
-                <CopyBlock text={code} codeBlock language="text" showLineNumbers={true} theme={a11yLight} wrapLongLines={false} />
+              <div className="position-relative">
+                <CustomOverlay overlay={<Tooltip>Copy to Clipboard</Tooltip>}>
+                  <Button onClick={handleCopy} variant="dark" className="position-absolute top-0 end-0 mt-2 me-4" style={{ zIndex: 1 }}>
+                    <FontAwesomeIcon icon={faCopy} />
+                  </Button>
+                </CustomOverlay>
+                <Editor
+                  readOnly
+                  value={code}
+                  onValueChange={() => {}}
+                  highlight={(code) => hightlightWithLineNumbers(code)}
+                  padding={10}
+                  textareaId="codeArea"
+                  className="editor"
+                />
               </div>
-              <div className="text-center"></div>
             </Row>
           )}
-          <Row className="mt-4">
-            <Col className="text-center">
-              <Button onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
+          <Row className="mt-5">
+            <Col className="">
+              <Button variant='info' onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
             </Col>
           </Row>
         </Container>

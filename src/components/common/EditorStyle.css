@@ -2,6 +2,7 @@
   counter-reset: line;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .editor #codeArea {
