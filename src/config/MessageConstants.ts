@@ -59,6 +59,7 @@ const T = {
       name: 'Name',
       value: 'Value',
     },
+    empty: 'No watches yet',
   },
   notFound: {
     title: 'Requested page could not found!',

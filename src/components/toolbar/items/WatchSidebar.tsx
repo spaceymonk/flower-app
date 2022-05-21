@@ -42,22 +42,26 @@ function WatchSidebar() {
           <Offcanvas.Title>{T.watchesSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body style={{ filter: isRunning() ? 'opacity(1)' : 'opacity(.5)' }}>
-          <Table>
-            <thead>
-              <tr>
-                <th>{T.watchesSidebar.table.name}</th>
-                <th>{T.watchesSidebar.table.value}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.keys(variableTableRef.current).map((key) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{displayValue(variableTableRef.current[key])}</td>
+          {Object.keys(variableTableRef.current).length === 0 ? (
+            <p>{T.watchesSidebar.empty}</p>
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>{T.watchesSidebar.table.name}</th>
+                  <th>{T.watchesSidebar.table.value}</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {Object.keys(variableTableRef.current).map((key) => (
+                  <tr key={key}>
+                    <td>{key}</td>
+                    <td>{displayValue(variableTableRef.current[key])}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </Offcanvas.Body>
       </Offcanvas>
     </>
