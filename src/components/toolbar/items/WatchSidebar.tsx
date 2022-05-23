@@ -19,8 +19,9 @@ function WatchSidebar() {
   React.useEffect(() => {
     if (isRunning()) {
       intervalRef.current = setInterval(() => {
+        console.count('WatchSidebar');
         forceRender(new Date());
-      }, 200);
+      }, 250);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -42,7 +43,7 @@ function WatchSidebar() {
           <Offcanvas.Title>{T.watchesSidebar.title}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body style={{ filter: isRunning() ? 'opacity(1)' : 'opacity(.5)' }}>
-          {Object.keys(variableTableRef.current).length === 0 ? (
+          {Object.keys(variableTableRef.current).length <= 1 ? (
             <p>{T.watchesSidebar.empty}</p>
           ) : (
             <Table>
@@ -53,12 +54,14 @@ function WatchSidebar() {
                 </tr>
               </thead>
               <tbody>
-                {Object.keys(variableTableRef.current).map((key) => (
-                  <tr key={key}>
-                    <td>{key}</td>
-                    <td>{displayValue(variableTableRef.current[key])}</td>
-                  </tr>
-                ))}
+                {Object.keys(variableTableRef.current)
+                  .slice(1, undefined)
+                  .map((key) => (
+                    <tr key={key}>
+                      <td>{key}</td>
+                      <td>{displayValue(variableTableRef.current[key])}</td>
+                    </tr>
+                  ))}
               </tbody>
             </Table>
           )}

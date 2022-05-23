@@ -35,7 +35,9 @@ export class SimulationService implements ISimulationService {
     const [startBlock] = this._flowService.validate();
     this.updateCurrentBlock(startBlock);
     this._simulationContext.inputParamCursorRef.current = 0;
-    this._simulationContext.variableTableRef.current = {};
+    this._simulationContext.variableTableRef.current = {
+      Math: Math,
+    };
   }
 
   public hasNext(): boolean {
