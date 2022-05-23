@@ -4,7 +4,7 @@ import { NavDropdown, Modal, Container, Table, Button } from 'react-bootstrap';
 import useToggle from '../../../hooks/useToggle';
 import PropTypes from 'prop-types';
 
-export function StatisticsModal({ show, onClose }: StatisticsModalProps) {
+export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
   return (
     <Modal show={show} size="lg" centered onHide={onClose} scrollable>
       <Modal.Header closeButton>
@@ -26,18 +26,18 @@ export function StatisticsModal({ show, onClose }: StatisticsModalProps) {
   );
 }
 
-StatisticsModal.propTypes = {
+AnalyzeModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-export interface StatisticsModalProps extends PropTypes.InferProps<typeof StatisticsModal.propTypes> {}
+export interface AnalyzeModalProps extends PropTypes.InferProps<typeof AnalyzeModal.propTypes> {}
 
-export const StatisticsMenuItem = () => {
+export const AnalyzeMenuItem = () => {
   const [show, toggleShow] = useToggle();
   return (
     <>
-      <StatisticsModal show={show} onClose={toggleShow} />
+      <AnalyzeModal show={show} onClose={toggleShow} />
       <NavDropdown.Item onClick={toggleShow}>
         <FontAwesomeIcon size="sm" className="me-2" icon={faInfoCircle} /> Statistics
       </NavDropdown.Item>

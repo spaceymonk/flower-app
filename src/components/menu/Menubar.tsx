@@ -8,7 +8,7 @@ import { InputSelectMenuItem } from './items/InputSelect';
 import { NewMenuItem } from './items/New';
 import { OpenMenuItem } from './items/Open';
 import { SaveMenuItem } from './items/Save';
-import { StatisticsMenuItem } from './items/Statistics';
+import { AnalyzeMenuItem } from './items/Analyze';
 
 import './menubar.css';
 
@@ -27,7 +27,7 @@ function Menubar() {
         <FindMenuItem />
         <InputSelectMenuItem />
         <NavDropdown.Divider />
-        <StatisticsMenuItem />
+        <AnalyzeMenuItem />
       </NavDropdown>
       <NavDropdown className="p-0" title="Help" id="nav-help-dropdown">
         <HowToMenuItem />
