@@ -9,5 +9,6 @@ export interface IRepository<Entity> {
   findAllByIds(ids: string[]): Entity[];
   existsById(id: string): boolean;
   getAll(): Entity[];
+  countAll(): number;
   clear(): void;
 }

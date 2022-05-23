@@ -68,6 +68,10 @@ export type Point2D = {
   y: number;
 };
 
+export enum AnalyzeTypes {
+  cyclomaticComplexity = 'cyclomaticComplexity',
+}
+
 export type AppContextType = {
   getTitle: () => string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;

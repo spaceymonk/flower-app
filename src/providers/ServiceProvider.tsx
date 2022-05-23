@@ -23,6 +23,8 @@ import { throwErrorIfNull } from '../util';
 import { useAppContext } from './AppProvider';
 import { useSimulationContext } from './SimulationProvider';
 import { ICanvasFacade } from '../services/ICanvasFacade';
+import { IAnalyzeService } from '../services/IAnalyzeService';
+import { AnalyzeService } from '../services/impl/AnalyzeService';
 
 type ServiceContextType = {
   canvasFacade: ICanvasFacade;
@@ -35,6 +37,7 @@ type ServiceContextType = {
   flowService: IFlowService;
   simulationService: ISimulationService;
   simulationControllerService: ISimulationControllerService;
+  analyzeService: IAnalyzeService;
 };
 
 const ServiceContext = React.createContext<ServiceContextType | null>(null);
@@ -60,7 +63,10 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     () => new ConnectionService(connectionRepository, blockRepository),
     [connectionRepository, blockRepository]
   );
-  const projectService = React.useMemo<IProjectService>(() => new ProjectService(appContext, blockRepository, connectionRepository), [appContext, blockRepository, connectionRepository]);
+  const projectService = React.useMemo<IProjectService>(
+    () => new ProjectService(appContext, blockRepository, connectionRepository),
+    [appContext, blockRepository, connectionRepository]
+  );
   const blockService = React.useMemo<IBlockService>(
     () => new BlockService(blockRepository, connectionRepository, canvasFacade),
     [blockRepository, canvasFacade, connectionRepository]
@@ -69,6 +75,11 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     () => new FlowService(blockService, blockRepository, connectionRepository),
     [blockRepository, blockService, connectionRepository]
   );
+  const analyzeService = React.useMemo<IAnalyzeService>(
+    () => new AnalyzeService(blockRepository, connectionRepository, flowService),
+    [blockRepository, connectionRepository, flowService]
+  );
+
   const exportService = React.useMemo<IExportService>(
     () => new ExportService(flowService, blockService, connectionRepository),
     [blockService, connectionRepository, flowService]
@@ -95,6 +106,7 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     flowService: flowService,
     simulationService: simulationService,
     simulationControllerService: simulationControllerService,
+    analyzeService: analyzeService,
   };
 
   return <ServiceContext.Provider value={value}>{props.children}</ServiceContext.Provider>;

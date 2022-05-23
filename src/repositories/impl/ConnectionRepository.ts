@@ -78,4 +78,7 @@ export class ConnectionRepository implements IConnectionRepository {
   public getAll(): Connection[] {
     return this._getConnections();
   }
+  public countAll(): number {
+    return this._getConnections().length;
+  }
 }

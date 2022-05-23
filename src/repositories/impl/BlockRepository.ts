@@ -27,6 +27,9 @@ export class BlockRepository implements IBlockRepository {
   public getAll(): Block[] {
     return this._getBlocks();
   }
+  public countAll(): number {
+    return this._getBlocks().length;
+  }
   public save(block: Block): void {
     this._setNodes((nodes) => {
       if (nodes.some((n) => n.id === block.id)) {
