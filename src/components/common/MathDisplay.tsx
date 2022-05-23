@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 
-export function MathDisplay({ text }: MathDisplayProps) {
+import './MathDisplay.css';
+
+export function MathDisplay({ text, display }: MathDisplayProps) {
+  let expr = '$' + text + '$';
+  if (display) expr = '$$' + text + '$$';
   return (
     <MathJaxContext config={config} version={3}>
       <MathJax dynamic inline>
-        {text}
+        {expr}
       </MathJax>
     </MathJaxContext>
   );
@@ -13,6 +17,7 @@ export function MathDisplay({ text }: MathDisplayProps) {
 
 MathDisplay.propTypes = {
   text: PropTypes.string.isRequired,
+  display: PropTypes.bool,
 };
 
 export interface MathDisplayProps extends PropTypes.InferProps<typeof MathDisplay.propTypes> {}
