@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { useServiceContext } from '../../../providers/ServiceProvider';
 import React from 'react';
 import { AnalyzeTypes } from '../../../types';
-import { MathDisplay } from '../../common/MathDisplay';
 
 type State = {
   [key in AnalyzeTypes]: any;
@@ -17,11 +16,11 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
 
   const [isLoading, setIsLoading] = React.useState<State>({
     [AnalyzeTypes.cyclomaticComplexity]: true,
-    [AnalyzeTypes.bigO]: true,
+    [AnalyzeTypes.blockCountByTypes]: true,
   });
   const [results, setResults] = React.useState<State>({
     [AnalyzeTypes.cyclomaticComplexity]: null,
-    [AnalyzeTypes.bigO]: null,
+    [AnalyzeTypes.blockCountByTypes]: null,
   });
 
   const resolveAnalyze = (key: AnalyzeTypes, promise: Promise<any>) => {
@@ -55,6 +54,7 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
   React.useEffect(() => {
     if (show) {
       resolveAnalyze(AnalyzeTypes.cyclomaticComplexity, analyzeService.getCyclomaticComplexity());
+      resolveAnalyze(AnalyzeTypes.blockCountByTypes, analyzeService.getBlockCountByTypes());
     }
   }, [analyzeService, show]);
 
@@ -72,19 +72,13 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
               <td>
                 <strong>Cyclomatic Complexity</strong>
               </td>
-              <td>
-                {isLoading[AnalyzeTypes.cyclomaticComplexity] ? (
-                  <Spinner animation="border" />
-                ) : (
-                  <MathDisplay text={results[AnalyzeTypes.cyclomaticComplexity]} />
-                )}
-              </td>
+              <td>{isLoading[AnalyzeTypes.cyclomaticComplexity] ? <Spinner animation="border" /> : CyclomaticComplexityDisplay(results)}</td>
             </tr>
             <tr>
               <td>
-                <strong>Big O Complexity</strong>
+                <strong>Block Counts</strong>
               </td>
-              <td>{isLoading[AnalyzeTypes.bigO] ? <Spinner animation="border" /> : <MathDisplay text={results[AnalyzeTypes.bigO]} />}</td>
+              <td>{isLoading[AnalyzeTypes.blockCountByTypes] ? <Spinner animation="border" /> : BlockCountTable(results)}</td>
             </tr>
           </tbody>
         </Table>
@@ -116,3 +110,41 @@ export const AnalyzeMenuItem = () => {
 };
 
 export interface AnalyzeModalProps extends PropTypes.InferProps<typeof AnalyzeModal.propTypes> {}
+
+function CyclomaticComplexityDisplay(results: State): React.ReactNode {
+  const complexity = results[AnalyzeTypes.cyclomaticComplexity];
+  if (complexity < 5) {
+    return <span className="text-success">{complexity}</span>;
+  } else if (complexity < 8) {
+    return <span className="text-warning">{complexity}</span>;
+  } else {
+    return <span className="text-danger">{complexity}</span>;
+  }
+}
+
+function BlockCountTable(results: State): React.ReactNode {
+  return (
+    <Table>
+      <thead>
+        <tr>
+          <th>Block Type</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.keys(results[AnalyzeTypes.blockCountByTypes]).map((key: string) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{results[AnalyzeTypes.blockCountByTypes][key]}</td>
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>Total</td>
+          <td>{Object.values<number>(results[AnalyzeTypes.blockCountByTypes]).reduce((a, b) => a + b, 0)}</td>
+        </tr>
+      </tfoot>
+    </Table>
+  );
+}

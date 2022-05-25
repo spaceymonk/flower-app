@@ -1,5 +1,6 @@
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
+import { BlockTypes } from '../../types';
 import { IAnalyzeService } from '../IAnalyzeService';
 import { IFlowService } from '../IFlowService';
 
@@ -26,6 +27,13 @@ export class AnalyzeService implements IAnalyzeService {
       const connectionCount = this._connectionRepository.countAll();
       const complexity = connectionCount - blockCount + 2;
       yay(complexity);
+    });
+  }
+
+  public async getBlockCountByTypes(): Promise<{ [type in BlockTypes]: number }> {
+    return new Promise((yay, nay) => {
+      const blockCounts = this._blockRepository.countByTypes();
+      yay(blockCounts);
     });
   }
 }

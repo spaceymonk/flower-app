@@ -19,7 +19,6 @@ function WatchSidebar() {
   React.useEffect(() => {
     if (isRunning()) {
       intervalRef.current = setInterval(() => {
-        console.count('WatchSidebar');
         forceRender(new Date());
       }, 250);
     } else {

@@ -70,7 +70,7 @@ export type Point2D = {
 
 export enum AnalyzeTypes {
   cyclomaticComplexity = 'cyclomaticComplexity',
-  bigO = 'bigO',
+  blockCountByTypes = 'blockCountByTypes',
 }
 
 export type AppContextType = {

@@ -1,7 +1,7 @@
 import { IBlockRepository } from '../IBlockRepository';
 import Block from '../../model/Block';
 import { Optional } from '../../util/Optional';
-import { BlockData } from '../../types';
+import { BlockData, BlockTypes } from '../../types';
 import { Node } from 'react-flow-renderer';
 import BlockAdapter from '../../adapters/BlockAdapter';
 
@@ -30,6 +30,22 @@ export class BlockRepository implements IBlockRepository {
   public countAll(): number {
     return this._getBlocks().length;
   }
+  public countByTypes(): { [type in BlockTypes]: number } {
+    const counts: { [type in BlockTypes]: number } = {
+      [BlockTypes.DECISION_BLOCK]: 0,
+      [BlockTypes.LOAD_BLOCK]: 0,
+      [BlockTypes.STORE_BLOCK]: 0,
+      [BlockTypes.START_BLOCK]: 0,
+      [BlockTypes.STOP_BLOCK]: 0,
+      [BlockTypes.STATEMENT_BLOCK]: 0,
+      [BlockTypes.WHILE_LOOP_BLOCK]: 0,
+    };
+    this._getBlocks().forEach((b) => {
+      counts[b.type] = (counts[b.type] || 0) + 1;
+    });
+    return counts;
+  }
+
   public save(block: Block): void {
     this._setNodes((nodes) => {
       if (nodes.some((n) => n.id === block.id)) {
