@@ -9,7 +9,7 @@ class DecisionBlock extends SimpleBlock {
     super(BlockTypes.DECISION_BLOCK, position);
   }
 
-  public override eval(memoryRef: MutableRefObject<Memory>): string {
+  public override async eval(memoryRef: MutableRefObject<Memory>) {
     const code = this.text.trim();
     const ast = parse(code.trim());
     const result = !!evaluate(ast, memoryRef.current);

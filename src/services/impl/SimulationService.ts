@@ -1,7 +1,7 @@
 import Block from '../../model/Block';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
-import { AppContextType, GlowTypes, SimulationContextType } from '../../types';
+import { GlowTypes, SimulationContextType } from '../../types';
 import { throwErrorIfNull } from '../../util';
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
@@ -13,28 +13,24 @@ export class SimulationService implements ISimulationService {
   private _blockRepository: IBlockRepository;
   private _connectionRepository: IConnectionRepository;
   private _simulationContext: SimulationContextType;
-  private _appContext: AppContextType;
 
   constructor(
     flowService: IFlowService,
     blockService: IBlockService,
     blockRepository: IBlockRepository,
     connectionRepository: IConnectionRepository,
-    context: SimulationContextType,
-    appContext: AppContextType
+    context: SimulationContextType
   ) {
     this._flowService = flowService;
     this._blockService = blockService;
     this._blockRepository = blockRepository;
     this._connectionRepository = connectionRepository;
     this._simulationContext = context;
-    this._appContext = appContext;
   }
 
   public initialize(): void {
     const [startBlock] = this._flowService.validate();
     this.updateCurrentBlock(startBlock);
-    this._simulationContext.inputParamCursorRef.current = 0;
     this._simulationContext.variableTableRef.current = {
       Math: Math,
     };
@@ -46,11 +42,10 @@ export class SimulationService implements ISimulationService {
     return this._connectionRepository.findAllBySourceId(currentBlock.id).length > 0;
   }
 
-  public process(): void {
+  public async process(): Promise<void> {
     const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
-    const nextBlock = currentBlock.eval(this._simulationContext.variableTableRef, {
-      inputParams: this._appContext.getInputParams(),
-      inputParamIter: this._simulationContext.inputParamCursorRef,
+    const nextBlock = await currentBlock.eval(this._simulationContext.variableTableRef, {
+      inputHandler: this._simulationContext.inputHandler.current,
     });
     this.next(nextBlock);
   }

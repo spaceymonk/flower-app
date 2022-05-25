@@ -3,17 +3,20 @@ import Block from '../model/Block';
 import { Memory } from '../services/helpers/SimulationHelper';
 import { SimulationActions, SimulationContextType } from '../types';
 import { throwErrorIfNull } from '../util';
+import { InputHandler } from '../util/InputHandler';
+import { useAppContext } from './AppProvider';
 
 const SimulationContext = React.createContext<SimulationContextType | null>(null);
 
 export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNode>) => {
+  const { getInputParams } = useAppContext();
   const [running, setRunning] = React.useState(false);
   const variableTableRef = React.useRef<Memory>({});
   const currentBlockRef = React.useRef<Block | null>(null);
   const speedInMsRef = React.useRef<number>(500);
   const actionRef = React.useRef(SimulationActions.none);
   const jumpNextBlockRef = React.useRef(false);
-  const inputParamCursorRef = React.useRef(0);
+  const inputHandler = React.useRef(new InputHandler(getInputParams()));
 
   const value: SimulationContextType = {
     isRunning: () => running,
@@ -24,7 +27,7 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
     currentBlockRef,
     actionRef,
     jumpNextBlockRef,
-    inputParamCursorRef,
+    inputHandler,
   };
   return <SimulationContext.Provider value={value}>{props.children}</SimulationContext.Provider>;
 };

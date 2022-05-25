@@ -15,18 +15,23 @@ import { CreateConnectionDto } from '../../dto/CreateConnectionDto';
 import { throwErrorIfNull } from '../../util';
 import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
 import { UpdateBlockDto } from '../../dto/UpdateBlockDto';
+import { InputModal } from './InputModal';
+import { useSimulationContext } from '../../providers/SimulationProvider';
+import { useDeferredPromise } from '../../hooks/useDefferedPromise';
 
 function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const paneLockConfigs = usePaneLock();
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
-  const { nodesState, edgesState } = useAppContext();
   const { connectionService, blockRepository, blockService } = useServiceContext();
-
-  const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
-  const [showModal, setShowModal] = React.useState(false);
-
+  const { inputHandler } = useSimulationContext();
+  const { nodesState, edgesState, setInputParams } = useAppContext();
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
+
+  const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
+  const [showModal, setShowModal] = React.useState({ block: false, input: false, output: false });
+  const [inputForVariable, setInputForVariable] = React.useState<string>('');
+  const { defer, deferRef } = useDeferredPromise<string | null>();
 
   /* -------------------------------------------------------------------------- */
   /*                              Adapter Functions                             */
@@ -81,8 +86,32 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const handleNodeDoubleClick = (event: any, node: Node<BlockData>) => {
     const block = blockRepository.findById(node.id).orElse(null);
     setDblClkNode(block);
-    setShowModal(true);
+    setShowModal((prev) => ({ ...prev, block: true }));
   };
+  const handleInputSubmit = (input: string | null) => {
+    throwErrorIfNull(deferRef.current, 'deferRef.current is null').resolve(input);
+    if (input) {
+      setInputParams(inputHandler.current.inputParams);
+    }
+  };
+  const handleBlockModalClose = () => {
+    setShowModal((prev) => ({ ...prev, block: false }));
+  };
+  const handleInputModalClose = () => {
+    setShowModal((prev) => ({ ...prev, input: false }));
+  };
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Side Effects                                */
+  /* -------------------------------------------------------------------------- */
+
+  React.useEffect(() => {
+    inputHandler.current.fetcher = async (name: string) => {
+      setInputForVariable(name);
+      setShowModal((prev) => ({ ...prev, input: true }));
+      return defer().promise;
+    };
+  }, [defer, inputHandler]);
 
   /* -------------------------------------------------------------------------- */
   /*                                 JSX Return                                 */
@@ -115,7 +144,8 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           </Controls>
         </ReactFlow>
       </div>
-      <BlockModalContainer block={dblClkNode} show={showModal} onClose={() => setShowModal(false)} />
+      <BlockModalContainer block={dblClkNode} show={showModal.block} onClose={handleBlockModalClose} />
+      <InputModal variableName={inputForVariable} onSubmit={handleInputSubmit} show={showModal.input} onClose={handleInputModalClose} />
     </>
   );
 }

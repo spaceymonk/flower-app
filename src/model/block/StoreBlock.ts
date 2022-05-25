@@ -9,7 +9,7 @@ class StoreBlock extends SimpleBlock {
     super(BlockTypes.STORE_BLOCK, position);
   }
 
-  public override eval(memoryRef: React.MutableRefObject<Memory>): null {
+  public override async eval(memoryRef: React.MutableRefObject<Memory>) {
     const code = this.text.trim();
     const tokens = code.split(', '); // @todo: bettter splitting!!!
     tokens.forEach((t) => {

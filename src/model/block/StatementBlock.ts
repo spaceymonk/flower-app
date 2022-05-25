@@ -10,7 +10,7 @@ class StatementBlock extends SimpleBlock {
     super(BlockTypes.STATEMENT_BLOCK, position);
   }
 
-  public override eval(memoryRef: React.MutableRefObject<Memory>): null {
+  public override async eval(memoryRef: React.MutableRefObject<Memory>) {
     const code = this.text.trim();
 
     const stmtMatch = code.match(stmtPattern);

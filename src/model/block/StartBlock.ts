@@ -6,7 +6,7 @@ class StartBlock extends SimpleBlock {
     super(BlockTypes.START_BLOCK, position);
   }
 
-  public override eval(): null {
+  public override async eval() {
     return null;
   }
   public override isSentinel(): boolean {

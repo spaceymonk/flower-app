@@ -3,6 +3,7 @@ import { Edge, Node, OnEdgesChange, OnNodesChange } from 'react-flow-renderer';
 import Block from '../model/Block';
 import Connection from '../model/Connection';
 import { Memory } from '../services/helpers/SimulationHelper';
+import { InputHandler } from '../util/InputHandler';
 
 export type ProjectData = {
   title: string;
@@ -95,5 +96,5 @@ export type SimulationContextType = {
   setSpeedInMs: (val: number) => number;
   actionRef: React.MutableRefObject<SimulationActions>;
   jumpNextBlockRef: React.MutableRefObject<boolean>;
-  inputParamCursorRef: React.MutableRefObject<number>;
+  inputHandler: React.MutableRefObject<InputHandler>;
 };

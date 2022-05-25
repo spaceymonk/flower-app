@@ -2,6 +2,7 @@
 import { v4 as uuid } from 'uuid';
 import { Memory } from '../services/helpers/SimulationHelper';
 import { BlockTypes, GlowTypes, Point2D } from '../types';
+import { InputHandler } from '../util/InputHandler';
 
 abstract class Block {
   protected _id: string;
@@ -26,10 +27,7 @@ abstract class Block {
     this._parentNodeId = null;
   }
 
-  public abstract eval(
-    memoryRef: React.MutableRefObject<Memory>,
-    options: { inputParams: string; inputParamIter: React.MutableRefObject<number> }
-  ): string | null;
+  public abstract eval(memoryRef: React.MutableRefObject<Memory>, options: { inputHandler: InputHandler }): Promise<string | null>;
   public abstract isContainer(): boolean;
   public isSentinel(): boolean {
     return false;

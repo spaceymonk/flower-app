@@ -6,7 +6,7 @@ class StopBlock extends SimpleBlock {
     super(BlockTypes.STOP_BLOCK, position);
   }
 
-  public override eval(): null {
+  public override async eval() {
     return null;
   }
 
