@@ -32,23 +32,29 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   /*                              Adapter Functions                             */
   /* -------------------------------------------------------------------------- */
   const handleNodeChange = (nodeChanges: NodeChange[]) => {
-    nodeChanges.forEach((nc) => {
+    const changes: NodeChange[] = [];
+    for (const nc of nodeChanges) {
       if (nc.type === 'position') {
         const dto: UpdateBlockDto = { position: nc.position };
         blockService.update(nc.id, dto);
       } else if (nc.type === 'remove') {
         blockService.delete(nc.id);
+      } else {
+        changes.push(nc);
       }
-    });
-    onNodesChange(nodeChanges);
+    }
+    onNodesChange(changes);
   };
   const handleEdgeChange = (edgeChanges: EdgeChange[]) => {
-    edgeChanges.forEach((ec) => {
+    const changes: EdgeChange[] = [];
+    for (const ec of edgeChanges) {
       if (ec.type === 'remove') {
         connectionService.delete(ec.id);
+      } else {
+        changes.push(ec);
       }
-    });
-    onEdgesChange(edgeChanges);
+    }
+    onEdgesChange(changes);
   };
   const handleConnectionCreate = (connection: Connection) => {
     const dto: CreateConnectionDto = {
