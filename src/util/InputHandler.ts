@@ -1,5 +1,3 @@
-import { throwErrorIfNull } from '.';
-
 export class InputHandler {
   private _index: number;
   private _inputParams: string[];
@@ -20,8 +18,12 @@ export class InputHandler {
       if (this._fetcher === undefined) {
         throw new Error(`No input on line ${this._index + 1}!`);
       }
-      const newParam = throwErrorIfNull(await this._fetcher(name), 'No input parameter supplied!');
-      this._inputParams.push(newParam);
+      const newParam = await this._fetcher(name);
+      if (newParam === null) {
+        throw new Error(`Please enter a value for "${name}"`);
+      } else {
+        this._inputParams.push(newParam);
+      }
     }
     const result = this._inputParams[this._index];
     this._index++;

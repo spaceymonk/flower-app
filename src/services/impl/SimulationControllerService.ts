@@ -63,7 +63,7 @@ export class SimulationControllerService implements ISimulationControllerService
   public run(): void {
     this._context.setRunning(true);
     toast.info('Simulation started!');
-    const simulationLoop = () => {
+    const simulationLoop = async () => {
       if (this._context.actionRef.current === SimulationActions.stop || !this._simulationService.hasNext()) {
         this._blockService.highlight(null, GlowTypes.NONE);
         this._context.setRunning(false);
@@ -72,10 +72,10 @@ export class SimulationControllerService implements ISimulationControllerService
       } else {
         try {
           if (this._context.actionRef.current === SimulationActions.continue) {
-            this._simulationService.process();
+            await this._simulationService.process();
           } else if (this._context.actionRef.current === SimulationActions.debug && this._context.jumpNextBlockRef.current) {
             this._context.jumpNextBlockRef.current = false;
-            this._simulationService.process();
+            await this._simulationService.process();
           }
           setTimeout(simulationLoop, this._context.getSpeedInMs());
         } catch (e: any) {
