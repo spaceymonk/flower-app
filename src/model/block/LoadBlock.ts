@@ -3,14 +3,14 @@ import { Memory } from '../../services/helpers/SimulationHelper';
 import { BlockTypes, Point2D } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
-import { InputHandler } from '../../util/InputHandler';
+import { EvalOptions } from '../Block';
 
 class LoadBlock extends SimpleBlock {
   constructor(position: Point2D) {
     super(BlockTypes.LOAD_BLOCK, position);
   }
 
-  public override async eval(memoryRef: MutableRefObject<Memory>, { inputHandler }: { inputHandler: InputHandler }) {
+  public override async eval(memoryRef: MutableRefObject<Memory>, { inputHandler }: EvalOptions) {
     const code = this.text.trim();
     const tokens = code.split(', '); // @todo: bettter splitting!!!
 

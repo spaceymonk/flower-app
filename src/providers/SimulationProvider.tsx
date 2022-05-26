@@ -4,6 +4,7 @@ import { Memory } from '../services/helpers/SimulationHelper';
 import { SimulationActions, SimulationContextType } from '../types';
 import { throwErrorIfNull } from '../util';
 import { InputHandler } from '../util/InputHandler';
+import { OutputHandler } from '../util/OutputHandler';
 import { useAppContext } from './AppProvider';
 
 const SimulationContext = React.createContext<SimulationContextType | null>(null);
@@ -17,6 +18,7 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
   const actionRef = React.useRef(SimulationActions.none);
   const jumpNextBlockRef = React.useRef(false);
   const inputHandler = React.useRef(new InputHandler(getInputParams()));
+  const outputHandler = React.useRef(new OutputHandler());
 
   const value: SimulationContextType = {
     isRunning: () => running,
@@ -28,6 +30,7 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
     actionRef,
     jumpNextBlockRef,
     inputHandler,
+    outputHandler,
   };
   return <SimulationContext.Provider value={value}>{props.children}</SimulationContext.Provider>;
 };

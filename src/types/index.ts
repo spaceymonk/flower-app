@@ -4,6 +4,7 @@ import Block from '../model/Block';
 import Connection from '../model/Connection';
 import { Memory } from '../services/helpers/SimulationHelper';
 import { InputHandler } from '../util/InputHandler';
+import { OutputHandler } from '../util/OutputHandler';
 
 export type ProjectData = {
   title: string;
@@ -97,4 +98,5 @@ export type SimulationContextType = {
   actionRef: React.MutableRefObject<SimulationActions>;
   jumpNextBlockRef: React.MutableRefObject<boolean>;
   inputHandler: React.MutableRefObject<InputHandler>;
+  outputHandler: React.MutableRefObject<OutputHandler>;
 };

@@ -46,6 +46,7 @@ export class SimulationService implements ISimulationService {
     const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
     const nextBlock = await currentBlock.eval(this._simulationContext.variableTableRef, {
       inputHandler: this._simulationContext.inputHandler.current,
+      outputHandler: this._simulationContext.outputHandler.current,
     });
     this.next(nextBlock);
   }
