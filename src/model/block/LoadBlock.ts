@@ -12,7 +12,7 @@ class LoadBlock extends SimpleBlock {
 
   public override async eval(memoryRef: MutableRefObject<Memory>, { inputHandler }: EvalOptions) {
     const code = this.text.trim();
-    const tokens = code.split(', '); // @todo: bettter splitting!!!
+    const tokens = code.split(',');
 
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i].trim();

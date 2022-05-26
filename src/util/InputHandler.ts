@@ -22,12 +22,13 @@ export class InputHandler {
       if (newParam === null) {
         throw new Error(`Please enter a value for "${name}"`);
       } else {
-        this._inputParams.push(newParam);
+        return newParam;
       }
+    } else {
+      const result = this._inputParams[this._index];
+      this._index++;
+      return result;
     }
-    const result = this._inputParams[this._index];
-    this._index++;
-    return result;
   }
 
   public reset(inputParam?: string): void {
