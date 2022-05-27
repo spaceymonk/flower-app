@@ -19,7 +19,7 @@ import { SimulationService } from '../services/impl/SimulationService';
 import { IProjectService } from '../services/IProjectService';
 import { ISimulationControllerService } from '../services/ISimulationControllerService';
 import { ISimulationService } from '../services/ISimulationService';
-import { throwErrorIfNull } from '../util';
+import { throwErrorIfNull } from '../util/common';
 import { useAppContext } from './AppProvider';
 import { useSimulationContext } from './SimulationProvider';
 import { ICanvasFacade } from '../services/ICanvasFacade';

@@ -6,7 +6,7 @@ import LocalStorageManager from '../../../config/LocalStorageManager';
 import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
 import PropTypes from 'prop-types';
-import { throwErrorIfNull } from '../../../util';
+import { throwErrorIfNull } from '../../../util/common';
 import { ProjectData } from '../../../types';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
 import { useServiceContext } from '../../../providers/ServiceProvider';

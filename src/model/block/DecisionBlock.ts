@@ -10,6 +10,9 @@ class DecisionBlock extends SimpleBlock {
 
   public override async eval(memoryRef: MutableRefObject<Memory>) {
     const code = this.text.trim();
+    if (code.length === 0) {
+      throw new Error('Decision code is empty');
+    }
     const ast = parse(code.trim());
     const result = !!evaluate(ast, memoryRef.current);
     return result === true ? DecisionBlockHandle.TRUE : DecisionBlockHandle.FALSE;

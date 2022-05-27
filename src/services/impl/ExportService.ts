@@ -1,6 +1,6 @@
 import FileSaver from 'file-saver';
 import { BlockTypes, DecisionBlockHandle, PathMapping } from '../../types';
-import { throwErrorIfNull } from '../../util';
+import { throwErrorIfNull } from '../../util/common';
 import { IExportService } from '../IExportService';
 import domtoimage from 'dom-to-image';
 import Block from '../../model/Block';

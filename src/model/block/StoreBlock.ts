@@ -11,6 +11,9 @@ class StoreBlock extends SimpleBlock {
   public override async eval(memoryRef: React.MutableRefObject<Memory>, { outputHandler }: EvalOptions) {
     const code = this.text.trim();
     const variable = code.trim();
+    if (variable.length === 0) {
+      throw new Error('Variable name is empty: ' + variable);
+    }
     const ast = parse(variable);
     const value = evaluate(ast, memoryRef.current);
     if (variable.startsWith('"')) {

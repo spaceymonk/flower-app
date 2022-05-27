@@ -12,7 +12,7 @@ import Block from '../../model/Block';
 import { useServiceContext } from '../../providers/ServiceProvider';
 import { NodeData } from '../../types';
 import { CreateConnectionDto } from '../../dto/CreateConnectionDto';
-import { throwErrorIfNull } from '../../util';
+import { throwErrorIfNull } from '../../util/common';
 import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
 import { UpdateBlockDto } from '../../dto/UpdateBlockDto';
 import { InputModal } from './InputModal';

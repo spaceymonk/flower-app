@@ -14,6 +14,9 @@ class LoadBlock extends SimpleBlock {
 
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i].trim();
+      if (token.length === 0) {
+        throw new Error('Variable name is empty: ' + token);
+      }
       const param = await inputHandler.next(token);
       const ast = parse(param);
       const value = evaluate(ast, memoryRef.current);

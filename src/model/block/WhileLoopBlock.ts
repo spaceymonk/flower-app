@@ -10,6 +10,9 @@ class WhileLoopBlock extends ContainerBlock {
 
   public override async eval(memoryRef: MutableRefObject<Memory>) {
     const code = this.text.trim();
+    if (code.length === 0) {
+      throw new Error('While condition is empty!');
+    }
     const ast = parse(code.trim());
     const result = !!evaluate(ast, memoryRef.current);
     return result === true ? ContainerBlockHandle.INNER_SOURCE : ContainerBlockHandle.OUTER_SOURCE;

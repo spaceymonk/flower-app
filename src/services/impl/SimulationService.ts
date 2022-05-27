@@ -2,7 +2,7 @@ import Block from '../../model/Block';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { GlowTypes, SimulationContextType } from '../../types';
-import { throwErrorIfNull } from '../../util';
+import { throwErrorIfNull } from '../../util/common';
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 import { ISimulationService } from '../ISimulationService';
