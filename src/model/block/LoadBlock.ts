@@ -1,9 +1,7 @@
 import { MutableRefObject } from 'react';
-import { Memory } from '../../services/helpers/SimulationHelper';
-import { BlockTypes, Point2D } from '../../types';
+import { BlockTypes, Point2D, Memory, EvalOptions } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
-import { EvalOptions } from '../Block';
 
 class LoadBlock extends SimpleBlock {
   constructor(position: Point2D) {
@@ -16,6 +14,9 @@ class LoadBlock extends SimpleBlock {
 
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i].trim();
+      if (token.length === 0) {
+        throw new Error('Variable name is empty: ' + token);
+      }
       const param = await inputHandler.next(token);
       const ast = parse(param);
       const value = evaluate(ast, memoryRef.current);

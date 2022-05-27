@@ -1,20 +1,16 @@
 import { Node } from 'react-flow-renderer';
 import Block from '../model/Block';
-import { BlockData } from '../types';
+import { NodeData } from '../types';
 
 class BlockAdapter {
-  public static toNode(block: Block): Node<BlockData> {
+  public static toNode(block: Block): Node<NodeData> {
     return {
       id: block.id,
       type: block.type,
       position: block.position,
       parentNode: block.parentNodeId || undefined,
       extent: block.parentNodeId ? 'parent' : undefined,
-      data: {
-        text: block.text,
-        glow: block.glow,
-        name: block.name,
-      },
+      data: { block },
     };
   }
 }

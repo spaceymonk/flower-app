@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { AppProvider } from '../providers/AppProvider';
 import { SimulationProvider } from '../providers/SimulationProvider';
-import { throwErrorIfNull } from '../util';
+import { throwErrorIfNull } from '../util/common';
 import { ServiceProvider } from '../providers/ServiceProvider';
 
 function App() {

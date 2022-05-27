@@ -1,8 +1,7 @@
-import { Point2D, BlockTypes, ContainerBlockHandle } from '../../types';
+import { BlockTypes, Point2D, Memory, ContainerBlockHandle } from '../../types';
 import { ContainerBlock } from '../ContainerBlock';
 import { parse, eval as evaluate } from 'expression-eval';
 import { MutableRefObject } from 'react';
-import { Memory } from '../../services/helpers/SimulationHelper';
 
 class WhileLoopBlock extends ContainerBlock {
   constructor(position: Point2D) {
@@ -11,6 +10,9 @@ class WhileLoopBlock extends ContainerBlock {
 
   public override async eval(memoryRef: MutableRefObject<Memory>) {
     const code = this.text.trim();
+    if (code.length === 0) {
+      throw new Error('While condition is empty!');
+    }
     const ast = parse(code.trim());
     const result = !!evaluate(ast, memoryRef.current);
     return result === true ? ContainerBlockHandle.INNER_SOURCE : ContainerBlockHandle.OUTER_SOURCE;

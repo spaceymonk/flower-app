@@ -1,7 +1,7 @@
 import { IBlockRepository } from '../IBlockRepository';
 import Block from '../../model/Block';
 import { Optional } from '../../util/Optional';
-import { BlockData, BlockTypes } from '../../types';
+import { NodeData, BlockTypes } from '../../types';
 import { Node } from 'react-flow-renderer';
 import BlockAdapter from '../../adapters/BlockAdapter';
 
@@ -9,12 +9,12 @@ export class BlockRepository implements IBlockRepository {
   private _getBlocks: () => Block[];
   private _setBlocks: ((bs: Block[]) => void) & ((arg0: (bs: Block[]) => Block[]) => void);
 
-  private _setNodes: React.Dispatch<React.SetStateAction<Node<BlockData>[]>>;
+  private _setNodes: React.Dispatch<React.SetStateAction<Node<NodeData>[]>>;
 
   constructor(
     getBlocks: () => Block[],
     setBlocks: ((bs: Block[]) => void) & ((arg0: (bs: Block[]) => Block[]) => void),
-    setNodes: React.Dispatch<React.SetStateAction<Node<BlockData>[]>>
+    setNodes: React.Dispatch<React.SetStateAction<Node<NodeData>[]>>
   ) {
     this._getBlocks = getBlocks;
     this._setBlocks = setBlocks;
@@ -30,16 +30,8 @@ export class BlockRepository implements IBlockRepository {
   public countAll(): number {
     return this._getBlocks().length;
   }
-  public countByTypes(): { [type in BlockTypes]: number } {
-    const counts: { [type in BlockTypes]: number } = {
-      [BlockTypes.DECISION_BLOCK]: 0,
-      [BlockTypes.LOAD_BLOCK]: 0,
-      [BlockTypes.STORE_BLOCK]: 0,
-      [BlockTypes.START_BLOCK]: 0,
-      [BlockTypes.STOP_BLOCK]: 0,
-      [BlockTypes.STATEMENT_BLOCK]: 0,
-      [BlockTypes.WHILE_LOOP_BLOCK]: 0,
-    };
+  public countByTypes(): { [type in BlockTypes]?: number } {
+    const counts: { [type in BlockTypes]?: number } = {};
     this._getBlocks().forEach((b) => {
       counts[b.type] = (counts[b.type] || 0) + 1;
     });

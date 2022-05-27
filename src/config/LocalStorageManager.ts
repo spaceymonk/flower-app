@@ -1,5 +1,5 @@
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
-import { nameof } from '../util';
+import { nameof } from '../util/common';
 import { ProjectData } from '../types';
 import Block from '../model/Block';
 import Connection from '../model/Connection';

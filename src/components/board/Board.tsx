@@ -10,9 +10,9 @@ import PropTypes from 'prop-types';
 import { useAppContext } from '../../providers/AppProvider';
 import Block from '../../model/Block';
 import { useServiceContext } from '../../providers/ServiceProvider';
-import { BlockData } from '../../types';
+import { NodeData } from '../../types';
 import { CreateConnectionDto } from '../../dto/CreateConnectionDto';
-import { throwErrorIfNull } from '../../util';
+import { throwErrorIfNull } from '../../util/common';
 import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
 import { UpdateBlockDto } from '../../dto/UpdateBlockDto';
 import { InputModal } from './InputModal';
@@ -29,7 +29,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const [edges, , onEdgesChange] = edgesState;
 
   const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
-  const [showModal, setShowModal] = React.useState({ block: false, input: false, output: false });
+  const [showModal, setShowModal] = React.useState({ block: false, input: false });
   const [inputForVariable, setInputForVariable] = React.useState<string>('');
   const { defer, deferRef } = useDeferredPromise<string | null>();
 
@@ -83,7 +83,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   /* -------------------------------------------------------------------------- */
   /*                            Behavioural Functions                           */
   /* -------------------------------------------------------------------------- */
-  const handleNodeDoubleClick = (event: any, node: Node<BlockData>) => {
+  const handleNodeDoubleClick = (event: any, node: Node<NodeData>) => {
     const block = blockRepository.findById(node.id).orElse(null);
     setDblClkNode(block);
     setShowModal((prev) => ({ ...prev, block: true }));

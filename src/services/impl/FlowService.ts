@@ -2,10 +2,9 @@ import { InvalidDecisionError, MultipleStartError, MultipleStopError, NoStartErr
 import Block from '../../model/Block';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
-import { BlockTypes } from '../../types';
-import { throwErrorIfUndefined } from '../../util';
+import { BlockTypes, PathMapping } from '../../types';
+import { throwErrorIfUndefined } from '../../util/common';
 import { includesBlock } from '../helpers/BlockHelper';
-import { PathMapping } from '../helpers/SimulationHelper';
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 

@@ -5,7 +5,7 @@ import { ProjectDataSchema } from '../../config/ProjectDataValidation';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { AppContextType, ProjectData } from '../../types';
-import { nameof, throwErrorIfNull } from '../../util';
+import { nameof, throwErrorIfNull } from '../../util/common';
 import { BlockCreateFactory } from '../helpers/BlockHelper';
 import { IProjectService } from '../IProjectService';
 

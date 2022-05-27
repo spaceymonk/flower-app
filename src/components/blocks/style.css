@@ -35,7 +35,7 @@
   border-radius: 50%;
   width: 0.4rem;
   height: 0.4rem;
-  background-color: blueviolet;
+  background-color: blueviolet !important;
 }
 .hande:hover {
   width: 0.5rem;

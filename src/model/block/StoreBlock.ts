@@ -1,8 +1,7 @@
-import { displayValue, Memory } from '../../services/helpers/SimulationHelper';
-import { BlockTypes, Point2D } from '../../types';
+import { displayValue } from '../../services/helpers/SimulationHelper';
+import { BlockTypes, Point2D, Memory, EvalOptions } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
-import { EvalOptions } from '../Block';
 
 class StoreBlock extends SimpleBlock {
   constructor(position: Point2D) {
@@ -12,6 +11,9 @@ class StoreBlock extends SimpleBlock {
   public override async eval(memoryRef: React.MutableRefObject<Memory>, { outputHandler }: EvalOptions) {
     const code = this.text.trim();
     const variable = code.trim();
+    if (variable.length === 0) {
+      throw new Error('Variable name is empty: ' + variable);
+    }
     const ast = parse(variable);
     const value = evaluate(ast, memoryRef.current);
     if (variable.startsWith('"')) {

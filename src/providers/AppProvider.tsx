@@ -1,6 +1,6 @@
 import React from 'react';
 import LocalStorageManager from '../config/LocalStorageManager';
-import { throwErrorIfNull } from '../util';
+import { throwErrorIfNull } from '../util/common';
 import { AppContextType } from '../types';
 import Block from '../model/Block';
 import Connection from '../model/Connection';
