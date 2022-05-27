@@ -1,5 +1,5 @@
 import FileSaver from 'file-saver';
-import { BlockTypes, DecisionBlockHandle } from '../../types';
+import { BlockTypes, DecisionBlockHandle, PathMapping } from '../../types';
 import { throwErrorIfNull } from '../../util';
 import { IExportService } from '../IExportService';
 import domtoimage from 'dom-to-image';
@@ -7,7 +7,6 @@ import Block from '../../model/Block';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
-import { PathMapping } from '../helpers/SimulationHelper';
 import LocalStorageManager from '../../config/LocalStorageManager';
 
 export class ExportService implements IExportService {

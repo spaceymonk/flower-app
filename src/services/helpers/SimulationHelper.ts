@@ -1,8 +1,3 @@
-import Block from '../../model/Block';
-
-export type Memory = { [key: string]: any };
-export type PathMapping = { [key: string]: Block };
-
 export const displayValue = (value: any): string => {
   if (typeof value === 'string') {
     return '"' + value + '"';

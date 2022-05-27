@@ -1,8 +1,7 @@
-import { Point2D, BlockTypes, ContainerBlockHandle } from '../../types';
+import { BlockTypes, Point2D, Memory, ContainerBlockHandle } from '../../types';
 import { ContainerBlock } from '../ContainerBlock';
 import { parse, eval as evaluate } from 'expression-eval';
 import { MutableRefObject } from 'react';
-import { Memory } from '../../services/helpers/SimulationHelper';
 
 class WhileLoopBlock extends ContainerBlock {
   constructor(position: Point2D) {

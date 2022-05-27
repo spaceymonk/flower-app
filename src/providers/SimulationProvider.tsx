@@ -1,7 +1,6 @@
 import React from 'react';
 import Block from '../model/Block';
-import { Memory } from '../services/helpers/SimulationHelper';
-import { SimulationActions, SimulationContextType } from '../types';
+import { SimulationActions, SimulationContextType, Memory } from '../types';
 import { throwErrorIfNull } from '../util';
 import { InputHandler } from '../util/InputHandler';
 import { OutputHandler } from '../util/OutputHandler';

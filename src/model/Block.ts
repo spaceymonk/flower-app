@@ -1,14 +1,6 @@
 // @ts-ignore
 import { v4 as uuid } from 'uuid';
-import { Memory } from '../services/helpers/SimulationHelper';
-import { BlockTypes, GlowTypes, Point2D } from '../types';
-import { InputHandler } from '../util/InputHandler';
-import { OutputHandler } from '../util/OutputHandler';
-
-export type EvalOptions = {
-  inputHandler: InputHandler;
-  outputHandler: OutputHandler;
-};
+import { EvalOptions, Memory, Point2D, GlowTypes, BlockTypes } from '../types';
 
 abstract class Block {
   protected _id: string;

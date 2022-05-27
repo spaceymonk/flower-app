@@ -1,5 +1,4 @@
-import { Memory } from '../../services/helpers/SimulationHelper';
-import { BlockTypes, Point2D } from '../../types';
+import { BlockTypes, Point2D, Memory } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
 

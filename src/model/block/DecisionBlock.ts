@@ -1,6 +1,5 @@
 import { MutableRefObject } from 'react';
-import { Memory } from '../../services/helpers/SimulationHelper';
-import { BlockTypes, DecisionBlockHandle, Point2D } from '../../types';
+import { BlockTypes, DecisionBlockHandle, Point2D, Memory } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
 

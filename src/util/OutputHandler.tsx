@@ -1,9 +1,5 @@
 import { toast } from 'react-toastify';
-
-export type OutputEntry = {
-  text: string;
-  timestamp: Date;
-};
+import { OutputEntry } from '../types';
 
 export class OutputHandler {
   private _outputs: OutputEntry[];

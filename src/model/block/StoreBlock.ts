@@ -1,8 +1,7 @@
-import { displayValue, Memory } from '../../services/helpers/SimulationHelper';
-import { BlockTypes, Point2D } from '../../types';
+import { displayValue } from '../../services/helpers/SimulationHelper';
+import { BlockTypes, Point2D, Memory, EvalOptions } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
-import { EvalOptions } from '../Block';
 
 class StoreBlock extends SimpleBlock {
   constructor(position: Point2D) {
