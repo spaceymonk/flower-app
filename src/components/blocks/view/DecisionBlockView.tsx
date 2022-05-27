@@ -1,11 +1,11 @@
 import { Handle, Node, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
 import { BlockView } from './BlockView';
-import { BlockData, DecisionBlockHandle } from '../../../types';
+import { NodeData, DecisionBlockHandle } from '../../../types';
 import React from 'react';
 import { useServiceContext } from '../../../providers/ServiceProvider';
 
-export function DecisionBlockView(node: Node<BlockData>) {
+export function DecisionBlockView(node: Node<NodeData>) {
   const { blockRepository } = useServiceContext();
   const block = React.useMemo(() => blockRepository.findById(node.id).orElse(null), [blockRepository, node.id]);
 

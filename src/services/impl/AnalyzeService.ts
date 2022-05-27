@@ -30,7 +30,7 @@ export class AnalyzeService implements IAnalyzeService {
     });
   }
 
-  public async getBlockCountByTypes(): Promise<{ [type in BlockTypes]: number }> {
+  public async getBlockCountByTypes(): Promise<{ [type in BlockTypes]?: number }> {
     return new Promise((yay, nay) => {
       const blockCounts = this._blockRepository.countByTypes();
       yay(blockCounts);

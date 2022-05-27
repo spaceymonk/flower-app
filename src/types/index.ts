@@ -50,12 +50,8 @@ export enum GlowTypes {
   ERROR,
 }
 
-export type BlockData = {
-  text?: string;
-  glow?: GlowTypes;
-  name?: string;
-  width?: number;
-  height?: number;
+export type NodeData = {
+  block: Block;
 };
 
 export enum SimulationActions {
@@ -84,7 +80,7 @@ export type AppContextType = {
   setBlocks: React.Dispatch<React.SetStateAction<Block[]>>;
   getConnections: () => Connection[];
   setConnections: React.Dispatch<React.SetStateAction<Connection[]>>;
-  nodesState: [Node<BlockData>[], React.Dispatch<React.SetStateAction<Node<BlockData>[]>>, OnNodesChange];
+  nodesState: [Node<NodeData>[], React.Dispatch<React.SetStateAction<Node<NodeData>[]>>, OnNodesChange];
   edgesState: [Edge<any>[], React.Dispatch<React.SetStateAction<Edge<any>[]>>, OnEdgesChange];
 };
 

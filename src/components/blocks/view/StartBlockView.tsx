@@ -1,10 +1,10 @@
 import React from 'react';
 import { Handle, Node, Position } from 'react-flow-renderer';
 import { useServiceContext } from '../../../providers/ServiceProvider';
-import { BlockData } from '../../../types';
+import { NodeData } from '../../../types';
 import { BlockView } from './BlockView';
 
-export function StartBlockView(node: Node<BlockData>) {
+export function StartBlockView(node: Node<NodeData>) {
   const { blockRepository } = useServiceContext();
   const block = React.useMemo(() => blockRepository.findById(node.id).orElse(null), [blockRepository, node.id]);
 

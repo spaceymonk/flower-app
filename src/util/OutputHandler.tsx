@@ -23,16 +23,14 @@ export class OutputHandler {
     });
     toast.info(text);
   }
-
-  public toString(): string {
-    return this._outputs.map((entry) => `${entry.timestamp.toLocaleTimeString()} - ${entry.text}`).join('\n');
+  
+  public isEmpty(): boolean {
+    return this._outputs.length === 0;
   }
+
+  /* --------------------------------- Getters -------------------------------- */
 
   public get outputs(): OutputEntry[] {
     return this._outputs;
-  }
-
-  public isEmpty(): boolean {
-    return this._outputs.length === 0;
   }
 }

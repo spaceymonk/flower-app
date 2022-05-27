@@ -1,11 +1,11 @@
 import { Handle, Node, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
 import { ContainerBlockView } from './ContainerBlockView';
-import { BlockData, ContainerBlockHandle } from '../../../types';
+import { NodeData, ContainerBlockHandle } from '../../../types';
 import React from 'react';
 import { useServiceContext } from '../../../providers/ServiceProvider';
 
-export function WhileLoopBlockView(node: Node<BlockData>) {
+export function WhileLoopBlockView(node: Node<NodeData>) {
   const { blockRepository } = useServiceContext();
   const block = React.useMemo(() => blockRepository.findById(node.id).orElse(null), [blockRepository, node.id]);
 
