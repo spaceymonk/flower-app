@@ -118,7 +118,6 @@ export class BlockService implements IBlockService {
     });
     const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
     this._blockRepository.clear();
-    console.log('after clear', this._blockRepository.getAll());
     this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
 
