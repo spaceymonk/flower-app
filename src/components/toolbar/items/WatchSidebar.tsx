@@ -12,23 +12,6 @@ function WatchSidebar() {
   const { isRunning, variableTableRef } = useSimulationContext();
   const [showSidebar, toggleSidebar] = useToggle();
 
-  /* --------------------------- anti-pattern start --------------------------- */
-  const [, forceRender] = React.useState<Date>(new Date());
-  const intervalRef = React.useRef<NodeJS.Timeout>();
-
-  React.useEffect(() => {
-    if (isRunning()) {
-      intervalRef.current = setInterval(() => {
-        forceRender(new Date());
-      }, 250);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    }
-  }, [isRunning]);
-  /* ---------------------------- anti-pattern end ---------------------------- */
-
   return (
     <>
       <CustomOverlay placement="bottom" overlay={<Tooltip>{T.watchesSidebar.tooltip}</Tooltip>}>

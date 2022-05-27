@@ -1,15 +1,10 @@
-import React from 'react';
 import { Handle, Node, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
-import { useServiceContext } from '../../../providers/ServiceProvider';
 import { NodeData } from '../../../types';
 import { BlockView } from './BlockView';
 
 export function StatementBlockView(node: Node<NodeData>) {
-  const { blockRepository } = useServiceContext();
-  const block = React.useMemo(() => blockRepository.findById(node.id).orElse(null), [blockRepository, node.id]);
-
-  if (block === null) return <></>;
+  const block = node.data.block;
   
   const processed = block.text; //todo: handle special keywords by bolding them etc.
 

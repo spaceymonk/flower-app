@@ -3,7 +3,7 @@ import { Form, FloatingLabel, Button, ListGroup, Tooltip, Stack, Container, Row,
 import T from '../../../config/MessageConstants';
 import { BaseModal } from './BaseModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faRemove } from '@fortawesome/free-solid-svg-icons';
+import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import CustomOverlay from '../../common/CustomOverlay';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
@@ -15,32 +15,32 @@ export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
   const { blockService, blockRepository } = useServiceContext();
 
   const [text, setText] = React.useState(block.text);
-  const [selectedChild, setSelectedChild] = React.useState<{ value: string; block: Block } | null>(null);
   const [childNodes, setChildNodes] = React.useState<Block[]>([]);
   const [removedChildren, setRemovedChildren] = React.useState<Block[]>([]);
   const availableNodes = React.useMemo(() => blockService.getAllAvailableChildren(block.id, childNodes), [blockService, block, childNodes]);
 
   React.useEffect(() => {
-    setChildNodes(blockRepository.getDirectChildren(block.id));
-    setText(block.text);
-  }, [block, blockRepository]);
+    if (show) {
+      setChildNodes(blockRepository.getDirectChildren(block.id));
+      setRemovedChildren([]);
+      setText(block.text);
+    }
+  }, [show, block, blockRepository]);
 
   const handleSave = () => {
     blockService.update(block.id, { text });
     blockService.addParentTo(block, childNodes);
     blockService.removeParentFrom(block, removedChildren);
-    setRemovedChildren([]);
     onClose();
   };
   const handleRemoveChild = (child: Block) => {
     setRemovedChildren((children) => children.concat(child));
     setChildNodes(childNodes.filter((n) => n.id !== child.id));
   };
-  const handleAddChild = React.useCallback(() => {
-    if (selectedChild === null) return;
-    setChildNodes((children) => children.concat(selectedChild.block));
-    setSelectedChild(null);
-  }, [selectedChild]);
+  const handleAddChild = React.useCallback((child: { value: string; block: Block }) => {
+    setRemovedChildren(removedChildren.filter((n) => n.id !== child.block.id));
+    setChildNodes((children) => children.concat(child.block));
+  }, [removedChildren]);
 
   return (
     <BaseModal show={show} onSave={handleSave} onClose={onClose} block={block}>
@@ -59,30 +59,19 @@ export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
       </Form.Group>
       <Stack gap={2} className="border border-1 pt-2 pb-1 px-1 rounded-3">
         <div className="d-flex justify-content-between bg-light mx-3">
-          <CustomOverlay overlay={<Tooltip>Add to container</Tooltip>}>
-            <Button
-              variant="outline-success"
-              size="sm"
-              className="my-auto me-2 rounded-circle"
-              disabled={selectedChild === null}
-              onClick={handleAddChild}
-            >
-              <FontAwesomeIcon icon={faAdd} />
-            </Button>
-          </CustomOverlay>
           <Select
             className="w-100"
             // below style makes the dropdown appear as rounded-pill
-            styles={{ control: (props, state) => ({ ...props, borderRadius: '50em' }) }}
+            styles={{ control: (props) => ({ ...props, borderRadius: '50em' }) }}
             components={{ DropdownIndicator: null }}
             formatOptionLabel={BlockOption}
             noOptionsMessage={() => 'There are no blocks to add'}
             placeholder="Select a block"
             defaultValue={null}
-            isClearable={true}
+            isClearable={false}
             isSearchable={true}
-            onChange={setSelectedChild}
-            value={selectedChild}
+            onChange={(value: any) => handleAddChild(value)}
+            value={null}
             options={availableNodes.map((n) => ({ value: n.id, block: n }))}
           />
         </div>
