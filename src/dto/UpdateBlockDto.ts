@@ -1,4 +1,4 @@
-import { GlowTypes, Point2D } from '../types';
+import { GlowTypes, Point2D, ProjectData } from '../types';
 
 export interface UpdateBlockDto {
   position?: Point2D;
@@ -7,4 +7,5 @@ export interface UpdateBlockDto {
   text?: string;
   name?: string;
   glow?: GlowTypes;
+  subroutine?: ProjectData;
 }

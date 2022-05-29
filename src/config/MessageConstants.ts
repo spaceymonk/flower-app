@@ -9,7 +9,7 @@ const T = {
   },
   blocks: {
     defaultTxt: '<code>',
-    creationFailed: 'Block creation failed!',
+    creationFailed: 'Block creation failed! ',
     creationSuccess: 'Block placed on the leftmost corner.',
     label: 'Code',
     statement: {

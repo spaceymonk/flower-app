@@ -1,6 +1,7 @@
 import { CreateBlockDto } from '../../dto/CreateBlockDto';
 import Block from '../../model/Block';
 import DecisionBlock from '../../model/block/DecisionBlock';
+import FunctionBlock from '../../model/block/FunctionBlock';
 import LoadBlock from '../../model/block/LoadBlock';
 import StartBlock from '../../model/block/StartBlock';
 import StatementBlock from '../../model/block/StatementBlock';
@@ -25,6 +26,8 @@ export class BlockCreateFactory {
       return new StopBlock(dto.position);
     } else if (dto.type === BlockTypes.WHILE_LOOP_BLOCK) {
       return new WhileLoopBlock(dto.position);
+    } else if (dto.type === BlockTypes.FUNCTION_BLOCK) {
+      return new FunctionBlock(dto.position);
     } else {
       throw new Error('Unknown block type');
     }
@@ -39,6 +42,7 @@ export class BlockCreateFactory {
     block.parentNodeId = json.parentNodeId;
     block.width = json.width;
     block.height = json.height;
+    if (block instanceof FunctionBlock) block.subroutine = json.subroutine;
     return block;
   }
 }

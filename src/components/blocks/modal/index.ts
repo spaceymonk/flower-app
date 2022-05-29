@@ -6,3 +6,4 @@ export { BlockModal as DecisionBlockModal } from './SimpleBlockModal';
 export { BlockModal as LoadBlockkModal } from './SimpleBlockModal';
 export { BlockModal as StoreBlockModal } from './SimpleBlockModal';
 export { ContainerModal as WhileLoopBlockModal } from './ContainerModal';
+export { FunctionBlockModal } from './FunctionBlockModal';
