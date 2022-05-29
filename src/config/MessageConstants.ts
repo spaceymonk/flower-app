@@ -40,6 +40,10 @@ const T = {
       title: 'While Loop Block',
       description: 'A while loop block lets you define a loop that repeats until the given condition is false.',
     },
+    function: {
+      title: 'Function Block',
+      description: 'A function block lets you define a subroutine that can be called from other blocks.',
+    },
   },
   projectTitle: {
     tooltip: 'Click to change project title',
