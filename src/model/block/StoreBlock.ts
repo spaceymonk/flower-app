@@ -1,4 +1,3 @@
-import { displayValue } from '../../services/helpers/SimulationHelper';
 import { BlockTypes, Point2D, Memory, EvalOptions } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
@@ -12,15 +11,11 @@ class StoreBlock extends SimpleBlock {
     const code = this.text.trim();
     const variable = code.trim();
     if (variable.length === 0) {
-      throw new Error('Variable name is empty: ' + variable);
+      throw new Error('Variable name is empty! ');
     }
     const ast = parse(variable);
     const value = evaluate(ast, memoryRef.current);
-    if (variable.startsWith('"')) {
-      outputHandler.add(displayValue(value));
-    } else {
-      outputHandler.add(`${variable} = ${displayValue(value)}`);
-    }
+    outputHandler.add(value, variable);
     return null;
   }
 }

@@ -1,5 +1,4 @@
-
 export type OutputEntry = {
-  text: string;
+  data: any;
   timestamp: Date;
 };

@@ -1,10 +1,11 @@
-import { toast } from 'react-toastify';
 import { OutputEntry } from '../types';
 
 export class OutputHandler {
   private _outputs: OutputEntry[];
+  private _handle: (value: any, variable: string) => OutputEntry;
 
-  constructor() {
+  constructor(handle: (value: any, variable: string) => OutputEntry) {
+    this._handle = handle;
     this._outputs = [];
   }
 
@@ -12,14 +13,11 @@ export class OutputHandler {
     this._outputs = [];
   }
 
-  public add(text: string): void {
-    this._outputs.push({
-      text,
-      timestamp: new Date(),
-    });
-    toast.info(text);
+  public add(value: any, variable: string): void {
+    const entry = this._handle(value, variable);
+    this.outputs.push(entry);
   }
-  
+
   public isEmpty(): boolean {
     return this._outputs.length === 0;
   }
@@ -28,5 +26,9 @@ export class OutputHandler {
 
   public get outputs(): OutputEntry[] {
     return this._outputs;
+  }
+
+  public set handle(handle: (value: any, variable: string) => OutputEntry) {
+    this._handle = handle;
   }
 }
