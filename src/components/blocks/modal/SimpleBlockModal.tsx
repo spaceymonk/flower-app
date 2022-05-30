@@ -17,8 +17,10 @@ export function BlockModal({ block, onClose, show }: BlockModalProps) {
   }
 
   React.useEffect(() => {
-    setText(block.text);
-  }, [block]);
+    if (show) {
+      setText(block.text);
+    }
+  }, [block, show]);
 
   return (
     <BaseModal show={show} onSave={handleSave} onClose={onClose} block={block}>
