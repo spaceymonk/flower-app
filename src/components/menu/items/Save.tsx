@@ -11,7 +11,7 @@ export function SaveMenuItem() {
 
   function handleClick() {
     try {
-      projectService.save(projectService.snapshot());
+      projectService.save();
       toast.success('Changes saved!');
     } catch (e: any) {
       toast.error('Something went wrong! ' + e.message);

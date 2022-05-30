@@ -32,6 +32,7 @@ function BlockSidebar() {
           <BlockCreateButtons.LoadBlockCreateBtn />
           <BlockCreateButtons.StoreBlockCreateBtn />
           <BlockCreateButtons.WhileLoopBlockCreateBtn />
+          <BlockCreateButtons.FunctionBlockCreateBtn />
         </Offcanvas.Body>
       </Offcanvas>
     </>

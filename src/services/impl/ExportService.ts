@@ -52,52 +52,41 @@ export class ExportService implements IExportService {
             scope.push({ scopeof: 'else', end: currentScope.end });
           }
           continue;
-        } else if (currentScope.scopeof === BlockTypes.WHILE_LOOP_BLOCK) {
+        } else if (currentScope.scopeof === 'CONTAINER') {
           continue;
         }
       }
 
+      code += iter.toCode(scope.length);
+      let nextBlocks = Array.of(outgoers[0]);
+
       if (iter.type === BlockTypes.START_BLOCK) {
-        code += 'begin\n';
         scope.push({ scopeof: iter.type, end: stopBlock.id });
-        stack.push(outgoers[0]);
       } else if (iter.type === BlockTypes.STOP_BLOCK) {
-        code += 'end\n';
         break;
-      } else if (iter.type === BlockTypes.LOAD_BLOCK) {
-        code += `${'  '.repeat(scope.length)}load ${iter.text}\n`;
-        stack.push(outgoers[0]);
-      } else if (iter.type === BlockTypes.STORE_BLOCK) {
-        code += `${'  '.repeat(scope.length)}store ${iter.text}\n`;
-        stack.push(outgoers[0]);
-      } else if (iter.type === BlockTypes.STATEMENT_BLOCK) {
-        code += `${'  '.repeat(scope.length)}${iter.text}\n`;
-        stack.push(outgoers[0]);
-      } else if (iter.type === BlockTypes.WHILE_LOOP_BLOCK) {
-        code += `${'  '.repeat(scope.length)}while (${iter.text})\n`;
-        scope.push({ scopeof: iter.type, end: iter.id });
+      } else if (iter.isContainer()) {
+        scope.push({ scopeof: 'CONTAINER', end: iter.id });
         if (outgoers[0].parentNodeId === iter.id) {
-          stack.push(outgoers[1], outgoers[0]);
+          nextBlocks = Array.of(outgoers[1], outgoers[0]);
         } else {
-          stack.push(outgoers[0], outgoers[1]);
+          nextBlocks = Array.of(outgoers[0], outgoers[1]);
         }
       } else if (iter.type === BlockTypes.DECISION_BLOCK) {
-        code += `${'  '.repeat(scope.length)}if (${iter.text})\n`;
         let falseBlockId = null;
         const connectedEdgeList = this._connectionRepository.findByBlocks(Array.of(iter));
         for (const edge of connectedEdgeList) {
           if (edge.sourceHandle === DecisionBlockHandle.FALSE) falseBlockId = edge.targetId;
         }
         if (falseBlockId === outgoers[0].id) {
-          stack.push(outgoers[0], outgoers[1]);
+          nextBlocks = Array.of(outgoers[0], outgoers[1]);
         } else {
-          stack.push(outgoers[1], outgoers[0]);
+          nextBlocks = Array.of(outgoers[1], outgoers[0]);
         }
         if (!mapping[iter.id]) this._flowService.mapDecisionPaths(iter, mapping);
         scope.push({ scopeof: iter.type, end: mapping[iter.id].id });
-      } else {
-        throw new Error('Unsupported block type: ' + iter.type);
       }
+
+      stack.push(...nextBlocks);
     }
 
     return code;

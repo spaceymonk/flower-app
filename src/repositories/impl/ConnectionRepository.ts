@@ -39,6 +39,9 @@ export class ConnectionRepository implements IConnectionRepository {
   public findByBlocks(blocks: Block[]): Connection[] {
     return this._getConnections().filter((c) => blocks.some((b) => b.id === c.sourceId || b.id === c.targetId));
   }
+  public countByBlocks(blocks: Block[]): number {
+    return this.findByBlocks(blocks).length;
+  }
   public save(connection: Connection): void {
     this._setEdges((edges) => {
       if (edges.some((e) => e.id === connection.id)) {

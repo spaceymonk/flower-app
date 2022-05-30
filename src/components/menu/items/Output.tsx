@@ -34,7 +34,7 @@ export function OutputModal({ show, onClose }: OutputModalProps) {
             {outputs.length !== 0 ? (
               outputs.map((output) => (
                 <tr key={output.timestamp.toString()}>
-                  <td className='text-start'>{output.text}</td>
+                  <td className='text-start'>{output.data}</td>
                   <td className='text-end text-muted text-nowrap'>{output.timestamp.toLocaleTimeString()}</td>
                 </tr>
               ))

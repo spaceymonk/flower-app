@@ -1,8 +1,18 @@
 import React from 'react';
-import { DecisionBlockModal, LoadBlockkModal, StartBlockModal, StatementBlockModal, StoreBlockModal, StopBlockModal, WhileLoopBlockModal } from '..';
+import {
+  DecisionBlockModal,
+  FunctionBlockModal,
+  LoadBlockkModal,
+  StartBlockModal,
+  StatementBlockModal,
+  StoreBlockModal,
+  StopBlockModal,
+  WhileLoopBlockModal,
+} from '..';
 import { BlockTypes } from '../../../types';
 import PropTypes from 'prop-types';
 import Block from '../../../model/Block';
+import FunctionBlock from '../../../model/block/FunctionBlock';
 
 export function BlockModalContainer({ block, show, onClose }: BlockModalContainerProps) {
   if (!block) {
@@ -21,6 +31,8 @@ export function BlockModalContainer({ block, show, onClose }: BlockModalContaine
     return <WhileLoopBlockModal block={block} show={show} onClose={onClose} />;
   } else if (block.type === BlockTypes.STATEMENT_BLOCK) {
     return <StatementBlockModal block={block} show={show} onClose={onClose} />;
+  } else if (block.type === BlockTypes.FUNCTION_BLOCK) {
+    return <FunctionBlockModal block={block as FunctionBlock} show={show} onClose={onClose} />;
   } else {
     throw new Error(`Unknown block type: ${block.type}`);
   }

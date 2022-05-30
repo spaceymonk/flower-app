@@ -44,11 +44,11 @@ export class SimulationService implements ISimulationService {
 
   public async process(): Promise<void> {
     const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
-    const nextBlock = await currentBlock.eval(this._simulationContext.variableTableRef, {
+    const handleId = await currentBlock.eval(this._simulationContext.variableTableRef.current, {
       inputHandler: this._simulationContext.inputHandler.current,
       outputHandler: this._simulationContext.outputHandler.current,
     });
-    this.next(nextBlock);
+    this.next(handleId);
   }
 
   private next(handleId: string | null): void {

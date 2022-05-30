@@ -6,4 +6,5 @@ export enum BlockTypes {
   START_BLOCK = 'start',
   STOP_BLOCK = 'stop',
   WHILE_LOOP_BLOCK = 'while',
+  FUNCTION_BLOCK = 'function',
 }

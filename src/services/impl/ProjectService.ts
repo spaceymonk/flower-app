@@ -1,12 +1,8 @@
-import FileSaver from 'file-saver';
 import { toast } from 'react-toastify';
-import LocalStorageManager from '../../config/LocalStorageManager';
-import { ProjectDataSchema } from '../../config/ProjectDataValidation';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { AppContextType, ProjectData } from '../../types';
-import { nameof, throwErrorIfNull } from '../../util/common';
-import { BlockCreateFactory } from '../helpers/BlockHelper';
+import { download, save, open } from '../helpers/ProjectHelper';
 import { IProjectService } from '../IProjectService';
 
 export class ProjectService implements IProjectService {
@@ -37,40 +33,19 @@ export class ProjectService implements IProjectService {
     this._blocksRepository.saveAll(pd.blocks);
     this._connectionRepository.saveAll(pd.connections);
   }
-  public save(pd: ProjectData): void {
-    window.localStorage.clear();
-    window.localStorage.setItem(nameof<ProjectData>('blocks'), JSON.stringify(pd.blocks));
-    window.localStorage.setItem(nameof<ProjectData>('connections'), JSON.stringify(pd.connections));
-    window.localStorage.setItem(nameof<ProjectData>('title'), pd.title);
-    window.localStorage.setItem(nameof<ProjectData>('inputParams'), pd.inputParams);
-    LocalStorageManager.refresh();
+
+  public save(): void {
+    save(this.snapshot());
   }
-  public download(pd: ProjectData): void {
-    const blob = new Blob([JSON.stringify(pd, null, 2)], { type: 'application/json' });
-    FileSaver.saveAs(blob, pd.title + '.json');
+
+  public download(): void {
+    download(this.snapshot());
   }
-  public open(file: Blob, onOpen?: (content: ProjectData) => void): void {
-    const fileReader = new FileReader();
-    const handleFileRead = () => {
-      try {
-        const content: ProjectData = JSON.parse(throwErrorIfNull(fileReader.result).toString());
-        const result = ProjectDataSchema.validate(content);
-        if (result.error) {
-          throw new Error(result.error.message);
-        }
-        if (onOpen) {
-          onOpen({
-            title: content.title,
-            blocks: content.blocks.map((b: any) => BlockCreateFactory.fromJSON(b)),
-            connections: content.connections,
-            inputParams: content.inputParams,
-          });
-        }
-      } catch (e: any) {
-        toast.error('Invalid project file: ' + e.message);
-      }
-    };
-    fileReader.onloadend = handleFileRead;
-    fileReader.readAsText(file);
+
+  public open(file: Blob): void {
+    open(file, (content: ProjectData) => {
+      this.load(content);
+      toast.success('Project loaded!');
+    });
   }
 }

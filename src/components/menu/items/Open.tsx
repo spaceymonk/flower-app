@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import useToggle from '../../../hooks/useToggle';
 import PropTypes from 'prop-types';
 import { throwErrorIfNull } from '../../../util/common';
-import { ProjectData } from '../../../types';
 import { useSimulationContext } from '../../../providers/SimulationProvider';
 import { useServiceContext } from '../../../providers/ServiceProvider';
 
@@ -27,10 +26,7 @@ export function OpenModal({ show, onClose }: OpenModalProps) {
 
   function handleOpen() {
     try {
-      projectService.open(throwErrorIfNull(file, 'File could not opened!'), (content: ProjectData) => {
-        projectService.load(content);
-        toast.success('Project loaded!');
-      });
+      projectService.open(throwErrorIfNull(file, 'File could not opened!'));
       canvasFacade.fitView();
       setFile(null);
       onClose();

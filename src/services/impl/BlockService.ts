@@ -10,6 +10,7 @@ import { PositionGenerator } from '../../util/PositionGenerator';
 import { IBlockService } from '../IBlockService';
 import { BlockNotFoundError } from '../../exceptions/BlockNotFoundError';
 import { ICanvasFacade } from '../ICanvasFacade';
+import FunctionBlock from '../../model/block/FunctionBlock';
 
 export class BlockService implements IBlockService {
   private _blockRepository: IBlockRepository;
@@ -36,6 +37,7 @@ export class BlockService implements IBlockService {
     if (dto.name) b.name = dto.name;
     if (dto.position) b.position = dto.position;
     if (dto.glow) b.glow = dto.glow;
+    if (dto.subroutine && b instanceof FunctionBlock) b.subroutine = dto.subroutine;
     this._blockRepository.save(b);
     return b;
   }

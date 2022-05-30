@@ -1,4 +1,3 @@
-import { MutableRefObject } from 'react';
 import { BlockTypes, Point2D, Memory, EvalOptions } from '../../types';
 import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
@@ -8,7 +7,7 @@ class LoadBlock extends SimpleBlock {
     super(BlockTypes.LOAD_BLOCK, position);
   }
 
-  public override async eval(memoryRef: MutableRefObject<Memory>, { inputHandler }: EvalOptions) {
+  public override async eval(memory: Memory, { inputHandler }: EvalOptions) {
     const code = this.text.trim();
     const tokens = code.split(',');
 
@@ -19,8 +18,8 @@ class LoadBlock extends SimpleBlock {
       }
       const param = await inputHandler.next(token);
       const ast = parse(param);
-      const value = evaluate(ast, memoryRef.current);
-      memoryRef.current[token] = value;
+      const value = evaluate(ast, memory);
+      memory[token] = value;
     }
 
     return null;

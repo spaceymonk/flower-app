@@ -4,6 +4,7 @@ import { Optional } from '../util/Optional';
 import { IRepository } from './IRepository';
 
 export interface IConnectionRepository extends IRepository<Connection> {
+  countByBlocks(blocks: Block[]): number;
   findByBlocks(blocks: Block[]): Connection[];
   findBySourceHandleAndSourceId(handleId: string | null, sourceId: string): Optional<Connection>;
   findAllBySourceId(id: string): Connection[];

@@ -7,7 +7,7 @@ import { useServiceContext } from '../../../providers/ServiceProvider';
 export function DownloadMenuItem() {
   const { projectService } = useServiceContext();
   function handleClick() {
-    projectService.download(projectService.snapshot());
+    projectService.download();
     toast.info('The download should begin shortly...');
   }
   return (

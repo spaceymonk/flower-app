@@ -9,7 +9,7 @@ const T = {
   },
   blocks: {
     defaultTxt: '<code>',
-    creationFailed: 'Block creation failed!',
+    creationFailed: 'Block creation failed! ',
     creationSuccess: 'Block placed on the leftmost corner.',
     label: 'Code',
     statement: {
@@ -39,6 +39,10 @@ const T = {
     while: {
       title: 'While Loop Block',
       description: 'A while loop block lets you define a loop that repeats until the given condition is false.',
+    },
+    function: {
+      title: 'Function Block',
+      description: 'A function block lets you define a subroutine that can be called from other blocks.',
     },
   },
   projectTitle: {

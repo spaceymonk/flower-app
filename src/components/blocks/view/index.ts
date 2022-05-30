@@ -5,6 +5,7 @@ import { StopBlockView } from './StopBlockView';
 import { LoadBlockView } from './LoadBlockView';
 import { StoreBlockView } from './StoreBlockView';
 import { WhileLoopBlockView } from './WhileContainerView';
+import { FunctionBlockView } from './FunctionBlockView';
 
 export const nodeTypes = {
   statement: StatementBlockView,
@@ -14,4 +15,5 @@ export const nodeTypes = {
   load: LoadBlockView,
   store: StoreBlockView,
   while: WhileLoopBlockView,
+  function: FunctionBlockView,
 };

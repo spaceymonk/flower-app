@@ -13,6 +13,10 @@ class StopBlock extends SimpleBlock {
   public override isSentinel(): boolean {
     return true;
   }
+
+  public override toCode(): string {
+    return 'end';
+  }
 }
 
 export default StopBlock;

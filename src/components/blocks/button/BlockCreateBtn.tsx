@@ -16,8 +16,8 @@ function BlockCreateButton({ title, description, icon, type }: BlockCreateButton
       const position = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
       blockService.create({ type, position });
       toast.success(T.blocks.creationSuccess);
-    } catch {
-      toast.error(T.blocks.creationFailed);
+    } catch (e: any) {
+      toast.error(T.blocks.creationFailed + e.message);
     }
   }
 

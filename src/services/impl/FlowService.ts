@@ -55,7 +55,7 @@ export class FlowService implements IFlowService {
 
     for (let i = 0; i < blocks.length; i++) {
       const b = blocks[i];
-      const connectionsCount = this._connectionRepository.findByBlocks([b]).length;
+      const connectionsCount = this._connectionRepository.countByBlocks(Array.of(b));
       if (b.type === BlockTypes.START_BLOCK) {
         startBlocks.push(b);
         if (connectionsCount < 1) throw new NotConnectedError(b.id);
