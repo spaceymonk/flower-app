@@ -62,7 +62,7 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
     <Modal show={show} size="lg" centered onHide={onClose} scrollable>
       <Modal.Header closeButton>
         <h4>
-          <FontAwesomeIcon size="lg" className="me-2" icon={faInfoCircle} /> Statistics
+          <FontAwesomeIcon size="lg" className="me-2" icon={faInfoCircle} /> Analyze
         </h4>
       </Modal.Header>
       <Modal.Body className="pb-2">
@@ -123,6 +123,9 @@ function CyclomaticComplexityDisplay(results: State): React.ReactNode {
 }
 
 function BlockCountTable(results: State): React.ReactNode {
+  if (Object.keys(results[AnalyzeTypes.blockCountByTypes]).length === 0) {
+    return <span className="text-danger">No blocks found</span>;
+  }
   return (
     <Table>
       <thead>

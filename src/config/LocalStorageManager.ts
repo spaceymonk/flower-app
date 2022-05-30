@@ -7,7 +7,7 @@ import { BlockCreateFactory } from '../services/helpers/BlockHelper';
 
 export const ProjectNameOptions = {
   dictionaries: [colors, adjectives, animals],
-  separator: '-',
+  separator: '_',
 };
 
 class LocalStorageManager {
