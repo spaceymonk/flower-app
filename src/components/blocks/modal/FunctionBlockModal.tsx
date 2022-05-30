@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, FloatingLabel, InputGroup } from 'react-bootstrap';
-import T from '../../../config/MessageConstants';
 import { BaseModal } from './BaseModal';
 import PropTypes from 'prop-types';
 import { useServiceContext } from '../../../providers/ServiceProvider';
