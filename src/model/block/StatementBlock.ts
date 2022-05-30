@@ -9,7 +9,7 @@ class StatementBlock extends SimpleBlock {
     super(BlockTypes.STATEMENT_BLOCK, position);
   }
 
-  public override async eval(memoryRef: React.MutableRefObject<Memory>) {
+  public override async eval(memory: Memory) {
     const code = this.text.trim();
 
     const stmtMatch = code.match(stmtPattern);
@@ -26,15 +26,15 @@ class StatementBlock extends SimpleBlock {
     }
 
     const ast = parse(rValue);
-    const result = evaluate(ast, memoryRef.current);
+    const result = evaluate(ast, memory);
 
     if (lValue) {
       if (lValueIndex) {
         const indexAst = parse(lValueIndex);
-        const indexResult = evaluate(indexAst, memoryRef.current);
-        memoryRef.current[lValue][indexResult] = result;
+        const indexResult = evaluate(indexAst, memory);
+        memory[lValue][indexResult] = result;
       } else {
-        memoryRef.current[lValue] = result;
+        memory[lValue] = result;
       }
     }
 

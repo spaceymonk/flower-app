@@ -25,7 +25,7 @@ abstract class Block {
     this._parentNodeId = null;
   }
 
-  public abstract eval(memoryRef: React.MutableRefObject<Memory>, options: EvalOptions): Promise<string | null>;
+  public abstract eval(memory: Memory, options: EvalOptions): Promise<string | null>;
   public abstract isContainer(): boolean;
   public isSentinel(): boolean {
     return false;

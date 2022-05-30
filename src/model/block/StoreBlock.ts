@@ -7,14 +7,14 @@ class StoreBlock extends SimpleBlock {
     super(BlockTypes.STORE_BLOCK, position);
   }
 
-  public override async eval(memoryRef: React.MutableRefObject<Memory>, { outputHandler }: EvalOptions) {
+  public override async eval(memory: Memory, { outputHandler }: EvalOptions) {
     const code = this.text.trim();
     const variable = code.trim();
     if (variable.length === 0) {
       throw new Error('Variable name is empty! ');
     }
     const ast = parse(variable);
-    const value = evaluate(ast, memoryRef.current);
+    const value = evaluate(ast, memory);
     outputHandler.add(value, variable);
     return null;
   }
