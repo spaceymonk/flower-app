@@ -42,7 +42,13 @@ export class BlockCreateFactory {
     block.parentNodeId = json.parentNodeId;
     block.width = json.width;
     block.height = json.height;
-    if (block instanceof FunctionBlock) block.subroutine = json.subroutine;
+    if (block instanceof FunctionBlock) {
+      const subroutine = {
+        ...json.subroutine,
+        blocks: json.subroutine.blocks.map((b: any) => BlockCreateFactory.fromJSON(b)),
+      };
+      block.subroutine = subroutine;
+    }
     return block;
   }
 }
