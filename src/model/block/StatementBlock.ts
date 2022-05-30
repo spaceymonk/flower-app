@@ -9,6 +9,10 @@ class StatementBlock extends SimpleBlock {
     super(BlockTypes.STATEMENT_BLOCK, position);
   }
 
+  public override toCode(indent: number): string {
+    return `${'  '.repeat(indent)}${this._text}\n`;
+  }
+
   public override async eval(memory: Memory) {
     const code = this.text.trim();
 

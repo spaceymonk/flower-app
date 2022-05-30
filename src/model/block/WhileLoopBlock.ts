@@ -7,6 +7,10 @@ class WhileLoopBlock extends ContainerBlock {
     super(BlockTypes.WHILE_LOOP_BLOCK, position, 200, 200);
   }
 
+  public override toCode(indent: number): string {
+    return `${'  '.repeat(indent)}while (${this._text})\n`;
+  }
+
   public override async eval(memory: Memory) {
     const code = this.text.trim();
     if (code.length === 0) {

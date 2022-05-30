@@ -27,6 +27,9 @@ abstract class Block {
 
   public abstract eval(memory: Memory, options: EvalOptions): Promise<string | null>;
   public abstract isContainer(): boolean;
+  public toCode(indent: number): string {
+    return `${'  '.repeat(indent)}${this._type} ${this._text}\n`;
+  }
   public isSentinel(): boolean {
     return false;
   }

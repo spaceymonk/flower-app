@@ -16,6 +16,15 @@ class FunctionBlock extends SimpleBlock {
     this._subroutine = null;
   }
 
+  public override toCode(indent: number): string {
+    const functionMatch = this._text.trim().match(functionRegex);
+    if (!functionMatch) {
+      throw new Error(`Invalid subroutine call: ${this._text}`);
+    }
+    const [, args, retVal] = functionMatch;
+    return `${'  '.repeat(indent)}${retVal} = ${this._subroutine?.title}(${args})\n`;
+  }
+
   public override async eval(memory: Memory) {
     if (this._subroutine === null) {
       throw new Error('No subroutine defined');

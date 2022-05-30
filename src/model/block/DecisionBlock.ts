@@ -16,6 +16,10 @@ class DecisionBlock extends SimpleBlock {
     const result = !!evaluate(ast, memory);
     return result === true ? DecisionBlockHandle.TRUE : DecisionBlockHandle.FALSE;
   }
+
+  public override toCode(indent: number): string {
+    return `${'  '.repeat(indent)}if (${this._text})\n`;
+  }
 }
 
 export default DecisionBlock;

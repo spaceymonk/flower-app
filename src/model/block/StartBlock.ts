@@ -12,6 +12,9 @@ class StartBlock extends SimpleBlock {
   public override isSentinel(): boolean {
     return true;
   }
+  public override toCode(): string {
+    return 'begin\n';
+  }
 }
 
 export default StartBlock;
