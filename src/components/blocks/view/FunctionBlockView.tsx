@@ -14,9 +14,9 @@ export function FunctionBlockView(node: Node<NodeData>) {
       <Handle type="target" position={Position.Top} className="handle" />
       <div className="w-100">
         <div className="header">SUBROUTINE</div>
-        <div className="p-2 text-center">{subroutineTitle ? subroutineTitle : <em className="text-muted">{'<function>'}</em>}</div>
-        <div className="header fst-italic">ARGS</div>
-        <div className="p-2 text-center">{processed ? processed : <em className="text-muted">{'<args>'}</em>}</div>
+        <div className="p-2 text-center">{subroutineTitle ? subroutineTitle : <em className="text-muted">{'<subroutine>'}</em>}</div>
+        <div className="subtitle fw-bold">SIGNATURE</div>
+        <div className="p-2 text-center">{processed ? processed : <em className="text-muted">{'<signature>'}</em>}</div>
       </div>
       <Handle type="source" position={Position.Bottom} className="handle" />
     </BlockView>

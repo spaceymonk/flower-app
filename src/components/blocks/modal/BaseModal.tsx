@@ -24,8 +24,10 @@ export function BaseModal({ show, children, onSave, onClose, block }: BaseModalP
   }
 
   React.useEffect(() => {
-    setName(block.name || block.id);
-  }, [block]);
+    if (show) {
+      setName(block.name || block.id);
+    }
+  }, [block, show]);
 
   return (
     <Modal show={show} centered className="node-modal">

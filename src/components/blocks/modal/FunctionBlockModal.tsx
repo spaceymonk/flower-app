@@ -45,15 +45,15 @@ export function FunctionBlockModal({ block, onClose, show }: FunctionBlockModalP
     <BaseModal show={show} onSave={handleSave} onClose={onClose} block={block}>
       <Form.Group className="mb-3">
         <InputGroup className="d-flex align-items-stretch clickable mb-2 flex-nowrap" onClick={() => throwErrorIfNull(inputRef.current).click()}>
-          <InputGroup.Text>Subroutine file:</InputGroup.Text>
+          <InputGroup.Text>Subroutine:</InputGroup.Text>
           <span className="flex-grow-1 px-2 border border-1 rounded-1 align-items-center d-inline-flex text-truncate">
             {subroutine?.title || 'Please select a file...'}
           </span>
           <input type="file" accept=".json" ref={inputRef} onChange={handleFileSelection} style={{ display: 'none' }} />
         </InputGroup>
-        <FloatingLabel label={T.blocks.label}>
+        <FloatingLabel label="Signature">
           <Form.Control
-            placeholder={T.blocks.label}
+            placeholder="Signature"
             type="text"
             value={text}
             onChange={(event) => setText(event.target.value)}
