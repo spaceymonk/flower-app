@@ -2,9 +2,9 @@ import { OutputEntry } from '../types';
 
 export class OutputHandler {
   private _outputs: OutputEntry[];
-  private _handle: (value: any, variable: string) => OutputEntry;
+  private _handle: (value: any, variable: string) => OutputEntry | null;
 
-  constructor(handle: (value: any, variable: string) => OutputEntry) {
+  constructor(handle: (value: any, variable: string) => OutputEntry | null) {
     this._handle = handle;
     this._outputs = [];
   }
@@ -15,7 +15,9 @@ export class OutputHandler {
 
   public add(value: any, variable: string): void {
     const entry = this._handle(value, variable);
-    this.outputs.push(entry);
+    if (entry) {
+      this._outputs.push(entry);
+    }
   }
 
   public isEmpty(): boolean {
@@ -28,7 +30,7 @@ export class OutputHandler {
     return this._outputs;
   }
 
-  public set handle(handle: (value: any, variable: string) => OutputEntry) {
+  public set handle(handle: (value: any, variable: string) => OutputEntry | null) {
     this._handle = handle;
   }
 }
