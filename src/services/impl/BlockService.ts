@@ -52,6 +52,8 @@ export class BlockService implements IBlockService {
       });
       this._blockRepository.saveAll(children);
     }
+    this._connectionRepository.deleteAll(this._connectionRepository.findAllBySourceId(id));
+    this._connectionRepository.deleteAll(this._connectionRepository.findAllByTargetId(id));
     this._blockRepository.delete(block);
   }
 
