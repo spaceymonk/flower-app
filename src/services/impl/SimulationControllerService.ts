@@ -77,7 +77,7 @@ export class SimulationControllerService implements ISimulationControllerService
             this._context.jumpNextBlockRef.current = false;
             await this._simulationService.process();
           }
-          setTimeout(simulationLoop, this._context.getSpeedInMs());
+          window.setTimeout(simulationLoop, this._context.getSpeedInMs());
         } catch (e: any) {
           console.error(e);
           this.abort(e.message);

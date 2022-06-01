@@ -6,6 +6,7 @@ import CustomOverlay from '../common/CustomOverlay';
 import { getEdgeCenter, getSmoothStepPath, MarkerType, Position } from 'react-flow-renderer';
 import PropTypes from 'prop-types';
 import { useServiceContext } from '../../providers/ServiceProvider';
+import { DecisionBlockHandle } from '../../types';
 
 export default function CustomEdge({
   id,
@@ -33,7 +34,7 @@ export default function CustomEdge({
   let x = edgeCenterX - foreignObjectSize / 2;
   let y = edgeCenterY - foreignObjectSize / 2;
 
-  if (sourceHandleId === 'true' || sourceHandleId === 'false') {
+  if (sourceHandleId === DecisionBlockHandle.TRUE || sourceHandleId === DecisionBlockHandle.FALSE) {
     x = targetX - foreignObjectSize / 2;
     y = sourceY - foreignObjectSize / 2;
   }
