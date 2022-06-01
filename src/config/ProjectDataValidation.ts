@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { titleRegex } from '../components/project-title/ProjectTitle.service';
 import { GlowTypes, BlockTypes } from '../types';
 
 const blockTypeList = [
@@ -41,7 +42,7 @@ export const EdgeSchema = Joi.object({
 }).options({ allowUnknown: false });
 
 export const ProjectDataSchema = Joi.object({
-  title: Joi.string().min(5).max(30).required(),
+  title: Joi.string().regex(titleRegex).required(),
   inputParams: Joi.string().allow('').required(),
   blocks: Joi.array().items(BlockSchema).required(),
   connections: Joi.array().items(EdgeSchema).required(),
