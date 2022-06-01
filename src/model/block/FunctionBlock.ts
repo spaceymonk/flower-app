@@ -5,6 +5,7 @@ import { SimpleBlock } from '../SimpleBlock';
 import { InputHandler } from '../../util/InputHandler';
 import { OutputHandler } from '../../util/OutputHandler';
 import Block from '../Block';
+import { parseArgs } from '../helpers/FunctionBlockHelper';
 
 const functionRegex = /^\((.*)\)\s*=>\s*(([a-zA-Z_][a-zA-Z0-9_]*))$/;
 
@@ -73,8 +74,7 @@ class FunctionBlock extends SimpleBlock {
 
     let args = '';
     if (functionMatch[1].trim().length !== 0) {
-      args = functionMatch[1]
-        .split(',') // todo: better split
+      args = parseArgs(functionMatch[1])
         .map((arg) => {
           const ast = parse(arg.trim());
           const value = evaluate(ast, memory);
