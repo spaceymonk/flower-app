@@ -43,11 +43,15 @@ export class BlockCreateFactory {
     block.width = json.width;
     block.height = json.height;
     if (block instanceof FunctionBlock) {
-      const subroutine = {
-        ...json.subroutine,
-        blocks: json.subroutine.blocks.map((b: any) => BlockCreateFactory.fromJSON(b)),
-      };
-      block.subroutine = subroutine;
+      if (json.subroutine) {
+        const subroutine = {
+          ...json.subroutine,
+          blocks: json.subroutine.blocks.map((b: any) => BlockCreateFactory.fromJSON(b)),
+        };
+        block.subroutine = subroutine;
+      } else {
+        block.subroutine = null;
+      }
     }
     return block;
   }
