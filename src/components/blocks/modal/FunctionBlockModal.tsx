@@ -8,6 +8,7 @@ import FunctionBlock from '../../../model/block/FunctionBlock';
 import { throwErrorIfNull } from '../../../util/common';
 import { ProjectData } from '../../../types';
 import { open } from '../../../services/helpers/ProjectHelper';
+import { ReadOnlyBoard } from '../../board/ReadOnlyBoard';
 
 export function FunctionBlockModal({ block, onClose, show }: FunctionBlockModalProps) {
   const { blockService } = useServiceContext();
@@ -62,6 +63,7 @@ export function FunctionBlockModal({ block, onClose, show }: FunctionBlockModalP
           />
         </FloatingLabel>
       </Form.Group>
+      {subroutine && <ReadOnlyBoard subroutine={subroutine} />}
     </BaseModal>
   );
 }
