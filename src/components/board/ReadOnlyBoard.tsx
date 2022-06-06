@@ -1,11 +1,14 @@
 import React from 'react';
-import ReactFlow, { Node, Edge, Background, Controls, ReactFlowProvider } from 'react-flow-renderer';
+import ReactFlow, { Node, Edge, Background, Controls, ReactFlowProvider, ControlButton } from 'react-flow-renderer';
 import BlockAdapter from '../../adapters/BlockAdapter';
 import ConnectionAdapter from '../../adapters/ConnectionAdapter';
 import { NodeData, ProjectData } from '../../types';
 import PropTypes from 'prop-types';
 import { nodeTypes } from '../blocks';
 import { edgeTypes } from '../edges';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
+import { download } from '../../services/helpers/ProjectHelper';
 
 export function ReadOnlyBoard({ subroutine }: ReadOnlyBoardProps) {
   const display = React.useMemo(() => {
@@ -31,7 +34,9 @@ export function ReadOnlyBoard({ subroutine }: ReadOnlyBoardProps) {
           elementsSelectable={false}
         >
           <Background />
-          <Controls showInteractive={false} showZoom={true} />
+          <Controls showInteractive={false}>
+            <ControlButton onClick={() => download(subroutine)} children={<FontAwesomeIcon icon={faFileDownload} />} />
+          </Controls>
         </ReactFlow>
       </ReactFlowProvider>
     </div>
