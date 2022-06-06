@@ -5,6 +5,7 @@ const T = {
     dateFormat: 'HH:mm:ss',
     saveTxt: 'Save',
     cancelTxt: 'Cancel',
+    homepage: 'Homepage',
     deleteTxt: 'Delete',
   },
   blocks: {
@@ -68,7 +69,6 @@ const T = {
   notFound: {
     title: 'Requested page could not found!',
     text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, totam?',
-    homepage: 'Homepage',
   },
 };
 
