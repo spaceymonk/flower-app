@@ -6,10 +6,7 @@
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Create, design, simulate and share your flowcharts." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>"
-    />
+    <link rel="icon" href="/public/how-to.ico" />
     <title>FlowerApp Manual</title>
     <style>
       main {
@@ -75,11 +72,23 @@
         color: red;
         list-style-type: '🪲 ';
       }
+      @media screen and (max-width: 768px) {
+        div.table-wrapper {
+          overflow: auto;
+          max-width: 768px;
+          max-height: 75vh;
+        }
+      }
       table {
         border-collapse: collapse;
         border-spacing: 0;
         margin: 0 5px;
         border: 4px double #ccc;
+      }
+      table th {
+        padding: 5px;
+        border: 1px solid #ccc;
+        background-color: #fafafa;
       }
       table td {
         padding: 5px;
@@ -101,6 +110,18 @@
         font-family: monospace;
         background-color: #dadada;
         padding: 1px 2px;
+      }
+      #simulation-examples {
+        margin: 1em 0;
+      }
+      #simulation-examples > tbody > tr > td:nth-child(1) {
+        min-width: 400px;
+      }
+      #simulation-examples > tbody > tr > td:nth-child(2) {
+        min-width: 300px;
+      }
+      #simulation-examples > tbody > tr > td:nth-child(3) {
+        min-width: 200px;
       }
       #toc {
         counter-reset: toch2counter;
@@ -418,7 +439,7 @@
             </ul>
           </div>
           <figure>
-            <img src="%PUBLIC_URL%/assets/flow-helloworld.png" alt="Hello world flowchart" width="200px" />
+            <img src="/public/assets/flow-helloworld.png" alt="Hello world flowchart" width="200" />
             <figcaption>Hello World in FlowerApp</figcaption>
           </figure>
           <p></p>
@@ -641,6 +662,100 @@
                 </li>
                 <li>Do not forget to save your work often! You do not want to lose your hardwork.</li>
               </ul>
+            </div>
+            <div class="table-wrapper">
+              <table id="simulation-examples">
+                <thead>
+                  <tr>
+                    <th>Flowchart</th>
+                    <th>Description</th>
+                    <th>Simulation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><img src="/public/assets/flow-addtwonumbers.png" alt="flow-addtwonumbers.png" /></td>
+                    <td><p>Add two numbers entered by the user</p></td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code> 2 &#9166; 3 </code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>5</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-quadratic.png" alt="flow-quadratic.png" /></td>
+                    <td>
+                      <p>Find Root of the quadratic equation ax<sup>2</sup>&nbsp;+&nbsp;bx&nbsp;+&nbsp;c&nbsp;=&nbsp;0</p>
+                      <p>First element of the returned array indicates equation has a solution or not.</p>
+                    </td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>1 &#9166; 4 &#9166; 4</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>[true, -2, -2]</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-factorial.png" alt="factorial.png" /></td>
+                    <td><p>Find the factorial of a number with a loop.</p></td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>5</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>120</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-isprime.png" alt="isprime.png" /></td>
+                    <td><p>Check whether a number is prime or not</p></td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>11</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>true</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-getprimes.png" alt="getprimes.png" /></td>
+                    <td>
+                      <p>Find all primes up to N</p>
+                      <p>In this flowchart <code>is_prime</code> (previous example) used!</p>
+                    </td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>10</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>[2, 3, 5, 7]</code>
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
           <!-- End of Examples -->
