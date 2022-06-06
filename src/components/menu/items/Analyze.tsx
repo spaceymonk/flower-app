@@ -103,7 +103,7 @@ export const AnalyzeMenuItem = () => {
     <>
       <AnalyzeModal show={show} onClose={toggleShow} />
       <NavDropdown.Item onClick={toggleShow}>
-        <FontAwesomeIcon size="sm" className="me-2" icon={faInfoCircle} /> Statistics
+        <FontAwesomeIcon size="sm" className="me-2" icon={faInfoCircle} /> Analyze
       </NavDropdown.Item>
     </>
   );

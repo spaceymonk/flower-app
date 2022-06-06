@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Create, design, simulate and share your flowcharts." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/public/how-to.ico" />
+    <title>FlowerApp Manual</title>
+    <style>
+      main {
+        counter-reset: h2counter;
+      }
+      main h2:not([data-nocount])::before {
+        content: counter(h2counter) '. ';
+        counter-increment: h2counter;
+      }
+      main h2 {
+        font-size: 1.8em;
+        counter-reset: h3counter;
+      }
+      main h3:not([data-nocount])::before {
+        content: counter(h2counter) '.' counter(h3counter) '. ';
+        counter-increment: h3counter;
+      }
+      main h3 {
+        font-size: 1.6em;
+        counter-reset: h4counter;
+      }
+      main h4:not([data-nocount])::before {
+        content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) '. ';
+        counter-increment: h4counter;
+      }
+      main h4 {
+        font-size: 1.4em;
+        counter-reset: h5counter;
+      }
+      main h5:not([data-nocount])::before {
+        content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter) '.' counter(h5counter) '. ';
+        counter-increment: h5counter;
+      }
+      main h5 {
+        font-size: 1.2em;
+      }
+      .message-box {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fafafa;
+      }
+      .message-box > .header {
+        margin: 0 5px;
+        padding: 5px;
+        border-bottom: 1px solid #ccc;
+        font-style: italic;
+      }
+      .message-box > ul {
+        list-style-type: square;
+      }
+      .chapter {
+        margin: 0;
+        padding: 0.5rem 1rem 1rem;
+        border-bottom: medium dotted #ccc;
+      }
+      @media screen and (max-width: 768px) {
+        .chapter {
+          padding: 0.5rem 0 1rem;
+        }
+      }
+      .bug {
+        color: red;
+        list-style-type: '🪲 ';
+      }
+      @media screen and (max-width: 768px) {
+        div.table-wrapper {
+          overflow: auto;
+          max-width: 768px;
+          max-height: 75vh;
+        }
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin: 0 5px;
+        border: 4px double #ccc;
+      }
+      table th {
+        padding: 5px;
+        border: 1px solid #ccc;
+        background-color: #fafafa;
+      }
+      table td {
+        padding: 5px;
+        border: 1px solid #ccc;
+      }
+      table td > ul {
+        list-style-type: '+ ';
+        padding-left: 1.2em;
+        margin: 0;
+      }
+      table td > ul ul {
+        list-style-type: '- ';
+        padding-left: 1.2em;
+      }
+      table td > ul > li:not(:first-child) {
+        margin-top: 0.5em;
+      }
+      code {
+        font-family: monospace;
+        background-color: #dadada;
+        padding: 1px 2px;
+      }
+      #simulation-examples {
+        margin: 1em 0;
+      }
+      #simulation-examples > tbody > tr > td:nth-child(1) {
+        min-width: 400px;
+      }
+      #simulation-examples > tbody > tr > td:nth-child(2) {
+        min-width: 300px;
+      }
+      #simulation-examples > tbody > tr > td:nth-child(3) {
+        min-width: 200px;
+      }
+      #toc {
+        counter-reset: toch2counter;
+      }
+      #toc .h2:not([data-nocount])::before {
+        content: counter(toch2counter) '. ';
+        counter-increment: toch2counter;
+      }
+      #toc .h2 {
+        margin-left: 1rem;
+        counter-reset: toch3counter;
+      }
+      #toc .h3:not([data-nocount])::before {
+        content: counter(toch2counter) '.' counter(toch3counter) '. ';
+        counter-increment: toch3counter;
+      }
+      #toc .h3 {
+        margin-left: 2rem;
+        counter-reset: toch4counter;
+      }
+      #toc .h4:not([data-nocount])::before {
+        content: counter(toch2counter) '.' counter(toch3counter) '.' counter(toch4counter) '. ';
+        counter-increment: toch4counter;
+      }
+      #toc .h4 {
+        margin-left: 3rem;
+        counter-reset: toch5counter;
+      }
+      #toc .h5:not([data-nocount])::before {
+        content: counter(toch2counter) '.' counter(toch3counter) '.' counter(toch5counter) '.' counter(toch5counter) '. ';
+        counter-increment: toch5counter;
+      }
+      #toc .h5 {
+        margin-left: 4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>FlowerApp Manual</h1>
+      <section>
+        <h2 data-nocount="">Table of Contents</h2>
+        <div id="toc">
+          <div class="h2"><a href="#toc0">Introduction</a></div>
+          <div class="h3"><a href="#toc1">Navigation and Menu</a></div>
+          <div class="h4"><a href="#toc2">Navigation Bar</a></div>
+          <div class="h4"><a href="#toc3">Menu</a></div>
+          <div class="h3"><a href="#toc4">Toolbar</a></div>
+          <div class="h4"><a href="#toc5">Simulation Controls</a></div>
+          <div class="h4"><a href="#toc6">Adding Block</a></div>
+          <div class="h4"><a href="#toc7">Watch Display</a></div>
+          <div class="h3"><a href="#toc8">Board</a></div>
+          <div class="h4"><a href="#toc9">Display-related Actions</a></div>
+          <div class="h4"><a href="#toc10">Block-related Actions</a></div>
+          <div class="h4"><a href="#toc11">Connection-related Actions</a></div>
+          <div class="h2"><a href="#toc12">Features</a></div>
+          <div class="h3"><a href="#toc13">Simulation</a></div>
+          <div class="h4"><a href="#toc14">Data Types</a></div>
+          <div class="h5"><a href="#toc15">String</a></div>
+          <div class="h5"><a href="#toc16">Number</a></div>
+          <div class="h5"><a href="#toc17">Array</a></div>
+          <div class="h4"><a href="#toc18">Examples</a></div>
+          <div class="h3"><a href="#toc19">Exporting</a></div>
+          <div class="h4"><a href="#toc20">Image Exporting</a></div>
+          <div class="h4"><a href="#toc21">Code Exporting</a></div>
+          <div class="h2"><a href="#toc22">Blocks</a></div>
+          <div class="h3"><a href="#toc23">START Block</a></div>
+          <div class="h3"><a href="#toc24">STOP Block</a></div>
+          <div class="h3"><a href="#toc25">STATEMENT Block</a></div>
+          <div class="h3"><a href="#toc26">DECISION Block</a></div>
+          <div class="h3"><a href="#toc27">LOAD Block</a></div>
+          <div class="h3"><a href="#toc28">STORE Block</a></div>
+          <div class="h3"><a href="#toc29">WHILE Loop Block</a></div>
+          <div class="h3"><a href="#toc30">FUNCTION Block</a></div>
+        </div>
+      </section>
+      <!-- End of TOC -->
+    </header>
+    <hr />
+    <main>
+      <section class="chapter">
+        <h2 id="toc0">Introduction</h2>
+        <p>
+          This is a simple web application that allows you to add, edit, and delete flowers. You can export your flowchart as a pseudo-code and also
+          as an PNG image.
+        </p>
+        <p>Program consists of three main parts:</p>
+        <ol>
+          <li><strong>Navigation and Menu:</strong> App name and icon, project title and menu items stored in here.</li>
+          <li><strong>Toolbar:</strong> Simulation controls, block add button and watch display button are here.</li>
+          <li>
+            <strong>Board:</strong> This is where the blocks and their connections showed in an interactive display. You can move, drag, zoom in/out
+            the display. There is also a minimap which helps to get an overview of your flowchart.
+          </li>
+        </ol>
+
+        <section>
+          <h3 id="toc1">Navigation and Menu</h3>
+          <section>
+            <h4 id="toc2">Navigation Bar</h4>
+            <p>The navigation bar is the top bar of the application. It contains the app name and icon, and the project title.</p>
+            <p>
+              <strong>Project title</strong> is the name of the project that you are currently working on. You can change it by clicking on the
+              project title on the navbar and typing in a new name.
+            </p>
+            <p>The name of the project is also used as the name of the subroutine name that can be used in the Function Block.</p>
+            <div class="message-box">
+              <div class="header">Remember</div>
+              <ul>
+                <li>The project title can be minimum of 2 characters and maximum of 30 characters.</li>
+                <li>The project title can only contain letters, numbers, and underscores.</li>
+                <li>The project title cannot start with a number.</li>
+              </ul>
+            </div>
+          </section>
+          <!-- End of Navigation Bar -->
+          <section>
+            <h4 id="toc3">Menu</h4>
+            Menu items and their functions are listed below:
+            <ul>
+              <li>
+                <strong>File:</strong>
+                <ul>
+                  <li><em>New:</em> Create a new project.</li>
+                  <li><em>Open:</em> Open an existing (downloaded) project.</li>
+                  <li><em>Save:</em> Save the current project in the browser memory.</li>
+                  <li><em>Download:</em> Download the current project, which can be used in Function Block.</li>
+                  <li><em>Export:</em> Export the current project as a pseudo-code or PNG image.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Project:</strong>
+                <ul>
+                  <li><em>Find:</em> List all blocks and focus on click.</li>
+                  <li>
+                    <em>Input Parameters:</em> Add input parameters to the project. These parameters will be automatically used when a Load Block
+                    encountered.
+                  </li>
+                  <li><em>Output History:</em> Show the history of the output values generated by Store Block.</li>
+                  <li><em>Analyze:</em> Analyze the current project. Displays cyclomatic complexity and block count.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Help:</strong>
+                <ul>
+                  <li><em>How to Use:</em> Show this manual.</li>
+                  <li><em>About:</em> Show the application information.</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+          <!-- End of Menu -->
+        </section>
+        <!-- End of Navigation and Menu -->
+        <section>
+          <h3 id="toc4">Toolbar</h3>
+          Toolbar contains simulation controls, block add button and watch display button.
+
+          <section>
+            <h4 id="toc5">Simulation Controls</h4>
+            <p>The simulation controls are used to control the simulation. You can start, stop and run the simulation step by step.</p>
+            <p>
+              If you want to step automatically you can click the resume/pause button. The speed of the automatic simulation can be adjusted by using
+              the speed slider which is located at the right of the control buttons.
+            </p>
+            <p>The block to be processed will be highlighted.</p>
+            <p>Once you started the simulation, you can no longer add or edit blocks, and save, open, download buttons are disabled.</p>
+            <div class="message-box">
+              <div class="header">Remember</div>
+              <ul>
+                <li>Speed slider showed only when the simulation is started.</li>
+                <li>The simulation can only be started when all blocks are connected and the flowchart is valid.</li>
+              </ul>
+            </div>
+          </section>
+          <!-- End of Simulation Controls -->
+
+          <section>
+            <h4 id="toc6">Adding Block</h4>
+            <p>By clicking the button a sidebar will pop up. The sidebar contains a list of all available blocks.</p>
+            <p>You can click on the block name to add the block to the flowchart.</p>
+            <div class="message-box">
+              <div class="header">Remember</div>
+              <ul>
+                <li>You can only add blocks to the flowchart when the simulation is stopped.</li>
+                <li>Created blocks will be placed on the top-left corner of the board.</li>
+              </ul>
+            </div>
+          </section>
+          <!-- End of Add Block -->
+
+          <section>
+            <h4 id="toc7">Watch Display</h4>
+            <p>By clicking the button, a sidebar will pop up. The sidebar contains the values of the variables that are used in the flowchart.</p>
+            <p>You can watch the values in real time while the simulation is running.</p>
+            <div class="message-box">
+              <div class="header">Remember</div>
+              <ul>
+                <li>If simulation is not running, the watch display will be grayed out.</li>
+              </ul>
+            </div>
+          </section>
+          <!-- End of Watch Display -->
+        </section>
+        <!-- End of Toolbar -->
+
+        <section>
+          <h3 id="toc8">Board</h3>
+          <p>Blocks and their connections are displayed here. You can edit and view your flowchart here.</p>
+
+          <section>
+            <h4 id="toc9">Display-related Actions</h4>
+            <ul>
+              <li>You can move the display.</li>
+              <li>You can zoom in/out the display.</li>
+              <li>You can show and hide the minimap. Minimap might help you to get an overview of your flowchart.</li>
+              <li>You can fit the display to the board. This will zoom out the display to fit the board.</li>
+              <li class="bug">If your flowchart is too big, fit feature may not work as intented.</li>
+            </ul>
+          </section>
+          <!-- End of Display-related Actions -->
+
+          <section>
+            <h4 id="toc10">Block-related Actions</h4>
+            <ul>
+              <li>You can drag blocks.</li>
+              <li>You can <strong>double click</strong> on the block to open its modal.</li>
+              <li class="bug">When connecting from mobile, you cannot double click on the blocks; therefore, you cannot edit/remove the blocks.</li>
+              <li>
+                You can select a block by <strong>click</strong> on it. In order to select multiple blocks apply <strong>CTRL+click</strong> on them.
+                You can move multiple blocks after multiple-select with ease.
+              </li>
+              <li>You can press <strong>Delete</strong> on keyboard to remove block(s) after selecting it/them.</li>
+              <li class="bug">These keyboard shortcuts sometimes do not work and requires page refresh to get fixed.</li>
+            </ul>
+          </section>
+          <!-- End of Block-related Actions -->
+
+          <section>
+            <h4 id="toc11">Connection-related Actions</h4>
+            <ul>
+              <li>
+                You can create connections by connecting block handles (the blue dots). The mouse icon changes to indicate a connection creation.
+              </li>
+              <li>
+                You can remove connections by <strong>hovering</strong> your mouse on the middle of the connection and <strong>clicking</strong> on
+                the appearing button.
+              </li>
+              <li>
+                If you need to move a connection to another block, ie. changing source or target block of the connection,
+                <ol>
+                  <li>
+                    Move your mouse around the desired block's handle. The mouse icon will be change accordingly (this icon is different from the
+                    create connection action.)
+                  </li>
+                  <li>Click and drag the connection to desired block's handle. when the mouse icon is changed</li>
+                </ol>
+              </li>
+              <li>
+                In mobile,
+                <ul>
+                  <li>
+                    <em>Connecting:</em> you need to click the first handle and than the second one. <small>It may require multiple trials :)</small>
+                  </li>
+                  <li><em>Removing:</em> you need to click the middle of the connection untill the button appears.</li>
+                  <li><em>Updating a connection:</em> is not possible.</li>
+                </ul>
+              </li>
+              <li class="bug">
+                If you placed your blocks too close to each other, after creating a connection between them, the connection removal button hover will
+                obstruct some part of the blocks. This includes the block handles which ultimately prevent you from connecting or updating connections
+                to nearby blocks. If that's the case, you can try to move the blocks a little bit.
+              </li>
+            </ul>
+            <div class="message-box">
+              <div class="header">Remember</div>
+              <ul>
+                <li>
+                  You can only create connections between blocks, if that connection is valid. For example, if you try to create a connection between
+                  two connected blocks or between a block and itself, the connection will not be created.
+                </li>
+              </ul>
+            </div>
+          </section>
+          <!-- End of Connection-related Actions -->
+        </section>
+        <!-- End of Board -->
+      </section>
+      <!-- End of Introduction -->
+      <section class="chapter">
+        <h2 id="toc12">Features</h2>
+        <p>
+          There are two main features that FlowerApp brings a solution for. These are the simulating a flowchart and exporing into various formats.
+        </p>
+        <section>
+          <h3 id="toc13">Simulation</h3>
+          <p>Writing a program in FlowerApp has the following benefits:</p>
+          <ul>
+            <li>Easy to learn</li>
+            <li>Helps to understand structured language</li>
+            <li>Forces to create correct flowcharts in a natural way. <small>If something looks bad, probably, its not right!</small></li>
+            <li>It can be run on all modern browsers which is easy access.</li>
+          </ul>
+          <p>
+            Even though you can write anything you want into the blocks, if you want to run your flowchart you have to follow FlowerApp syntax which
+            is very similar to JavaScript. <small>Therefore, it is a great start to learning JavaScript also!</small>
+          </p>
+          <div class="message-box">
+            <div class="header"><strong>Important!</strong></div>
+            <ul>
+              <li>
+                You must think FlowerApp syntax as a subset of JavaScript. There are subtle but not complex differences between the two. For example,
+                no support for objects and functions, you can only create string by double quotes etc.
+              </li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/public/assets/flow-helloworld.png" alt="Hello world flowchart" width="200" />
+            <figcaption>Hello World in FlowerApp</figcaption>
+          </figure>
+          <p></p>
+
+          <p>
+            Flowchart consists of blocks and connections between them. Blocks are the building materials of the flowchart. Blocks can be connected to
+            each other by connecting the blue dots (handles).
+          </p>
+          <p>
+            The flowchart will run from the START block to the STOP block. If there are any blocks that are not connected or there are more than one
+            START or STOP blocks the flowchart counted as invalid and the simulation will not run.
+          </p>
+          <p>
+            Each block performs a set of actions that can be executed. Some may branch to other blocks, some may calculate a value and assign
+            variable, or loop through a set of blocks, etc. You, as a programmer, tell what kind of actions are executed in what order in the
+            flowchart.
+          </p>
+          <p>Each block type detailed under the Blocks section. Please refer to the Blocks section for more information.</p>
+
+          <section>
+            <h4 id="toc14">Data Types</h4>
+            <p>FlowerApp supports the following data types:</p>
+            <ul>
+              <li><strong>String</strong> - a sequence of characters.</li>
+              <li><strong>Number</strong> - a sequence of digits.</li>
+              <li><strong>Boolean</strong> - a true or false value.</li>
+              <li><strong>Array</strong> - a list of values.</li>
+              <li><strong>Null</strong> is a special value that represents the intentional absence of a value.</li>
+            </ul>
+            <div class="message-box">
+              <div class="header">Note</div>
+              <ul>
+                <li>There is no <strong>Object</strong> type which is a collection of key-value pairs.</li>
+                <li>
+                  There is no support for anonymous functions. Therefore, you cannot use methods that require a function as a parameter (such as
+                  <code>filter</code> and <code>map</code> methods).
+                </li>
+              </ul>
+            </div>
+            <section>
+              <h5 id="toc15">String</h5>
+              <p>A string is a sequence of characters. You can use double quotes to define a string.</p>
+              <p>
+                Strings are JavaScript objects. Therefore, you can use string methods to manipulate strings. You can use <code>+</code> to concantate
+                strings
+              </p>
+              <p>Examples:</p>
+              <ul>
+                <li><code>str = "Hello World!"</code> or <code>str = "Hello" + " World!"</code></li>
+                <li><code>str.length</code> returns the length of the string.</li>
+                <li><code>str.charAt(0)</code> returns the character at the specified index.</li>
+                <li><code>str.indexOf("o")</code> returns the index of the first occurrence of the specified value.</li>
+                <li>
+                  <code>str.substring(0, 4)</code> returns the substring starting at the specified index and up to, but not including, the specified
+                  end index.
+                </li>
+                <li><code>str.toUpperCase()</code> returns the string in upper case.</li>
+                <li><code>str.toLowerCase()</code> returns the string in lower case.</li>
+                <li><code>str.replace("World", "Universe")</code> replaces all occurrences of the specified value.</li>
+                <li><code>str.split(" ")</code> splits the string into an array of substrings.</li>
+                <li><code>str.trim()</code> removes whitespace from both ends of the string.</li>
+                <li><code>str.concat("!", "?")</code> concatenates the string with the specified value.</li>
+              </ul>
+            </section>
+            <!-- End of String -->
+            <section>
+              <h5 id="toc16">Number</h5>
+              <p>Numbers are JavaScript numbers which are 64-bit floating point. Numbers can be written with or without decimals.</p>
+              <ul>
+                <li><code>x = 3.14</code> - A number with decimals</li>
+                <li><code>x = 3</code> - A number without decimals</li>
+                <li><code>x = 3.14e-10</code> - A number with decimals and scientific notation</li>
+                <li><code>x = 3.14e10</code> - A number with decimals and scientific notation</li>
+              </ul>
+              <p>You can perform arithmetic operations on Numbers.</p>
+              <ul>
+                <li><strong>Addition</strong> - <code>5 + 4</code></li>
+                <li><strong>Subtraction</strong> - <code>4 - 15</code></li>
+                <li><strong>Multiplication</strong> - <code>12 * 178</code></li>
+                <li><strong>Division</strong> - <code>34 / 11</code></li>
+                <li><strong>Modulo</strong> - <code>64 % 51</code></li>
+              </ul>
+              <div class="message-box">
+                <div class="header">Note</div>
+                <ul>
+                  <li>
+                    FlowerApp syntax uses the <code>+</code> operator for both addition and concatenation. Numbers are added. Strings are concatenated
+                  </li>
+                  <li>If you add two numbers, the result will be a number; if you add two strings, the result will be a string concatenation.</li>
+                  <li>
+                    If you add a number and a string, the result will be a string concatenation:
+                    <ul>
+                      <li><code>10 + "30"</code> → <code>"1030"</code></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <p>Again, you can use some methods of JavaScript numbers:</p>
+              <ul>
+                <li><code>x.toString()</code> returns the number as a string.</li>
+                <li><code>x.toFixed(2)</code> returns a string, with the number written with a specified number of decimals.</li>
+                <li><code>x.toExponential(2)</code> returns a string, with a number rounded and written using exponential notation.</li>
+                <li><code>x.toPrecision(2)</code> returns a string, with a number written with a specified length.</li>
+              </ul>
+              <p>You can use <code>Math</code> library to perform common mathematical operations like random number generation.</p>
+              <ul>
+                <li><code>Math.random()</code> returns a random number between 0 and 1.</li>
+                <li><code>Math.trunc()</code> returns the integer part of a number by removing any fractional digits.</li>
+                <li><code>Math.floor(x)</code> returns the largest integer less than or equal to the specified number.</li>
+                <li><code>Math.ceil(x)</code> returns the smallest integer greater than or equal to the specified number.</li>
+                <li><code>Math.round(x)</code> returns the nearest integer to the specified number.</li>
+                <li><code>Math.abs(x)</code> returns the absolute value of the specified number.</li>
+                <li><code>Math.pow(x, y)</code> returns the value of the specified number raised to the specified power.</li>
+                <li><code>Math.sqrt(x)</code> returns the square root of the specified number.</li>
+                <li><code>Math.min(x, y)</code> returns the smaller of the two specified numbers.</li>
+                <li><code>Math.max(x, y)</code> returns the larger of the two specified numbers.</li>
+                <li><code>Math.sin(x)</code> returns the sine of the specified angle.</li>
+                <li><code>Math.cos(x)</code> returns the cosine of the specified angle.</li>
+                <li><code>Math.tan(x)</code> returns the tangent of the specified angle.</li>
+                <li><code>Math.atan(x)</code> returns the angle whose tangent is the specified number.</li>
+                <li><code>Math.atan2(x, y)</code> returns the angle whose tangent is the quotient of two specified numbers.</li>
+                <li><code>Math.log(x)</code> returns the natural logarithm of the specified number.</li>
+                <li><code>Math.log10(x)</code> returns the base 10 logarithm of the specified number.</li>
+                <li><code>Math.exp(x)</code> returns the specified number raised to the power of Euler's number.</li>
+                <li><code>Math.PI</code> returns the value of pi.</li>
+                <li><code>Math.E</code> returns the value of e.</li>
+              </ul>
+              <div class="message-box">
+                <div class="header">Remember</div>
+                <ul>
+                  <li>
+                    The <code>Math</code> library is actually JavaScript's Math object. Thus, you can use its methods that not presented here.
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math" target="_blank">Reference</a>
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <!-- End of Number -->
+            <section>
+              <h5>Boolean</h5>
+              <p>
+                Boolean represents one of two values: true or false. Very often, in programming, you will need a data type that can only have one of
+                two values, like yes/no, on/off, or true/false.
+              </p>
+              <p>Booleans used for conditioning and logical operations. You can apply following operations to booleans:</p>
+              <ul>
+                <li><strong>Logical AND</strong> - <code>true && true</code> → <code>true</code></li>
+                <li><strong>Logical OR</strong> - <code>true || false</code> → <code>true</code></li>
+                <li><strong>Logical NOT</strong> - <code>!true</code> → <code>false</code></li>
+              </ul>
+              <p>Comparision operators:</p>
+              <ul>
+                <li><code>x == y</code> - <code>x</code> is equal to <code>y</code></li>
+                <li><code>x != y</code> - <code>x</code> is not equal to <code>y</code></li>
+                <li><code>x === y</code> - <code>x</code> is equal to <code>y</code> and they are of the same type</li>
+                <li><code>x !== y</code> - <code>x</code> is not equal to <code>y</code> or they are not of the same type</li>
+                <li><code>x &gt; y</code> - <code>x</code> is greater than <code>y</code></li>
+                <li><code>x &lt; y</code> - <code>x</code> is less than <code>y</code></li>
+                <li><code>x &gt;= y</code> - <code>x</code> is greater than or equal to <code>y</code></li>
+                <li><code>x &lt;= y</code> - <code>x</code> is less than or equal to <code>y</code></li>
+              </ul>
+            </section>
+            <!-- End of Boolean -->
+            <section>
+              <h5 id="toc17">Array</h5>
+              <p>
+                An array is a list of values. The values can be of any type. The order of the values is important and each value can be accessed by
+                its index. An array can be created by using square brackets. The values inside the square brackets are separated by commas.
+              </p>
+              <p>Arrays are JavaScript objects. The syntax is similar to that of JavaScript.</p>
+              <p>Examples:</p>
+              <ul>
+                <li><code>arr = [1, 2, 3]</code> - a number array</li>
+                <li><code>arr = ["a", "b", "c"]</code> - a string array</li>
+                <li><code>arr = [true, false]</code> - a boolean array</li>
+                <li><code>arr = [true, 1, 2, "hello!!"]</code> - an array of different types</li>
+                <li><code>arr.push(4)</code> - add a value to the end of the array</li>
+                <li><code>arr.pop()</code> - remove the last value from the array and return it.</li>
+                <li><code>arr.shift()</code> - remove the first value from the array</li>
+                <li><code>arr.unshift(0)</code> - add a value to the beginning of the array</li>
+                <li><code>arr.splice(1, 1)</code> - remove the value at index 1 from the array</li>
+                <li><code>arr.slice(1, 2)</code> - return a new array with the values at index 1 and 2</li>
+                <li><code>arr.indexOf(2)</code> - return the index of the value 2</li>
+                <li><code>arr.join("-")</code> - return a string with the values separated by the character "-"</li>
+                <li><code>arr.sort()</code> - sort the values in the array</li>
+                <li><code>arr.reverse()</code> - reverse the order of the values in the array</li>
+                <li>
+                  <code>arr.concat(["d", "e", "f"])</code> - return a new array with the values from the original array and the values from the array
+                  passed as a parameter
+                </li>
+              </ul>
+            </section>
+            <!-- End of Array -->
+          </section>
+
+          <section>
+            <h4 id="toc18">Examples</h4>
+            <p>
+              In this section you will find some examples of various algorithms written in FlowerApp. I higly encourage you to realise them in your
+              browser.
+            </p>
+            <div class="message-box">
+              <div class="header">Remember</div>
+              <ul>
+                <li>
+                  Follow these simple steps to create your flowchart:
+                  <ol>
+                    <li>
+                      First of all, please think your inputs and outputs. What are you trying to solve? What information given to you and what do you
+                      need to return?
+                    </li>
+                    <li>Select your blocks that will be used in your algorithm. If you are confused, please read the Blocks section.</li>
+                    <li>After adding block, write its content. Remember, every block requires a different code syntax and does different things.</li>
+                    <li>Now we have our blocks on the board. Think logically and connect them in order they should be.</li>
+                    <li>
+                      You may need to adjust your blocks to present them beautifully. After your adjustments finished, you can simulate or export your
+                      flowchart.
+                    </li>
+                  </ol>
+                </li>
+                <li>Do not forget to save your work often! You do not want to lose your hardwork.</li>
+              </ul>
+            </div>
+            <div class="table-wrapper">
+              <table id="simulation-examples">
+                <thead>
+                  <tr>
+                    <th>Flowchart</th>
+                    <th>Description</th>
+                    <th>Simulation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><img src="/public/assets/flow-addtwonumbers.png" alt="flow-addtwonumbers.png" /></td>
+                    <td><p>Add two numbers entered by the user</p></td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code> 2 &#9166; 3 </code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>5</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-quadratic.png" alt="flow-quadratic.png" /></td>
+                    <td>
+                      <p>Find Root of the quadratic equation ax<sup>2</sup>&nbsp;+&nbsp;bx&nbsp;+&nbsp;c&nbsp;=&nbsp;0</p>
+                      <p>First element of the returned array indicates equation has a solution or not.</p>
+                    </td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>1 &#9166; 4 &#9166; 4</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>[true, -2, -2]</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-factorial.png" alt="factorial.png" /></td>
+                    <td><p>Find the factorial of a number with a loop.</p></td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>5</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>120</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-isprime.png" alt="isprime.png" /></td>
+                    <td><p>Check whether a number is prime or not</p></td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>11</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>true</code>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="/public/assets/flow-getprimes.png" alt="getprimes.png" /></td>
+                    <td>
+                      <p>Find all primes up to N</p>
+                      <p>In this flowchart <code>is_prime</code> (previous example) used!</p>
+                    </td>
+                    <td>
+                      <p>
+                        Input: <br />
+                        <code>10</code>
+                      </p>
+                      <br />
+                      <p>
+                        Output: <br />
+                        <code>[2, 3, 5, 7]</code>
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <!-- End of Examples -->
+        </section>
+        <!-- End of Simulation -->
+        <section>
+          <h3 id="toc19">Exporting</h3>
+          This feature of the program does not require a lot of knowledge about the programming language. It is just a simple way to export your
+          flowchart into various formats. You can write whatever you want in the code of the blocks and export it to the desired format, since we are
+          not simulating it.
+          <section>
+            <h4 id="toc20">Image Exporting</h4>
+            <p>
+              You can export the flowchart into a PNG image file. To do so, follow <em>File &gt; Export</em> path in the menu and select second option
+              in the opened modal.
+            </p>
+            <p>
+              This feature implemented as converting DOM element (the Board) into an image file. Therefore, it is simulates a screenshot of the board
+              display.
+            </p>
+            <ul>
+              <li class="bug">
+                If your flowchart does not fit into the board, the resulting image will not contain the whole flowchart but a part of it.
+              </li>
+              <li class="bug">Control buttons and the minimap (if not hidden) will be present on the exported image.</li>
+            </ul>
+          </section>
+          <!-- End of Image Exporting -->
+          <section>
+            <h4 id="toc21">Code Exporting</h4>
+            <p>You can export the flowchart into a pseudo-code. Every valid (detailed under) flowchart can be exported this way.</p>
+            <p>
+              After selecting <em>File &gt; Export</em> menu item, you will be presented with a modal that contains "Pseudocode" with gears button.
+              Clicking on the gears button will generate the code.
+            </p>
+            <p>
+              A valid flowchart means each block is correctly connected. Since the process produces a pseudo-code the texts of the blocks do not
+              matter.
+            </p>
+          </section>
+          <!-- End of Code Exporting -->
+        </section>
+        <!-- End of Exporting -->
+      </section>
+      <!-- End of Features -->
+      <section class="chapter">
+        <h2 id="toc22">Blocks</h2>
+        <p>
+          Blocks are the building material of your flowchart. In this section, available blocks are described. If you want to learn about interacting
+          with blocks, please refer to Board section.
+        </p>
+        <p>
+          Every block has an <strong>id</strong> that is unique to that block. This can be used to select/find the desired block. Moreover, you can
+          specify a <strong>name</strong> for a block to easier access.
+        </p>
+        <div class="message-box">
+          <div class="header">How to name a block?</div>
+          <ul>
+            <li>Block names do not need to be unique.</li>
+            <li>In order to change the name, open a block modal and click on the id.</li>
+            <li>You do not need to hit Enter or click Save to update name. Changes are immediate after the lost of focus of the name field.</li>
+            <li>To remove the name, clear the name field in the block.</li>
+          </ul>
+        </div>
+        <section>
+          <h3 id="toc23">START Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>The START block marks the beginning of the flowchart.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>This block does not take any inputs.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>The flow will proceed to the next connected block.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>There can only be one START block in the flowchart.</li>
+                    <li>In order to simulate the diagram there should be exactly one START block.</li>
+                    <li>The simulation will flow from the START block.</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of START Block -->
+
+        <section>
+          <h3 id="toc24">STOP Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>The STOP block marks the endpoint of the flowchart.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>This block does not take any inputs.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>The simulation should end.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>There can only be one STOP block in the flowchart.</li>
+                    <li>In order to simulate the diagram there should be exactly one STOP block.</li>
+                    <li>To finish simulation last block must be STOP block.</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of STOP Block -->
+
+        <section>
+          <h3 id="toc25">STATEMENT Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>
+                  The STATEMENT block is used to execute a statement. This block is used to execute a statement, such as a variable assignment, but
+                  not a function call.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>This block takes one input, which is the statement to be executed.</li>
+                    <li>
+                      The statement can be any valid JavaScript statement in the forms of,
+                      <ul>
+                        <li><code> &lt;VARIABLE&gt; = &lt;EXPRESSION&gt;</code></li>
+                        <li><code>&lt;ARRAY&gt;.&lt;ARRAY_FUNC&gt;</code></li>
+                      </ul>
+                      This means you cannot use <code>&lt;VARIABLE&gt;++</code> or <code>&lt;VARIABLE&gt; += &lt;EXPRESSION&gt;</code>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>Statement is executed and the result stored in the memory, and the flow will proceed to the next connected block.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>It can be used to execute a single line of code.</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of STATEMENT Block -->
+
+        <section>
+          <h3 id="toc26">DECISION Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>
+                  The DECISION block is used to create branches in a flow. It enables to change the work logic of the program by the given expression.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>This block takes one input, which is the expression which decision to be decide.</li>
+                    <li>
+                      The expression can be any valid JavaScript expression that evaluates to a boolean value. <br />
+                      <strong>Be careful!</strong> You have to use <code>===</code> and <code>!==</code> for equality and in-equality checking!
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>
+                  The flow will continue on the block connected to <code>TRUE</code> or <code>FALSE</code> handles according to the value of the
+                  expression.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul></ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of DECISION Block -->
+
+        <section>
+          <h3 id="toc27">LOAD Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>The LOAD block is used to gather information from user.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>Code should be comma separated variable names (not <code>an_array[1]</code>).</li>
+                    <li>
+                      The input provided by the user should be JavaScript expression. For example;
+                      <ul>
+                        <li><code>1 + 2</code></li>
+                        <li><code>array[0]</code></li>
+                        <li><code>"hello world!"</code> <em>not</em> <code>hello world!</code></li>
+                        <li>
+                          <code>"hello"</code> <em>not</em> <code>hello</code>, the latter will assign the <strong>value</strong> of the
+                          <code>hello</code> <strong>variable</strong>.
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>Input values assigned to the variables, after that, the flow will proceed to the next connected block.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>Upon execution of the block, a modal will pop-up and the flow will wait untill the user enters the values.</li>
+                    <li>
+                      The menu item <em>Project &gt; Input Parameters</em> enables you to predefine input values for the simulation. Each line
+                      processed as a separete input. This means, if there is enough predefined input the modal will not appear and the required values
+                      will be automatically taken from the predefined input area.
+                    </li>
+                    <li>This block behaves as function parameters if used in a subroutine. More details can be found in FUNCTION block.</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of LOAD Block -->
+
+        <section>
+          <h3 id="toc28">STORE Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>The STORE block is used to display information to the user.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>
+                      Code should be consists of only one expression (no comma separated values like in LOAD block) and it should be valid JavaScript
+                      expression. For example;
+                      <ul>
+                        <li><code>(1 + 2) / 3</code></li>
+                        <li><code>array[0]</code></li>
+                        <li><code>"The \"answer\" is: " + ans</code></li>
+                      </ul>
+                    </li>
+                    <li>You cannot use <code>'</code> or <code>`</code> to print strings.</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>The flow will proceed to the next connected block.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>
+                      Upon execution of the block, a toast message will appear. If you have missed the message or want to see previous messages click
+                      on <em>Project &gt; Output History</em> menu item to display the message history.
+                    </li>
+                    <li>
+                      In a subroutine call, the return value is generated by the STORE block that's the last executed one. In other words, subroutine
+                      will return the last STORE block's value.
+                    </li>
+                    <li>In subroutine call, execution of STORE block will not produce a toast message nor stored in output history.</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of STORE Block -->
+
+        <section>
+          <h3 id="toc29">WHILE Loop Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>The WHILE block is used to execute a block of code while a condition is true.</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>
+                      This block takes two input; one is the expression which decision to be decide, as explained in DECISION block, and other one is
+                      the blocks
+                    </li>
+                    <li>
+                      The expression can be any valid JavaScript expression that evaluates to a boolean value. <br />
+                      <strong>Be careful!</strong> You have to use <code>===</code> and <code>!==</code> for equality and in-equality checking!
+                    </li>
+                    <li>
+                      Second input is the block selection. Blocks are listed in a searchable dropdown. You can use name and id property of the blocks
+                      to select which ones to include. You can also remove blocks from the selection. Adding or removing will remove all connections
+                      of the target block and re-position them on the top-left corner of the WHILE block.
+                    </li>
+                    <li class="bug">
+                      If a block is selected and removed from the list without saving, its connections and position will be changed nevertheless.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>
+                  The flow will loop through the child blocks (next executed block is the connected by the blue-violet colored triangular handle)
+                  while the condition is true. If the condition is false, the flow will continue through the block that is connected from the outer
+                  handle (blue dot handle).
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>You can resize the WHILE block to match its size to fit the child blocks.</li>
+                    <li class="bug">
+                      Resizing is not automatic. Therefore, after adding child blocks to this block, you have to adjust its size. One major issue is
+                      that, if you add another WHILE block whose size is equal to or bigger than the parent one, it becomes impossible to resize. This
+                      means, you cannot connect or click underlying WHILE block. So, please be careful when adding child blocks to this block.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of WHILE Block -->
+
+        <section>
+          <h3 id="toc30">FUNCTION Block</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Description:</strong>
+                </td>
+                <td>
+                  The FUNCTION block is used to call a subroutine. Subroutines are the flowcharts that downloaded via <em>File &gt; Download</em> menu
+                  item.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Input Details:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>
+                      This block takes two input; one is the file path of the subroutine file (project file), the other one is the signature of the
+                      subroutine.
+                    </li>
+                    <li>
+                      Subroutine file is simply a FlowerApp project file. You can download any project and open them as a subroutine.
+                      <ul>
+                        <li>The subroutine name determined by the project title. This is displayed when you load the file into the editor.</li>
+                      </ul>
+                    </li>
+                    <li>
+                      Signature defines the input parameters and the returned value. It has the following syntax:
+                      <code>(&lt;EXPR&gt;) =&gt; &lt;VARIABLE&gt;</code>.
+                      <ul>
+                        <li>
+                          The part before the arrow defines the arguments of the call. Paranthesis are mandatory and more than one argument needed to
+                          pass use comma for separation. Arguments should be valid STORE block expressions.
+                        </li>
+                        <li>
+                          Right hand side of the arrow tells where to store returned value. It should be a plain variable name like
+                          <code>retVal</code> not <code>returnArray[0]</code>. This variable name should be valid LOAD block expression (except there
+                          is only one variable).
+                        </li>
+                        <li>
+                          Example signatures: <code>(an_array, "find this string") =&gt; index</code>, <code>(5)=&gt;factorial</code>,
+                          <code>()=&gt;x</code>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>On Successful Execution:</strong>
+                </td>
+                <td>
+                  Subroutine called with the given parameters and returned value stored into memory. The flow will proceed to the next connected
+                  block.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Notes:</strong>
+                </td>
+                <td>
+                  <ul>
+                    <li>
+                      <strong>Important!</strong> After you load your subroutine into the memory (selecting file and clicking on Save button on the
+                      modal), the subroutine will be statically attached to your FUNCTION block. This means, if you change your subroutine file, you
+                      have to re-load the subroutine file into the memory. This applies to all subroutines in the project, even if they are using the
+                      same subroutine.
+                    </li>
+                    <li>
+                      Calling subroutines done in isolation. Yours/theirs variables will not interact with each other which means, you cannot set a
+                      variable that is used in the main flowchart in a subroutine or vice versa. The only way of interaction is to use the LOAD and
+                      STORE blocks.
+                    </li>
+                    <li>
+                      If your subroutine does not contain a STORE block, this means it does not mutate/return any value (due to the isolation) and
+                      therefore, it is most likely useless.
+                    </li>
+                    <li>
+                      After loading your subroutine you can view it on the modal. But you cannot change it. To do so, re-open that project and
+                      re-load.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- End of FUNCTION Block -->
+      </section>
+      <!-- End of Blocks -->
+    </main>
+  </body>
+</html>

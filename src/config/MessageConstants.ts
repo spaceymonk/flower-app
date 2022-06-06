@@ -1,7 +1,7 @@
 /* eslint-disable no-multi-str */
 const T = {
   app: {
-    name: 'Flower App',
+    name: 'FlowerApp',
     dateFormat: 'HH:mm:ss',
     saveTxt: 'Save',
     cancelTxt: 'Cancel',

@@ -3,10 +3,10 @@ export const displayValue = (value: any): string => {
     return '"' + value + '"';
   }
   if (typeof value === 'number') {
-    return value.toFixed(2);
+    return value.toString();
   }
   if (typeof value === 'boolean') {
-    return value ? 'T' : 'F';
+    return value ? 'true' : 'false';
   }
   if (value === null) {
     return 'null';
