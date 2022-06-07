@@ -1,8 +1,18 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "flower-app",
+  "version": "1.0.0",
+  "author": {
+    "name": "Berktug Ozkan",
+    "email": "b.kaan.ozkan@gmail.com",
+    "url": "https://spaceymonk.github.io/"
+  },
+  "description": "Create, design, simulate and share your flowcharts.",
   "private": true,
   "homepage": "https://web.itu.edu.tr/~ozkanbe19/flower-app/",
+  "bugs": {
+    "url": "https://github.com/spaceymonk/flower-app/issues"
+  },
+  "license": "GPL-3.0",
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@fortawesome/fontawesome-svg-core": "^1.3.0",
