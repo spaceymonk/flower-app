@@ -28,6 +28,8 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
 
+  const [edgeToRemove, setEdgeToRemove] = React.useState<{ id: string | null; dragging: boolean }>({ id: null, dragging: false });
+
   const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
   const [showModal, setShowModal] = React.useState({ block: false, input: false });
   const [inputForVariable, setInputForVariable] = React.useState<string>('');
@@ -71,6 +73,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     connectionService.create(dto);
   };
   const handleConnectionUpdate = (oldEdge: Edge<any>, newConnection: Connection) => {
+    setEdgeToRemove((prev) => ({ ...prev, id: null }));
     const dto: UpdateConnectionDto = {
       sourceId: throwErrorIfNull(newConnection.source),
       targetId: throwErrorIfNull(newConnection.target),
@@ -101,6 +104,13 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   /* -------------------------------------------------------------------------- */
   /*                                Side Effects                                */
   /* -------------------------------------------------------------------------- */
+
+  React.useEffect(() => {
+    if (!edgeToRemove.dragging && edgeToRemove.id) {
+      connectionService.delete(edgeToRemove.id);
+      setEdgeToRemove((prev) => ({ ...prev, id: null }));
+    }
+  }, [connectionService, edgeToRemove.dragging, edgeToRemove.id]);
 
   React.useEffect(() => {
     inputHandler.current.fetcher = async (name: string) => {
@@ -134,6 +144,14 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           connectionLineComponent={CustomConnectionLine}
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
+          onEdgeUpdateStart={(e: React.MouseEvent, edge: Edge) => {
+            console.log('onEdgeUpdateStart', edge);
+            setEdgeToRemove((prev) => ({ ...prev, id: edge.id, dragging: true }));
+          }}
+          onEdgeUpdateEnd={(e: MouseEvent, edge: Edge) => {
+            console.log('onEdgeUpdateEnd', edge);
+            setEdgeToRemove((prev) => ({ ...prev, dragging: false }));
+          }}
           {...paneLockConfigs}
         >
           <Background />
