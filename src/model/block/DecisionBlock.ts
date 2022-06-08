@@ -10,10 +10,13 @@ class DecisionBlock extends Block {
   public override async eval(memory: Memory) {
     const code = this.text.trim();
     if (code.length === 0) {
-      throw new Error('Decision code is empty');
+      throw new Error('Decision code is empty!');
     }
     const ast = parse(code.trim());
-    const result = !!evaluate(ast, memory);
+    const result = evaluate(ast, memory);
+    if (typeof result !== 'boolean') {
+      throw new Error('Decision code is invalid!');
+    }
     return result === true ? DecisionBlockHandle.TRUE : DecisionBlockHandle.FALSE;
   }
 

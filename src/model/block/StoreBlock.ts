@@ -11,10 +11,13 @@ class StoreBlock extends Block {
     const code = this.text.trim();
     const variable = code.trim();
     if (variable.length === 0) {
-      throw new Error('Variable name is empty! ');
+      throw new Error('Variable name is empty!');
     }
     const ast = parse(variable);
     const value = evaluate(ast, memory);
+    if (typeof value === 'undefined') {
+      throw new Error('Cannot store value: ' + variable);
+    }
     outputHandler.add(value, variable);
     return null;
   }

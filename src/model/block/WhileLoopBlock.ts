@@ -21,7 +21,10 @@ class WhileLoopBlock extends Block {
       throw new Error('While condition is empty!');
     }
     const ast = parse(code.trim());
-    const result = !!evaluate(ast, memory);
+    const result = evaluate(ast, memory);
+    if (typeof result !== 'boolean') {
+      throw new Error('Decision code is invalid!');
+    }
     return result === true ? ContainerBlockHandle.INNER_SOURCE : ContainerBlockHandle.OUTER_SOURCE;
   }
 }
