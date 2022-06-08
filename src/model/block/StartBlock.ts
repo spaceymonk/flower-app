@@ -1,7 +1,7 @@
 import { BlockTypes, Point2D } from '../../types';
-import { SimpleBlock } from '../SimpleBlock';
+import Block from '../Block';
 
-class StartBlock extends SimpleBlock {
+class StartBlock extends Block {
   constructor(position: Point2D) {
     super(BlockTypes.START_BLOCK, position);
   }

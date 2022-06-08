@@ -1,7 +1,6 @@
 import { parse, eval as evaluate } from 'expression-eval';
 import { extractValue } from '../../services/helpers/SimulationHelper';
 import { BlockTypes, Memory, Point2D, ProjectData } from '../../types';
-import { SimpleBlock } from '../SimpleBlock';
 import { InputHandler } from '../../util/InputHandler';
 import { OutputHandler } from '../../util/OutputHandler';
 import Block from '../Block';
@@ -9,7 +8,7 @@ import { parseArgs } from '../helpers/FunctionBlockHelper';
 
 const functionRegex = /^\((.*)\)\s*=>\s*(([a-zA-Z_][a-zA-Z0-9_]*))$/;
 
-class FunctionBlock extends SimpleBlock {
+class FunctionBlock extends Block {
   private _subroutine: ProjectData | null;
 
   constructor(position: Point2D) {

@@ -1,8 +1,8 @@
 import { BlockTypes, DecisionBlockHandle, Point2D, Memory } from '../../types';
-import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
+import Block from '../Block';
 
-class DecisionBlock extends SimpleBlock {
+class DecisionBlock extends Block {
   constructor(position: Point2D) {
     super(BlockTypes.DECISION_BLOCK, position);
   }
