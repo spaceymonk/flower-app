@@ -86,8 +86,8 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
   );
 
   const simulationService = React.useMemo<ISimulationService>(
-    () => new SimulationService(flowService, blockService, blockRepository, connectionRepository, simulationContext),
-    [blockRepository, blockService, connectionRepository, flowService, simulationContext]
+    () => new SimulationService(flowService, blockService, blockRepository, connectionRepository, simulationContext, appContext),
+    [appContext, blockRepository, blockService, connectionRepository, flowService, simulationContext]
   );
 
   const simulationControllerService = React.useMemo<ISimulationControllerService>(
