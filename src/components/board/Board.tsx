@@ -24,7 +24,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
   const { connectionService, blockRepository, blockService } = useServiceContext();
   const { inputHandler } = useSimulationContext();
-  const { nodesState, edgesState, getInputParams } = useAppContext();
+  const { nodesState, edgesState } = useAppContext();
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
 
@@ -125,10 +125,6 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
       return defer().promise;
     };
   }, [defer, inputHandler]);
-
-  React.useEffect(() => {
-    inputHandler.current.reset(getInputParams());
-  }, [getInputParams, inputHandler]);
 
   /* -------------------------------------------------------------------------- */
   /*                                 JSX Return                                 */
