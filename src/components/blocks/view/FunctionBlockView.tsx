@@ -1,9 +1,9 @@
-import { Handle, Node, Position } from 'react-flow-renderer';
+import { Handle, NodeProps, Position } from 'react-flow-renderer';
 import FunctionBlock from '../../../model/block/FunctionBlock';
 import { NodeData } from '../../../types';
 import { BlockView } from './BlockView';
 
-export function FunctionBlockView(node: Node<NodeData>) {
+export function FunctionBlockView(node: NodeProps<NodeData>) {
   const block = node.data.block as FunctionBlock;
 
   const processed = block.text; //todo: handle special keywords by bolding them etc.

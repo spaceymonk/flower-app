@@ -1,10 +1,10 @@
 import { BlockTypes, Point2D, Memory } from '../../types';
-import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
+import Block from '../Block';
 
 const stmtPattern = /^(([a-zA-Z_][a-zA-Z0-9_]*)(\[(.*)\])?\s*=\s*)?(.*)$/;
 
-class StatementBlock extends SimpleBlock {
+class StatementBlock extends Block {
   constructor(position: Point2D) {
     super(BlockTypes.STATEMENT_BLOCK, position);
   }

@@ -1,8 +1,8 @@
-import { Handle, Node, Position } from 'react-flow-renderer';
+import { Handle, NodeProps, Position } from 'react-flow-renderer';
 import { NodeData } from '../../../types';
 import { BlockView } from './BlockView';
 
-export function StartBlockView(node: Node<NodeData>) {
+export function StartBlockView(node: NodeProps<NodeData>) {
   const block = node.data.block;
   
   return (

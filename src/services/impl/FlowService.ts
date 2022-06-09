@@ -36,7 +36,7 @@ export class FlowService implements IFlowService {
       if (current.type === BlockTypes.DECISION_BLOCK) {
         if (!mapping[current.id]) this.mapDecisionPaths(current, mapping);
         queue.push(mapping[current.id]);
-      } else if (current.type === BlockTypes.WHILE_LOOP_BLOCK) {
+      } else if (current.isContainer()) {
         // pass the body of the container block
         if (outgoers[0].parentNodeId === current.id) queue.push(outgoers[1]);
         else queue.push(outgoers[0]);

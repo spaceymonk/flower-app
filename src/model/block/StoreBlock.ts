@@ -1,8 +1,8 @@
 import { BlockTypes, Point2D, Memory, EvalOptions } from '../../types';
-import { SimpleBlock } from '../SimpleBlock';
 import { parse, eval as evaluate } from 'expression-eval';
+import Block from '../Block';
 
-class StoreBlock extends SimpleBlock {
+class StoreBlock extends Block {
   constructor(position: Point2D) {
     super(BlockTypes.STORE_BLOCK, position);
   }
@@ -11,10 +11,13 @@ class StoreBlock extends SimpleBlock {
     const code = this.text.trim();
     const variable = code.trim();
     if (variable.length === 0) {
-      throw new Error('Variable name is empty! ');
+      throw new Error('Variable name is empty!');
     }
     const ast = parse(variable);
     const value = evaluate(ast, memory);
+    if (typeof value === 'undefined') {
+      throw new Error('Cannot store value: ' + variable);
+    }
     outputHandler.add(value, variable);
     return null;
   }

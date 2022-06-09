@@ -28,6 +28,8 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
 
+  const [edgeToRemove, setEdgeToRemove] = React.useState<{ id: string | null; dragging: boolean }>({ id: null, dragging: false });
+
   const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
   const [showModal, setShowModal] = React.useState({ block: false, input: false });
   const [inputForVariable, setInputForVariable] = React.useState<string>('');
@@ -71,6 +73,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     connectionService.create(dto);
   };
   const handleConnectionUpdate = (oldEdge: Edge<any>, newConnection: Connection) => {
+    setEdgeToRemove((prev) => ({ ...prev, id: null }));
     const dto: UpdateConnectionDto = {
       sourceId: throwErrorIfNull(newConnection.source),
       targetId: throwErrorIfNull(newConnection.target),
@@ -97,10 +100,23 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const handleInputModalClose = () => {
     setShowModal((prev) => ({ ...prev, input: false }));
   };
+  const handleEdgeUpdateStart = (e: React.MouseEvent, edge: Edge) => {
+    setEdgeToRemove((prev) => ({ ...prev, id: edge.id, dragging: true }));
+  };
+  const handleEdgeUpdateEnd = (e: MouseEvent, edge: Edge) => {
+    setEdgeToRemove((prev) => ({ ...prev, dragging: false }));
+  };
 
   /* -------------------------------------------------------------------------- */
   /*                                Side Effects                                */
   /* -------------------------------------------------------------------------- */
+
+  React.useEffect(() => {
+    if (!edgeToRemove.dragging && edgeToRemove.id) {
+      connectionService.delete(edgeToRemove.id);
+      setEdgeToRemove((prev) => ({ ...prev, id: null }));
+    }
+  }, [connectionService, edgeToRemove.dragging, edgeToRemove.id]);
 
   React.useEffect(() => {
     inputHandler.current.fetcher = async (name: string) => {
@@ -134,6 +150,8 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           connectionLineComponent={CustomConnectionLine}
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
+          onEdgeUpdateStart={handleEdgeUpdateStart}
+          onEdgeUpdateEnd={handleEdgeUpdateEnd}
           {...paneLockConfigs}
         >
           <Background />
