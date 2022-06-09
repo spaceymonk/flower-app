@@ -1,9 +1,9 @@
-import { Handle, Node, Position } from 'react-flow-renderer';
+import { Handle, NodeProps, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
 import { ContainerBlockView } from './ContainerBlockView';
 import { NodeData, ContainerBlockHandle } from '../../../types';
 
-export function WhileLoopBlockView(node: Node<NodeData>) {
+export function WhileLoopBlockView(node: NodeProps<NodeData>) {
   const block = node.data.block;
   
   const processed = block.text; //todo: handle special keywords by bolding them etc.

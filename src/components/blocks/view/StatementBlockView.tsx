@@ -1,9 +1,9 @@
-import { Handle, Node, Position } from 'react-flow-renderer';
+import { Handle, NodeProps, Position } from 'react-flow-renderer';
 import T from '../../../config/MessageConstants';
 import { NodeData } from '../../../types';
 import { BlockView } from './BlockView';
 
-export function StatementBlockView(node: Node<NodeData>) {
+export function StatementBlockView(node: NodeProps<NodeData>) {
   const block = node.data.block;
   
   const processed = block.text; //todo: handle special keywords by bolding them etc.
