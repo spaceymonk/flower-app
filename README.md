@@ -1,9 +1,5 @@
 # flower-app
 
-In order to run application:
+This branch is for deployment of ITU servers. Main differences are the homepage and routing configurations and the presence of Jenkinsfile.
 
-``` Shell
-$ npm i
-$ npm run build
-$ serve -s build
-```
+This branch is up-to-date with the [university link](https://web.itu.edu.tr/~ozkanbe19/flower-app/).
