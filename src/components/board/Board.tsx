@@ -100,6 +100,12 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const handleInputModalClose = () => {
     setShowModal((prev) => ({ ...prev, input: false }));
   };
+  const handleEdgeUpdateStart = (e: React.MouseEvent, edge: Edge) => {
+    setEdgeToRemove((prev) => ({ ...prev, id: edge.id, dragging: true }));
+  };
+  const handleEdgeUpdateEnd = (e: MouseEvent, edge: Edge) => {
+    setEdgeToRemove((prev) => ({ ...prev, dragging: false }));
+  };
 
   /* -------------------------------------------------------------------------- */
   /*                                Side Effects                                */
@@ -144,14 +150,8 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           connectionLineComponent={CustomConnectionLine}
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
-          onEdgeUpdateStart={(e: React.MouseEvent, edge: Edge) => {
-            console.log('onEdgeUpdateStart', edge);
-            setEdgeToRemove((prev) => ({ ...prev, id: edge.id, dragging: true }));
-          }}
-          onEdgeUpdateEnd={(e: MouseEvent, edge: Edge) => {
-            console.log('onEdgeUpdateEnd', edge);
-            setEdgeToRemove((prev) => ({ ...prev, dragging: false }));
-          }}
+          onEdgeUpdateStart={handleEdgeUpdateStart}
+          onEdgeUpdateEnd={handleEdgeUpdateEnd}
           {...paneLockConfigs}
         >
           <Background />
