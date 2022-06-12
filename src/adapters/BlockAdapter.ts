@@ -11,6 +11,7 @@ class BlockAdapter {
       parentNode: block.parentNodeId || undefined,
       extent: block.parentNodeId ? 'parent' : undefined,
       data: { block },
+      dragHandle: '.node',
     };
   }
 }
