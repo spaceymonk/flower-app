@@ -46,6 +46,9 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
         blockService.update(nc.id, dto);
       } else if (nc.type === 'remove') {
         blockService.delete(nc.id);
+      } else if (nc.type === 'dimensions') {
+        const dto: UpdateBlockDto = { width: nc.dimensions.width, height: nc.dimensions.height };
+        blockService.update(nc.id, dto);
       } else {
         changes.push(nc);
       }
