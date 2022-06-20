@@ -7,21 +7,23 @@ import Block from '../../model/Block';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
-import LocalStorageManager from '../../config/LocalStorageManager';
+import { IProjectService } from '../IProjectService';
 
 export class ExportService implements IExportService {
   private _flowService: IFlowService;
   private _blockService: IBlockService;
   private _connectionRepository: IConnectionRepository;
+  private _projectService: IProjectService;
 
-  constructor(flowService: IFlowService, blockService: IBlockService, connectionRepository: IConnectionRepository) {
+  constructor(flowService: IFlowService, blockService: IBlockService, connectionRepository: IConnectionRepository, projectService: IProjectService) {
     this._flowService = flowService;
     this._blockService = blockService;
     this._connectionRepository = connectionRepository;
+    this._projectService = projectService;
   }
 
   public async toPNG(): Promise<void> {
-    const pd = LocalStorageManager.get();
+    const pd = this._projectService.snapshot();
     const boardNode = throwErrorIfNull(document.getElementById('board'));
     const filter = (node: Node): boolean => {
       if (node.nodeType === Node.ELEMENT_NODE) {
