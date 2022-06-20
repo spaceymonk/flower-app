@@ -22,7 +22,18 @@ export class ExportService implements IExportService {
 
   public async toPNG(): Promise<void> {
     const pd = LocalStorageManager.get();
-    const blob = await domtoimage.toBlob(throwErrorIfNull(document.getElementById('board')), { bgcolor: '#fff' });
+    const boardNode = throwErrorIfNull(document.getElementById('board'));
+    const filter = (node: Node): boolean => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as Element;
+        if (element.classList.contains('react-flow__controls')) return false;
+        if (element.classList.contains('react-flow__attribution')) return false;
+        if (element.classList.contains('react-flow__minimap')) return false;
+        if (element.classList.contains('react-flow__background')) return false;
+      }
+      return true;
+    };
+    const blob = await domtoimage.toBlob(boardNode, { bgcolor: '#fff', filter });
     FileSaver.saveAs(blob, pd.title + '.png');
   }
 
