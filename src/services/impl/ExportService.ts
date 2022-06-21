@@ -32,6 +32,7 @@ export class ExportService implements IExportService {
         if (element.classList.contains('react-flow__attribution')) return false;
         if (element.classList.contains('react-flow__minimap')) return false;
         if (element.classList.contains('react-flow__background')) return false;
+        if (element.classList.contains('react-flow__handle')) return false;
       }
       return true;
     };
