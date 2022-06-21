@@ -24,6 +24,8 @@ export class BlockService implements IBlockService {
   }
 
   public create(dto: CreateBlockDto): Block {
+    dto.position.x = dto.position.x - (dto.position.x % 10);
+    dto.position.y = dto.position.y - (dto.position.y % 10);
     const b = BlockCreateFactory.create(dto);
     this._blockRepository.save(b);
     return b;
@@ -35,7 +37,10 @@ export class BlockService implements IBlockService {
     if (dto.width) b.width = dto.width;
     if (dto.text) b.text = dto.text;
     if (dto.name) b.name = dto.name;
-    if (dto.position) b.position = dto.position;
+    if (dto.position) {
+      b.position.x = dto.position.x - (dto.position.x % 10);
+      b.position.y = dto.position.y - (dto.position.y % 10);
+    }
     if (dto.glow) b.glow = dto.glow;
     if (dto.subroutine && b instanceof FunctionBlock) b.subroutine = dto.subroutine;
     this._blockRepository.save(b);

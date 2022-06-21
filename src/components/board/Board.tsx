@@ -151,7 +151,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           multiSelectionKeyCode="Control"
           onEdgeUpdateStart={handleEdgeUpdateStart}
           onEdgeUpdateEnd={handleEdgeUpdateEnd}
-          // fitView
+          fitView
           snapToGrid
           {...paneLockConfigs}
         >
