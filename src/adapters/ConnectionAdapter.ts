@@ -11,6 +11,7 @@ class ConnectionAdapter {
       sourceHandle: connection.sourceHandle,
       type: 'custom',
       markerEnd: { type: MarkerType.ArrowClosed, color: '#505050' },
+      animated: connection.highlighted,
     };
   }
 }

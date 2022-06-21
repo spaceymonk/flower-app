@@ -7,6 +7,7 @@ class Connection {
   public targetId: string;
   public sourceHandle: string | null;
   public targetHandle: string | null;
+  public highlighted: boolean;
 
   constructor(sourceId: string, targetId: string, sourceHandle: string | null, targetHandle: string | null) {
     this.id = uuid();
@@ -14,6 +15,7 @@ class Connection {
     this.targetId = targetId;
     this.sourceHandle = sourceHandle;
     this.targetHandle = targetHandle;
+    this.highlighted = false;
   }
 }
 

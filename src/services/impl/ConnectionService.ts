@@ -45,6 +45,18 @@ export class ConnectionService implements IConnectionService {
     return null;
   }
 
+  public highlightByBlockId(blockId: string | null): void {
+    const connections = this._connectionRepository.getAll();
+    connections.forEach((c) => {
+      if (c.sourceId === blockId || c.targetId === blockId) {
+        c.highlighted = true;
+      } else {
+        c.highlighted = false;
+      }
+    });
+    this._connectionRepository.saveAll(connections);
+  }
+
   public delete(id: string): void {
     const c = this._connectionRepository.findById(id).orElseThrow(new Error('Connection not found'));
     this._connectionRepository.delete(c);

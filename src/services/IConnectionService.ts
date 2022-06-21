@@ -9,4 +9,5 @@ export interface IConnectionService {
   create(createConnectionDto: CreateConnectionDto): Connection | null;
   update(id: string, updateConnectionDto: UpdateConnectionDto): Connection | null;
   delete(id: string): void;
+  highlightByBlockId(blockId: string | null): void;
 }
