@@ -2,11 +2,13 @@ import { EdgeProps, getSmoothStepPath, useNodes } from 'react-flow-renderer';
 import { getSmartEdge, pathfindingJumpPointNoDiagonal } from '@tisoap/react-flow-smart-edge';
 import { throwErrorIfUndefined } from '../../util/common';
 import { NodeData } from '../../types';
+import React from 'react';
 
 export default function CustomEdge({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, source, target }: EdgeProps) {
   const nodes = useNodes<NodeData>();
   const targetNode = throwErrorIfUndefined(nodes.find((n) => n.id === target));
   const sourceNode = throwErrorIfUndefined(nodes.find((n) => n.id === source));
+  const filteredNodes = React.useMemo(()=>nodes.filter((node) => node.id !== sourceNode.parentNode && node.id !== targetNode.parentNode), [nodes, sourceNode.parentNode, targetNode.parentNode]);
 
   const edgeResponse = getSmartEdge({
     sourcePosition,
@@ -15,7 +17,7 @@ export default function CustomEdge({ id, sourceX, sourceY, targetX, targetY, sou
     sourceY,
     targetX,
     targetY,
-    nodes: nodes.filter((node) => node.id !== sourceNode.parentNode && node.id !== targetNode.parentNode),
+    nodes: filteredNodes,
     options: {
       gridRatio: 5,
       nodePadding: 30,

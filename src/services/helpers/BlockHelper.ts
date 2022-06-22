@@ -56,12 +56,3 @@ export class BlockCreateFactory {
     return block;
   }
 }
-
-export const includesBlock = (blockList: Block[], block: Block): boolean => {
-  for (let i = 0; i < blockList.length; i++) {
-    if (blockList[i].id === block.id) {
-      return true;
-    }
-  }
-  return false;
-};

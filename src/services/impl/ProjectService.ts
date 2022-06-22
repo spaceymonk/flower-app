@@ -18,8 +18,8 @@ export class ProjectService implements IProjectService {
 
   public snapshot(): ProjectData {
     return {
-      blocks: this._blocksRepository.getAll(),
-      connections: this._connectionRepository.getAll(),
+      blocks: Array.from(this._blocksRepository.getAll()),
+      connections: Array.from(this._connectionRepository.getAll()),
       title: this._appContext.getTitle(),
       inputParams: this._appContext.getInputParams(),
     };

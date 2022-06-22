@@ -52,11 +52,11 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
 
   const canvasFacade = React.useMemo<ICanvasFacade>(() => new CanvasFacade(reactFlowInstance), [reactFlowInstance]);
   const blockRepository = React.useMemo<IBlockRepository>(
-    () => new BlockRepository(appContext.getBlocks, appContext.setBlocks, appContext.nodesState[1]),
+    () => new BlockRepository(appContext.blockMapRef.current, appContext.nodesState[1]),
     [appContext]
   );
   const connectionRepository = React.useMemo<IConnectionRepository>(
-    () => new ConnectionRepository(appContext.getConnections, appContext.setConnections, appContext.edgesState[1]),
+    () => new ConnectionRepository(appContext.connectionMapRef.current, appContext.edgesState[1]),
     [appContext]
   );
   const connectionService = React.useMemo<IConnectionService>(

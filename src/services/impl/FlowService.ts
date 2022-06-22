@@ -4,7 +4,6 @@ import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { BlockTypes, PathMapping } from '../../types';
 import { throwErrorIfUndefined } from '../../util/common';
-import { includesBlock } from '../helpers/BlockHelper';
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 
@@ -24,14 +23,14 @@ export class FlowService implements IFlowService {
       throw new Error('start block must be a decision block');
     }
     const queue: Block[] = this._blockService.getOutgoers(start);
-    const visited: Block[] = [];
+    const visited = new Set();
     while (queue.length > 0) {
       const current = throwErrorIfUndefined(queue.shift());
-      if (includesBlock(visited, current)) {
+      if (visited.has(current)) {
         mapping[start.id] = current;
         return mapping;
       }
-      visited.push(current);
+      visited.add(current);
       const outgoers = this._blockService.getOutgoers(current);
       if (current.type === BlockTypes.DECISION_BLOCK) {
         if (!mapping[current.id]) this.mapDecisionPaths(current, mapping);
@@ -49,12 +48,13 @@ export class FlowService implements IFlowService {
   }
 
   public validate(): [Block, Block] {
-    const blocks: Block[] = this._blockRepository.getAll();
+    const blockIter = this._blockRepository.getAll();
     const startBlocks: Block[] = [];
     const stopBlocks: Block[] = [];
 
-    for (let i = 0; i < blocks.length; i++) {
-      const b = blocks[i];
+    let it = blockIter.next();
+    while (!it.done) {
+      const b = it.value;
       const connectionsCount = this._connectionRepository.countByBlocks(Array.of(b));
       if (b.type === BlockTypes.START_BLOCK) {
         startBlocks.push(b);
@@ -67,7 +67,9 @@ export class FlowService implements IFlowService {
       } else if (connectionsCount < 2) {
         throw new NotConnectedError(b.id);
       }
+      it = blockIter.next();
     }
+
     if (startBlocks.length > 1) throw new MultipleStartError(startBlocks.map((b) => b.id));
     if (stopBlocks.length > 1) throw new MultipleStopError(stopBlocks.map((b) => b.id));
     if (startBlocks.length === 0) throw new NoStartError();

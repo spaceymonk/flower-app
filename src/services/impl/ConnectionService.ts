@@ -46,15 +46,12 @@ export class ConnectionService implements IConnectionService {
   }
 
   public highlightByBlockId(blockId: string | null): void {
-    const connections = this._connectionRepository.getAll();
-    connections.forEach((c) => {
-      if (c.sourceId === blockId || c.targetId === blockId) {
-        c.highlighted = true;
-      } else {
-        c.highlighted = false;
-      }
-    });
-    this._connectionRepository.saveAll(connections);
+    if (blockId === null) {
+      this._connectionRepository.updateHighlightedByIdList([]);
+    } else {
+      const connections = this._connectionRepository.findAllBySourceIdOrTargetId(blockId);
+      this._connectionRepository.updateHighlightedByIdList(connections.map((c) => c.id));
+    }
   }
 
   public delete(id: string): void {
@@ -87,33 +84,19 @@ export class ConnectionService implements IConnectionService {
     return true;
   }
   public isValidOnConnect(c: Connection): boolean {
-    const connectionList = this._connectionRepository.getAll();
-    for (const e of connectionList) {
-      // there can be only one edge with same source data between two nodes
-      if (e.sourceId === c.sourceId && c.sourceHandle === e.sourceHandle) {
-        return false;
-      }
-    }
-    return true;
+    // there can be only one edge with same source data between two nodes
+    return !this._connectionRepository.existsBySourceIdAndSourceHandle(c.sourceId, c.sourceHandle);
   }
   public isValidOnUpdate(oldConnection: Connection, newConnection: Connection): boolean {
-    const connectionList = this._connectionRepository.getAll();
-
-    for (const e of connectionList) {
-      // if there is already an edge return
-      if (e.sourceId === newConnection.sourceId && e.sourceHandle === newConnection.sourceHandle && oldConnection.id !== e.id) {
-        return false;
-      }
-      // if there is already an exact edge return
-      if (
-        e.sourceId === newConnection.sourceId &&
-        e.sourceHandle === newConnection.sourceHandle &&
-        e.targetId === newConnection.targetId &&
-        e.targetHandle === newConnection.targetHandle
-      ) {
-        return false;
-      }
-    }
-    return true;
+    return (
+      this._connectionRepository.existsById(oldConnection.id) &&
+      !this._connectionRepository.existsBySourceIdAndSourceHandle(newConnection.sourceId, newConnection.sourceHandle) &&
+      !this._connectionRepository.existsBySourceIdAndSourceHandleAndTargetIdAndTargetHandle(
+        newConnection.sourceId,
+        newConnection.sourceHandle,
+        newConnection.targetId,
+        newConnection.targetHandle
+      )
+    );
   }
 }

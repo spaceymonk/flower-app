@@ -17,8 +17,14 @@ export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => 
   const projectData = LocalStorageManager.get();
   const [title, setTitle] = React.useState<string>(projectData.title);
   const [inputParams, setInputParams] = React.useState<string>(projectData.inputParams);
-  const [blocks, setBlocks] = React.useState<Block[]>(projectData.blocks);
-  const [connections, setConnections] = React.useState<Connection[]>(projectData.connections);
+
+  const blockMapRef = React.useRef<Map<string, Block>>(new Map());
+  const connectionMapRef = React.useRef<Map<string, Connection>>(new Map());
+
+  React.useEffect(() => {
+    projectData.blocks.forEach((b) => blockMapRef.current.set(b.id, b));
+    projectData.connections.forEach((c) => connectionMapRef.current.set(c.id, c));
+  }, [projectData.blocks, projectData.connections]);
 
   const nodesState = useNodesState(projectData.blocks.map((b) => BlockAdapter.toNode(b)));
   const edgesState = useEdgesState(projectData.connections.map((c) => ConnectionAdapter.toEdge(c)));
@@ -28,10 +34,8 @@ export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => 
     setTitle,
     getInputParams: () => inputParams,
     setInputParams,
-    getBlocks: () => blocks,
-    setBlocks,
-    getConnections: () => connections,
-    setConnections,
+    blockMapRef,
+    connectionMapRef,
     nodesState,
     edgesState,
   };

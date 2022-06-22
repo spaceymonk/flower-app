@@ -8,7 +8,7 @@ export function ContainerBlockView({ block, ...props }: ContainerNodeProps) {
   const { blockService, blockRepository, canvasFacade } = useServiceContext();
 
   const [minSize, setMinSize] = React.useState<[number, number]>([200, 200]);
-  const childBlocks = React.useMemo(() => blockRepository.getDirectChildren(block.id), [block.id, blockRepository]);
+  const childBlocks = React.useMemo(() => blockRepository.findAllByParentNodeId(block.id), [block.id, blockRepository]);
   const zoom = React.useMemo(() => canvasFacade.getViewport().zoom, [canvasFacade]);
 
   const calcMinSize = React.useCallback((): [number, number] => {
