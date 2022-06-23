@@ -3,17 +3,25 @@ import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { AppContextType, ProjectData } from '../../types';
 import { download, save, open } from '../helpers/ProjectHelper';
+import { IAnalyzeService } from '../IAnalyzeService';
 import { IProjectService } from '../IProjectService';
 
 export class ProjectService implements IProjectService {
   private _appContext: AppContextType;
   private _blocksRepository: IBlockRepository;
   private _connectionRepository: IConnectionRepository;
+  private _analyzeService: IAnalyzeService;
 
-  constructor(appContext: AppContextType, blocksRepository: IBlockRepository, connectionRepository: IConnectionRepository) {
+  constructor(
+    appContext: AppContextType,
+    blocksRepository: IBlockRepository,
+    connectionRepository: IConnectionRepository,
+    analyzeService: IAnalyzeService
+  ) {
     this._appContext = appContext;
     this._blocksRepository = blocksRepository;
     this._connectionRepository = connectionRepository;
+    this._analyzeService = analyzeService;
   }
 
   public snapshot(): ProjectData {
@@ -26,6 +34,7 @@ export class ProjectService implements IProjectService {
   }
 
   public load(pd: ProjectData): void {
+    this._analyzeService.clear();
     this._blocksRepository.clear();
     this._connectionRepository.clear();
     this._appContext.setTitle(pd.title);

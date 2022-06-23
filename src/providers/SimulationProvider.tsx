@@ -17,6 +17,7 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
   const speedInMsRef = React.useRef<number>(500);
   const actionRef = React.useRef(SimulationActions.none);
   const jumpNextBlockRef = React.useRef(false);
+  const stepCountRef = React.useRef(0);
   const inputHandler = React.useMemo(() => new InputHandler(getInputParams()), [getInputParams]);
   const outputHandler = React.useMemo(() => new OutputHandler(toastAndSave), []);
 
@@ -25,6 +26,7 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
     setRunning,
     getSpeedInMs: () => speedInMsRef.current,
     setSpeedInMs: (val: number) => (speedInMsRef.current = val),
+    stepCountRef,
     variableTableRef,
     currentBlockRef,
     actionRef,

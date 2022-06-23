@@ -11,6 +11,7 @@ export type SimulationContextType = {
   currentBlockRef: React.MutableRefObject<Block | null>;
   getSpeedInMs: () => number;
   setSpeedInMs: (val: number) => number;
+  stepCountRef: React.MutableRefObject<number>;
   actionRef: React.MutableRefObject<SimulationActions>;
   jumpNextBlockRef: React.MutableRefObject<boolean>;
   inputHandler: InputHandler;

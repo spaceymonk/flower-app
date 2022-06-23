@@ -63,10 +63,6 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     () => new ConnectionService(connectionRepository, blockRepository),
     [connectionRepository, blockRepository]
   );
-  const projectService = React.useMemo<IProjectService>(
-    () => new ProjectService(appContext, blockRepository, connectionRepository),
-    [appContext, blockRepository, connectionRepository]
-  );
   const blockService = React.useMemo<IBlockService>(
     () => new BlockService(blockRepository, connectionRepository, canvasFacade),
     [blockRepository, canvasFacade, connectionRepository]
@@ -76,20 +72,21 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
     [blockRepository, blockService, connectionRepository]
   );
   const analyzeService = React.useMemo<IAnalyzeService>(
-    () => new AnalyzeService(blockRepository, connectionRepository, flowService),
-    [blockRepository, connectionRepository, flowService]
+    () => new AnalyzeService(blockRepository, connectionRepository, flowService, simulationContext),
+    [blockRepository, connectionRepository, flowService, simulationContext]
   );
-
+  const projectService = React.useMemo<IProjectService>(
+    () => new ProjectService(appContext, blockRepository, connectionRepository, analyzeService),
+    [analyzeService, appContext, blockRepository, connectionRepository]
+  );
   const exportService = React.useMemo<IExportService>(
     () => new ExportService(flowService, blockService, connectionRepository, projectService),
     [blockService, connectionRepository, flowService, projectService]
   );
-
   const simulationService = React.useMemo<ISimulationService>(
-    () => new SimulationService(flowService, blockService, blockRepository, connectionService, connectionRepository, simulationContext, appContext),
-    [appContext, blockRepository, blockService, connectionRepository, connectionService, flowService, simulationContext]
+    () => new SimulationService(flowService, blockService, blockRepository, connectionService, connectionRepository, simulationContext),
+    [blockRepository, blockService, connectionRepository, connectionService, flowService, simulationContext]
   );
-
   const simulationControllerService = React.useMemo<ISimulationControllerService>(
     () => new SimulationControllerService(simulationContext, blockService, connectionService, simulationService),
     [blockService, connectionService, simulationContext, simulationService]

@@ -17,10 +17,12 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
   const [isLoading, setIsLoading] = React.useState<State>({
     [AnalyzeTypes.cyclomaticComplexity]: true,
     [AnalyzeTypes.blockCountByTypes]: true,
+    [AnalyzeTypes.stepCount]: true,
   });
   const [results, setResults] = React.useState<State>({
     [AnalyzeTypes.cyclomaticComplexity]: null,
     [AnalyzeTypes.blockCountByTypes]: null,
+    [AnalyzeTypes.stepCount]: null,
   });
 
   const resolveAnalyze = (key: AnalyzeTypes, promise: Promise<any>) => {
@@ -55,6 +57,7 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
     if (show) {
       resolveAnalyze(AnalyzeTypes.cyclomaticComplexity, analyzeService.getCyclomaticComplexity());
       resolveAnalyze(AnalyzeTypes.blockCountByTypes, analyzeService.getBlockCountByTypes());
+      resolveAnalyze(AnalyzeTypes.stepCount, analyzeService.getStepCount());
     }
   }, [analyzeService, show]);
 
@@ -73,6 +76,12 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
                 <strong>Cyclomatic Complexity</strong>
               </td>
               <td>{isLoading[AnalyzeTypes.cyclomaticComplexity] ? <Spinner animation="border" /> : CyclomaticComplexityDisplay(results)}</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Number of steps</strong>
+              </td>
+              <td>{isLoading[AnalyzeTypes.stepCount] ? <Spinner animation="border" /> : StepCountDisplay(results)}</td>
             </tr>
             <tr>
               <td colSpan={2}>{isLoading[AnalyzeTypes.blockCountByTypes] ? <Spinner animation="border" /> : BlockCountTable(results)}</td>
@@ -119,13 +128,21 @@ function CyclomaticComplexityDisplay(results: State): React.ReactNode {
   }
 }
 
+function StepCountDisplay(results: State): React.ReactNode {
+  const stepCount = results[AnalyzeTypes.stepCount];
+  if (stepCount !== 0) {
+    return <span>{stepCount}</span>;
+  }
+    return <span className="text-danger">Run your program for calculation</span>;
+}
+
 function BlockCountTable(results: State): React.ReactNode {
   if (Object.keys(results[AnalyzeTypes.blockCountByTypes]).length === 0) {
     return <span className="text-danger">No blocks found</span>;
   }
   return (
-    <div className='container-sm' >
-      <Table size='sm' bordered>
+    <div className="container-sm">
+      <Table size="sm" bordered>
         <thead>
           <tr>
             <th>Block Type</th>
@@ -142,7 +159,7 @@ function BlockCountTable(results: State): React.ReactNode {
         </tbody>
         <tfoot>
           <tr>
-            <td>Total</td>
+            <td><strong>Total</strong></td>
             <td>{Object.values<number>(results[AnalyzeTypes.blockCountByTypes]).reduce((a, b) => a + b, 0)}</td>
           </tr>
         </tfoot>
