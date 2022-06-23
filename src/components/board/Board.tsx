@@ -127,7 +127,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   }, [connectionService, edgeToRemove.dragging, edgeToRemove.id]);
 
   React.useEffect(() => {
-    inputHandler.current.fetcher = async (name: string) => {
+    inputHandler.fetcher = async (name: string) => {
       setInputForVariable(name);
       setShowModal((prev) => ({ ...prev, input: true }));
       return defer().promise;

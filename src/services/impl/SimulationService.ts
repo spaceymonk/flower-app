@@ -36,7 +36,7 @@ export class SimulationService implements ISimulationService {
   }
 
   public initialize(): void {
-    this._simulationContext.inputHandler.current.reset(this._appContext.getInputParams());
+    // this._simulationContext.inputHandler.reset(this._appContext.getInputParams());
     const [startBlock] = this._flowService.validate();
     this.updateCurrentBlock(startBlock);
     this._simulationContext.variableTableRef.current = {
@@ -53,8 +53,8 @@ export class SimulationService implements ISimulationService {
   public async process(): Promise<void> {
     const currentBlock = throwErrorIfNull(this._simulationContext.currentBlockRef.current, 'Current block is null');
     const handleId = await currentBlock.eval(this._simulationContext.variableTableRef.current, {
-      inputHandler: this._simulationContext.inputHandler.current,
-      outputHandler: this._simulationContext.outputHandler.current,
+      inputHandler: this._simulationContext.inputHandler,
+      outputHandler: this._simulationContext.outputHandler,
     });
     this.next(handleId);
   }

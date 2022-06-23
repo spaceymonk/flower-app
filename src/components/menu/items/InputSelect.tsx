@@ -8,10 +8,11 @@ import PropTypes from 'prop-types';
 import Editor from 'react-simple-code-editor';
 
 import { hightlightWithLineNumbers } from '../../common/EditorHelper';
-
+import { useSimulationContext } from '../../../providers/SimulationProvider';
 
 export function InputSelectModal({ show, onClose }: InputSelectModalProps) {
   const { getInputParams, setInputParams } = useAppContext();
+  const { isRunning } = useSimulationContext();
   const [text, setText] = React.useState(getInputParams());
 
   const handleSave = () => {
@@ -48,6 +49,7 @@ export function InputSelectModal({ show, onClose }: InputSelectModalProps) {
             padding={10}
             textareaId="codeArea"
             className="editor"
+            readOnly={isRunning()}
           />
         </Container>
       </Modal.Body>

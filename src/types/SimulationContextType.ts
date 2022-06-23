@@ -13,6 +13,6 @@ export type SimulationContextType = {
   setSpeedInMs: (val: number) => number;
   actionRef: React.MutableRefObject<SimulationActions>;
   jumpNextBlockRef: React.MutableRefObject<boolean>;
-  inputHandler: React.MutableRefObject<InputHandler>;
-  outputHandler: React.MutableRefObject<OutputHandler>;
+  inputHandler: InputHandler;
+  outputHandler: OutputHandler;
 };

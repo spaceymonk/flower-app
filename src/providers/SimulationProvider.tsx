@@ -17,8 +17,8 @@ export const SimulationProvider = (props: React.PropsWithChildren<React.ReactNod
   const speedInMsRef = React.useRef<number>(500);
   const actionRef = React.useRef(SimulationActions.none);
   const jumpNextBlockRef = React.useRef(false);
-  const inputHandler = React.useRef(new InputHandler(getInputParams()));
-  const outputHandler = React.useRef(new OutputHandler(toastAndSave));
+  const inputHandler = React.useMemo(() => new InputHandler(getInputParams()), [getInputParams]);
+  const outputHandler = React.useMemo(() => new OutputHandler(toastAndSave), []);
 
   const value: SimulationContextType = {
     isRunning: () => running,
