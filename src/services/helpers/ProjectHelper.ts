@@ -5,6 +5,7 @@ import { ProjectDataSchema } from '../../config/ProjectDataValidation';
 import { ProjectData } from '../../types';
 import { nameof, throwErrorIfNull } from '../../util/common';
 import { BlockCreateFactory } from './BlockHelper';
+import { ConnectionCreateFactory } from './ConnectionHelper';
 
 export function save(pd: ProjectData): void {
   window.localStorage.clear();
@@ -33,7 +34,7 @@ export function open(file: Blob, onOpen?: (content: ProjectData) => void): void 
         onOpen({
           title: content.title,
           blocks: content.blocks.map((b: any) => BlockCreateFactory.fromJSON(b)),
-          connections: content.connections,
+          connections: content.connections.map((c: any) => ConnectionCreateFactory.fromJSON(c)),
           inputParams: content.inputParams,
         });
       }
