@@ -144,12 +144,8 @@ export class ConnectionRepository implements IConnectionRepository {
   }
   public saveAll(connections: Connection[]): void {
     if (this._connectionMap.size === 0) {
-      this._setEdges(() =>
-        connections.map((c) => {
-          this._connectionMap.set(c.id, c);
-          return ConnectionAdapter.toEdge(c);
-        })
-      );
+      this._setEdges(() => connections.map((c) => ConnectionAdapter.toEdge(c)));
+      connections.forEach((c) => this._connectionMap.set(c.id, c));
     } else {
       connections.forEach((c) => this.save(c));
     }

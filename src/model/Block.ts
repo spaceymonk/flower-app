@@ -19,7 +19,7 @@ abstract class Block {
     this._width = width;
     this._height = height;
     this._type = type;
-    this._position = position;
+    this._position = { ...position };
     this._text = '';
     this._name = undefined;
     this._parentNodeId = null;

@@ -107,12 +107,8 @@ export class BlockRepository implements IBlockRepository {
   }
   public saveAll(bs: Block[]): void {
     if (this._blockMap.size === 0) {
-      this._setNodes(() =>
-        bs.map((b) => {
-          this._blockMap.set(b.id, b);
-          return BlockAdapter.toNode(b);
-        })
-      );
+      this._setNodes(() => bs.map((b) => BlockAdapter.toNode(b)));
+      bs.forEach((b) => this._blockMap.set(b.id, b));
     } else {
       bs.forEach((b) => this.save(b));
     }

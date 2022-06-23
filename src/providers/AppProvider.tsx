@@ -11,7 +11,7 @@ import ConnectionAdapter from '../adapters/ConnectionAdapter';
 const AppContext = React.createContext<AppContextType | null>(null);
 
 export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => {
-  const projectData = LocalStorageManager.get();
+  const projectData = React.useMemo(() => LocalStorageManager.get(), []);
   const initialDataLoadedRef = React.useRef(false);
 
   const [title, setTitle] = React.useState<string>(projectData.title);
