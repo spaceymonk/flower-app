@@ -19,7 +19,7 @@ abstract class Block {
     this._width = width;
     this._height = height;
     this._type = type;
-    this._position = position;
+    this._position = { ...position };
     this._text = '';
     this._name = undefined;
     this._parentNodeId = null;
@@ -43,7 +43,6 @@ abstract class Block {
       type: this._type,
       position: this._position,
       text: this._text,
-      glow: this._glow,
       name: this._name,
       parentNodeId: this._parentNodeId,
       width: this._width,

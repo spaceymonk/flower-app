@@ -10,15 +10,15 @@ import React from 'react';
 
 export function OutputModal({ show, onClose }: OutputModalProps) {
   const { outputHandler } = useSimulationContext();
-  const [outputs, setOutputs] = React.useState(outputHandler.current.outputs);
+  const [outputs, setOutputs] = React.useState(outputHandler.outputs);
 
   React.useEffect(() => {
-    setOutputs(outputHandler.current.outputs);
+    setOutputs(outputHandler.outputs);
   }, [outputHandler]);
 
   const handleClear = () => {
-    outputHandler.current.clear();
-    setOutputs(outputHandler.current.outputs);
+    outputHandler.clear();
+    setOutputs(outputHandler.outputs);
   };
 
   return (
@@ -50,7 +50,7 @@ export function OutputModal({ show, onClose }: OutputModalProps) {
       </Modal.Body>
       <Modal.Footer>
         <CustomOverlay overlay={<Tooltip>Clear history</Tooltip>}>
-          <Button variant="danger" size="sm" className="me-auto" disabled={outputHandler.current.isEmpty()} onClick={handleClear}>
+          <Button variant="danger" size="sm" className="me-auto" disabled={outputHandler.isEmpty()} onClick={handleClear}>
             <FontAwesomeIcon icon={faTrash} />
           </Button>
         </CustomOverlay>

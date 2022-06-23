@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './pages/App';
 import NotFound from './pages/NotFound';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-resizable/css/styles.css';
@@ -20,3 +21,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+serviceWorkerRegistration.register();

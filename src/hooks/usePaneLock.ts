@@ -5,7 +5,7 @@ import { GlowTypes } from '../types';
 
 const usePaneLock = () => {
   const { isRunning } = useSimulationContext();
-  const { blockService } = useServiceContext();
+  const { blockService, connectionService } = useServiceContext();
 
   const [nodesDraggable, setNodesDraggable] = React.useState(true);
   const [nodesConnectable, setNodesConnectable] = React.useState(true);
@@ -14,8 +14,9 @@ const usePaneLock = () => {
   const onPaneClick = React.useCallback(() => {
     if (!isRunning()) {
       blockService.highlight(null, GlowTypes.NONE); // clear highlighs
+      connectionService.highlightByBlockId(null, GlowTypes.NONE);
     }
-  }, [blockService, isRunning]);
+  }, [blockService, connectionService, isRunning]);
 
   React.useEffect(() => {
     if (isRunning()) {

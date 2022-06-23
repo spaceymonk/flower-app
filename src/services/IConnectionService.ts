@@ -1,6 +1,7 @@
 import { CreateConnectionDto } from '../dto/CreateConnectionDto';
 import { UpdateConnectionDto } from '../dto/UpdateConnectionDto';
 import Connection from '../model/Connection';
+import { GlowTypes } from '../types';
 
 export interface IConnectionService {
   isValidConnection(c: Connection): boolean;
@@ -9,4 +10,5 @@ export interface IConnectionService {
   create(createConnectionDto: CreateConnectionDto): Connection | null;
   update(id: string, updateConnectionDto: UpdateConnectionDto): Connection | null;
   delete(id: string): void;
+  highlightByBlockId(blockId: string | null, glow: GlowTypes): void;
 }

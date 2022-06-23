@@ -9,9 +9,10 @@ import { useServiceContext } from '../../../providers/ServiceProvider';
 import Block from '../../../model/Block';
 
 export function FindModal({ show, onClose }: FindModalProps) {
-  const {blockService, blockRepository} = useServiceContext();
+  const { blockService, blockRepository } = useServiceContext();
 
-  const blockList = React.useMemo(() => blockRepository.getAll(), [blockRepository]);
+  const blockCount = React.useMemo(() => blockRepository.countAll(), [blockRepository]);
+  const blockIter = React.useMemo(() => blockRepository.getAll(), [blockRepository]);
 
   function handleSelect(b: Block) {
     onClose();
@@ -26,13 +27,13 @@ export function FindModal({ show, onClose }: FindModalProps) {
         </h4>
       </Modal.Header>
       <Modal.Body className="pb-5">
-        {blockList.length === 0 ? (
+        {blockCount === 0 ? (
           <p className="lead text-center fst-italic text-muted mt-5">No blocks found</p>
         ) : (
           <>
             <h5>Block List</h5>
             <ListGroup variant="flush">
-              {blockList.map((b) => (
+              {Array.from(blockIter, (b) => (
                 <ListGroup.Item key={b.id} action onClick={() => handleSelect(b)}>
                   <BlockOption block={b} />
                 </ListGroup.Item>
