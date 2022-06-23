@@ -66,7 +66,7 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
         </h4>
       </Modal.Header>
       <Modal.Body className="pb-2">
-        <Table className="text-start">
+        <Table className="text-start" striped>
           <tbody>
             <tr>
               <td>
@@ -75,10 +75,7 @@ export function AnalyzeModal({ show, onClose }: AnalyzeModalProps) {
               <td>{isLoading[AnalyzeTypes.cyclomaticComplexity] ? <Spinner animation="border" /> : CyclomaticComplexityDisplay(results)}</td>
             </tr>
             <tr>
-              <td>
-                <strong>Block Counts</strong>
-              </td>
-              <td>{isLoading[AnalyzeTypes.blockCountByTypes] ? <Spinner animation="border" /> : BlockCountTable(results)}</td>
+              <td colSpan={2}>{isLoading[AnalyzeTypes.blockCountByTypes] ? <Spinner animation="border" /> : BlockCountTable(results)}</td>
             </tr>
           </tbody>
         </Table>
@@ -127,27 +124,29 @@ function BlockCountTable(results: State): React.ReactNode {
     return <span className="text-danger">No blocks found</span>;
   }
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>Block Type</th>
-          <th>Count</th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.keys(results[AnalyzeTypes.blockCountByTypes]).map((key: string) => (
-          <tr key={key}>
-            <td>{key}</td>
-            <td>{results[AnalyzeTypes.blockCountByTypes][key]}</td>
+    <div className='container-sm' >
+      <Table size='sm' bordered>
+        <thead>
+          <tr>
+            <th>Block Type</th>
+            <th>Count</th>
           </tr>
-        ))}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Total</td>
-          <td>{Object.values<number>(results[AnalyzeTypes.blockCountByTypes]).reduce((a, b) => a + b, 0)}</td>
-        </tr>
-      </tfoot>
-    </Table>
+        </thead>
+        <tbody>
+          {Object.keys(results[AnalyzeTypes.blockCountByTypes]).map((key: string) => (
+            <tr key={key}>
+              <td>{key}</td>
+              <td>{results[AnalyzeTypes.blockCountByTypes][key]}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td>{Object.values<number>(results[AnalyzeTypes.blockCountByTypes]).reduce((a, b) => a + b, 0)}</td>
+          </tr>
+        </tfoot>
+      </Table>
+    </div>
   );
 }
