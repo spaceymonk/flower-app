@@ -43,7 +43,6 @@ abstract class Block {
       type: this._type,
       position: this._position,
       text: this._text,
-      glow: this._glow,
       name: this._name,
       parentNodeId: this._parentNodeId,
       width: this._width,
