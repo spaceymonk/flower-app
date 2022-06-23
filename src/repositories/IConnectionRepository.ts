@@ -1,5 +1,6 @@
 import Block from '../model/Block';
 import Connection from '../model/Connection';
+import { GlowTypes } from '../types';
 import { Optional } from '../util/Optional';
 import { IRepository } from './IRepository';
 
@@ -17,6 +18,6 @@ export interface IConnectionRepository extends IRepository<Connection> {
     targetId: string,
     targetHandle: string | null
   ): boolean;
-  updateHighlightedByIdList(ids: string[]): void;
+  updateHighlightedByIdList(ids: string[], glow: GlowTypes): void;
   findAllBySourceIdOrTargetId(id: string): Connection[];
 }

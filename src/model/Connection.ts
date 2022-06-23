@@ -1,5 +1,6 @@
 // @ts-ignore
 import { v4 as uuid } from 'uuid';
+import { GlowTypes } from '../types';
 
 class Connection {
   public id: string;
@@ -7,7 +8,7 @@ class Connection {
   public targetId: string;
   public sourceHandle: string | null;
   public targetHandle: string | null;
-  public highlighted: boolean;
+  public glow: GlowTypes;
 
   constructor(sourceId: string, targetId: string, sourceHandle: string | null, targetHandle: string | null) {
     this.id = uuid();
@@ -15,7 +16,7 @@ class Connection {
     this.targetId = targetId;
     this.sourceHandle = sourceHandle;
     this.targetHandle = targetHandle;
-    this.highlighted = false;
+    this.glow = GlowTypes.NONE;
   }
 }
 

@@ -3,7 +3,7 @@ import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
 import Connection from '../../model/Connection';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
-import { ContainerBlockHandle } from '../../types';
+import { ContainerBlockHandle, GlowTypes } from '../../types';
 import { IConnectionService } from '../IConnectionService';
 
 export class ConnectionService implements IConnectionService {
@@ -45,12 +45,15 @@ export class ConnectionService implements IConnectionService {
     return null;
   }
 
-  public highlightByBlockId(blockId: string | null): void {
+  public highlightByBlockId(blockId: string | null, glow: GlowTypes): void {
     if (blockId === null) {
-      this._connectionRepository.updateHighlightedByIdList([]);
+      this._connectionRepository.updateHighlightedByIdList([], glow);
     } else {
       const connections = this._connectionRepository.findAllBySourceIdOrTargetId(blockId);
-      this._connectionRepository.updateHighlightedByIdList(connections.map((c) => c.id));
+      this._connectionRepository.updateHighlightedByIdList(
+        connections.map((c) => c.id),
+        glow
+      );
     }
   }
 

@@ -86,13 +86,13 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
   );
 
   const simulationService = React.useMemo<ISimulationService>(
-    () => new SimulationService(flowService, blockService, blockRepository, connectionRepository, simulationContext, appContext),
-    [appContext, blockRepository, blockService, connectionRepository, flowService, simulationContext]
+    () => new SimulationService(flowService, blockService, blockRepository, connectionService, connectionRepository, simulationContext, appContext),
+    [appContext, blockRepository, blockService, connectionRepository, connectionService, flowService, simulationContext]
   );
 
   const simulationControllerService = React.useMemo<ISimulationControllerService>(
-    () => new SimulationControllerService(simulationContext, blockService, simulationService),
-    [blockService, simulationContext, simulationService]
+    () => new SimulationControllerService(simulationContext, blockService, connectionService, simulationService),
+    [blockService, connectionService, simulationContext, simulationService]
   );
 
   const value: ServiceContextType = {

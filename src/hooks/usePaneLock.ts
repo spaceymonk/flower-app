@@ -14,7 +14,7 @@ const usePaneLock = () => {
   const onPaneClick = React.useCallback(() => {
     if (!isRunning()) {
       blockService.highlight(null, GlowTypes.NONE); // clear highlighs
-      connectionService.highlightByBlockId(null);
+      connectionService.highlightByBlockId(null, GlowTypes.NONE);
     }
   }, [blockService, connectionService, isRunning]);
 

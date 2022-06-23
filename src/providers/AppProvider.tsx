@@ -10,11 +10,10 @@ import ConnectionAdapter from '../adapters/ConnectionAdapter';
 
 const AppContext = React.createContext<AppContextType | null>(null);
 
-/**
- * This component is used to provide the project data to all the components.
- */
 export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => {
   const projectData = LocalStorageManager.get();
+  const initialDataLoadedRef = React.useRef(false);
+
   const [title, setTitle] = React.useState<string>(projectData.title);
   const [inputParams, setInputParams] = React.useState<string>(projectData.inputParams);
 
@@ -22,8 +21,11 @@ export const AppProvider = (props: React.PropsWithChildren<React.ReactNode>) => 
   const connectionMapRef = React.useRef<Map<string, Connection>>(new Map());
 
   React.useEffect(() => {
-    projectData.blocks.forEach((b) => blockMapRef.current.set(b.id, b));
-    projectData.connections.forEach((c) => connectionMapRef.current.set(c.id, c));
+    if (!initialDataLoadedRef.current) {
+      projectData.blocks.forEach((b) => blockMapRef.current.set(b.id, b));
+      projectData.connections.forEach((c) => connectionMapRef.current.set(c.id, c));
+      initialDataLoadedRef.current = true;
+    }
   }, [projectData.blocks, projectData.connections]);
 
   const nodesState = useNodesState(projectData.blocks.map((b) => BlockAdapter.toNode(b)));

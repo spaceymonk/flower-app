@@ -3,6 +3,7 @@ import { Edge } from 'react-flow-renderer';
 import ConnectionAdapter from '../../adapters/ConnectionAdapter';
 import Block from '../../model/Block';
 import Connection from '../../model/Connection';
+import { GlowTypes } from '../../types';
 import { Optional } from '../../util/Optional';
 import { IConnectionRepository } from '../IConnectionRepository';
 
@@ -23,14 +24,14 @@ export class ConnectionRepository implements IConnectionRepository {
     });
     return result;
   }
-  updateHighlightedByIdList(ids: string[]): void {
+  updateHighlightedByIdList(ids: string[], glow: GlowTypes): void {
     const result = [] as Connection[];
     const idSet = new Set<string>(ids);
     this._connectionMap.forEach((c) => {
       if (idSet.has(c.id)) {
-        c.highlighted = true;
+        c.glow = glow;
       } else {
-        c.highlighted = false;
+        c.glow = GlowTypes.NONE;
       }
       result.push(c);
     });

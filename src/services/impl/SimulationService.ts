@@ -4,6 +4,7 @@ import { IConnectionRepository } from '../../repositories/IConnectionRepository'
 import { AppContextType, GlowTypes, SimulationContextType } from '../../types';
 import { throwErrorIfNull } from '../../util/common';
 import { IBlockService } from '../IBlockService';
+import { IConnectionService } from '../IConnectionService';
 import { IFlowService } from '../IFlowService';
 import { ISimulationService } from '../ISimulationService';
 
@@ -11,6 +12,7 @@ export class SimulationService implements ISimulationService {
   private _flowService: IFlowService;
   private _blockService: IBlockService;
   private _blockRepository: IBlockRepository;
+  private _connectionService: IConnectionService;
   private _connectionRepository: IConnectionRepository;
   private _simulationContext: SimulationContextType;
   private _appContext: AppContextType;
@@ -19,6 +21,7 @@ export class SimulationService implements ISimulationService {
     flowService: IFlowService,
     blockService: IBlockService,
     blockRepository: IBlockRepository,
+    connectionService: IConnectionService,
     connectionRepository: IConnectionRepository,
     simulationContext: SimulationContextType,
     appContext: AppContextType
@@ -26,6 +29,7 @@ export class SimulationService implements ISimulationService {
     this._flowService = flowService;
     this._blockService = blockService;
     this._blockRepository = blockRepository;
+    this._connectionService = connectionService;
     this._connectionRepository = connectionRepository;
     this._simulationContext = simulationContext;
     this._appContext = appContext;
@@ -67,5 +71,6 @@ export class SimulationService implements ISimulationService {
   private updateCurrentBlock(block: Block): void {
     this._simulationContext.currentBlockRef.current = block;
     this._blockService.highlight([block.id], GlowTypes.NORMAL);
+    this._connectionService.highlightByBlockId(block.id, GlowTypes.ANIMATE);
   }
 }
