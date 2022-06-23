@@ -143,7 +143,16 @@ export class ConnectionRepository implements IConnectionRepository {
     this._connectionMap.delete(connection.id);
   }
   public saveAll(connections: Connection[]): void {
-    connections.forEach((c) => this.save(c));
+    if (this._connectionMap.size === 0) {
+      this._setEdges(() =>
+        connections.map((c) => {
+          this._connectionMap.set(c.id, c);
+          return ConnectionAdapter.toEdge(c);
+        })
+      );
+    } else {
+      connections.forEach((c) => this.save(c));
+    }
   }
   public deleteAll(cs: Connection[]): void {
     cs.forEach((c) => this.delete(c));

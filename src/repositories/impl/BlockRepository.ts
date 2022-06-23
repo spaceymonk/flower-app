@@ -5,6 +5,8 @@ import { NodeData, BlockTypes, GlowTypes } from '../../types';
 import { Node } from 'react-flow-renderer';
 import BlockAdapter from '../../adapters/BlockAdapter';
 
+const lastAccessedItem = { id: '', index: -1 };
+
 export class BlockRepository implements IBlockRepository {
   private _blockMap: Map<string, Block>;
   private _setNodes: React.Dispatch<React.SetStateAction<Node<NodeData>[]>>;
@@ -62,16 +64,32 @@ export class BlockRepository implements IBlockRepository {
   }
 
   public save(block: Block): void {
-    this._setNodes((nodes) => {
-      if (this._blockMap.has(block.id)) {
-        return nodes.map((n) => (n.id === block.id ? BlockAdapter.toNode(block) : n));
-      } else {
-        return nodes.concat(BlockAdapter.toNode(block));
-      }
-    });
+    if (block.id === lastAccessedItem.id) {
+      this._setNodes((nodes) => {
+        nodes[lastAccessedItem.index] = BlockAdapter.toNode(block);
+        return nodes;
+      });
+    } else {
+      this._setNodes((nodes) => {
+        if (this._blockMap.has(block.id)) {
+          return nodes.map((n, index) => {
+            if (n.id === block.id) {
+              lastAccessedItem.id = block.id;
+              lastAccessedItem.index = index;
+              return BlockAdapter.toNode(block);
+            } else {
+              return n;
+            }
+          });
+        } else {
+          return nodes.concat(BlockAdapter.toNode(block));
+        }
+      });
+    }
     this._blockMap.set(block.id, block);
   }
   public delete(block: Block): void {
+    lastAccessedItem.id = '';
     this._setNodes((nodes) => nodes.filter((n) => n.id !== block.id));
     this._blockMap.delete(block.id);
   }
@@ -88,12 +106,25 @@ export class BlockRepository implements IBlockRepository {
     return this._blockMap.has(id);
   }
   public saveAll(bs: Block[]): void {
-    bs.forEach((b) => this.save(b));
+    if (this._blockMap.size === 0) {
+      this._setNodes(() =>
+        bs.map((b) => {
+          this._blockMap.set(b.id, b);
+          return BlockAdapter.toNode(b);
+        })
+      );
+    } else {
+      bs.forEach((b) => this.save(b));
+    }
   }
   public deleteAll(bs: Block[]): void {
-    bs.forEach((b) => this.delete(b));
+    const blockIds = new Set(bs.map((b) => b.id));
+    this._setNodes((nodes) => nodes.filter((n) => !blockIds.has(n.id)));
+    blockIds.forEach((id) => this._blockMap.delete(id));
+    lastAccessedItem.id = '';
   }
   public clear(): void {
+    lastAccessedItem.id = '';
     this._setNodes(() => []);
     this._blockMap.clear();
   }
