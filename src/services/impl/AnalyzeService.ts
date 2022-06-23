@@ -28,7 +28,7 @@ export class AnalyzeService implements IAnalyzeService {
         this._flowService.validate();
       } catch (e) {
         console.error(e);
-        nay('invalid flow');
+        nay('Invalid flow');
       }
       const blockCount = this._blockRepository.countAll();
       const connectionCount = this._connectionRepository.countAll();
