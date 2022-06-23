@@ -52,11 +52,11 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
 
   const canvasFacade = React.useMemo<ICanvasFacade>(() => new CanvasFacade(reactFlowInstance), [reactFlowInstance]);
   const blockRepository = React.useMemo<IBlockRepository>(
-    () => new BlockRepository(appContext.getBlocks, appContext.setBlocks, appContext.nodesState[1]),
+    () => new BlockRepository(appContext.blockMapRef.current, appContext.nodesState[1]),
     [appContext]
   );
   const connectionRepository = React.useMemo<IConnectionRepository>(
-    () => new ConnectionRepository(appContext.getConnections, appContext.setConnections, appContext.edgesState[1]),
+    () => new ConnectionRepository(appContext.connectionMapRef.current, appContext.edgesState[1]),
     [appContext]
   );
   const connectionService = React.useMemo<IConnectionService>(
@@ -86,13 +86,13 @@ export const ServiceProvider = (props: React.PropsWithChildren<React.ReactNode>)
   );
 
   const simulationService = React.useMemo<ISimulationService>(
-    () => new SimulationService(flowService, blockService, blockRepository, connectionRepository, simulationContext, appContext),
-    [appContext, blockRepository, blockService, connectionRepository, flowService, simulationContext]
+    () => new SimulationService(flowService, blockService, blockRepository, connectionService, connectionRepository, simulationContext, appContext),
+    [appContext, blockRepository, blockService, connectionRepository, connectionService, flowService, simulationContext]
   );
 
   const simulationControllerService = React.useMemo<ISimulationControllerService>(
-    () => new SimulationControllerService(simulationContext, blockService, simulationService),
-    [blockService, simulationContext, simulationService]
+    () => new SimulationControllerService(simulationContext, blockService, connectionService, simulationService),
+    [blockService, connectionService, simulationContext, simulationService]
   );
 
   const value: ServiceContextType = {

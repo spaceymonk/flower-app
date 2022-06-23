@@ -2,16 +2,24 @@ import { toast } from 'react-toastify';
 import { InvalidDecisionError, MultipleStartError, MultipleStopError, NotConnectedError } from '../../exceptions';
 import { GlowTypes, SimulationActions, SimulationContextType } from '../../types';
 import { IBlockService } from '../IBlockService';
+import { IConnectionService } from '../IConnectionService';
 import { ISimulationControllerService } from '../ISimulationControllerService';
 import { ISimulationService } from '../ISimulationService';
 
 export class SimulationControllerService implements ISimulationControllerService {
   private _context: SimulationContextType;
   private _blockService: IBlockService;
+  private _connectionService: IConnectionService;
   private _simulationService: ISimulationService;
 
-  constructor(simulationContext: SimulationContextType, blockService: IBlockService, simulationService: ISimulationService) {
+  constructor(
+    simulationContext: SimulationContextType,
+    blockService: IBlockService,
+    connectionService: IConnectionService,
+    simulationService: ISimulationService
+  ) {
     this._context = simulationContext;
+    this._connectionService = connectionService;
     this._blockService = blockService;
     this._simulationService = simulationService;
   }
@@ -66,6 +74,7 @@ export class SimulationControllerService implements ISimulationControllerService
     const simulationLoop = async () => {
       if (this._context.actionRef.current === SimulationActions.stop || !this._simulationService.hasNext()) {
         this._blockService.highlight(null, GlowTypes.NONE);
+        this._connectionService.highlightByBlockId(null, GlowTypes.NONE);
         this._context.setRunning(false);
         this._context.actionRef.current = SimulationActions.none;
         toast.info('Simulation ended!');

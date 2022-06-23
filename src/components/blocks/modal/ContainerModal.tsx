@@ -21,7 +21,7 @@ export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
 
   React.useEffect(() => {
     if (show) {
-      setChildNodes(blockRepository.getDirectChildren(block.id));
+      setChildNodes(blockRepository.findAllByParentNodeId(block.id));
       setRemovedChildren([]);
       setText(block.text);
     }

@@ -5,7 +5,7 @@ import Block from '../../model/Block';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
 import { ContainerBlockHandle, GlowTypes } from '../../types';
-import { BlockCreateFactory, includesBlock } from '../helpers/BlockHelper';
+import { BlockCreateFactory } from '../helpers/BlockHelper';
 import { PositionGenerator } from '../../util/PositionGenerator';
 import { IBlockService } from '../IBlockService';
 import { BlockNotFoundError } from '../../exceptions/BlockNotFoundError';
@@ -50,7 +50,7 @@ export class BlockService implements IBlockService {
   public delete(id: string): void {
     const block = this._blockRepository.findById(id).orElseThrow(new BlockNotFoundError(id));
     if (block.isContainer()) {
-      const children = this._blockRepository.getDirectChildren(block.id);
+      const children = this._blockRepository.findAllByParentNodeId(block.id);
       children.forEach((c) => {
         c.parentNodeId = null;
         c.position = { x: c.position.x + block.position.x, y: c.position.y + block.position.y };
@@ -63,15 +63,11 @@ export class BlockService implements IBlockService {
   }
 
   public highlight(ids: string[] | null, glowType: GlowTypes = GlowTypes.NONE): void {
-    const blocks = this._blockRepository.getAll();
-    blocks.forEach((b) => {
-      if (ids && ids.includes(b.id)) {
-        b.glow = glowType;
-      } else {
-        b.glow = GlowTypes.NONE;
-      }
-    });
-    this._blockRepository.saveAll(blocks);
+    if (ids === null) {
+      this._blockRepository.updateHighlightedByIdList([], glowType);
+    } else {
+      this._blockRepository.updateHighlightedByIdList(ids, glowType);
+    }
   }
 
   public focus(block: Block): void {
@@ -99,7 +95,18 @@ export class BlockService implements IBlockService {
   }
 
   public getAllAvailableChildren(id: string, excludeList: Block[] = []): Block[] {
-    return this._blockRepository.getAll().filter((b) => !(b.id === id || b.isSentinel() || includesBlock(excludeList, b)));
+    const result = [] as Block[];
+    const excludeSet = new Set(excludeList.map((b) => b.id));
+    const blockIter = this._blockRepository.getAll();
+    let it = blockIter.next();
+    while (!it.done) {
+      const block = it.value;
+      if (!(block.id === id || block.isSentinel() || excludeSet.has(block.id))) {
+        result.push(block);
+      }
+      it = blockIter.next();
+    }
+    return result;
   }
 
   public addParentTo(parentBlock: Block, childrenToBeAdded: Block[]): void {
@@ -114,7 +121,6 @@ export class BlockService implements IBlockService {
     }
     const positionGen = new PositionGenerator({ x: 0, y: 0 }, 15);
 
-    const blocks = this._blockRepository.getAll();
     const affectedBlocks: Block[] = [];
     childrenToBeAdded.forEach((childToBeAdded) => {
       // if block is not already a child of the parent
@@ -125,7 +131,7 @@ export class BlockService implements IBlockService {
         affectedBlocks.push(...this.normalizeBlockOrder(childToBeAdded));
       }
     });
-    const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
+    const remainingBlocks = this._blockRepository.findAllExcept(affectedBlocks);
     this._blockRepository.clear();
     this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
@@ -138,8 +144,6 @@ export class BlockService implements IBlockService {
     if (childrenToBeRemoved.length === 0) return;
     const positionGen = new PositionGenerator({ x: parentBlock.position.x, y: parentBlock.position.y }, -15);
 
-    const blocks = this._blockRepository.getAll();
-
     const affectedBlocks: Block[] = [];
     childrenToBeRemoved.forEach((b) => {
       b.parentNodeId = null;
@@ -147,7 +151,7 @@ export class BlockService implements IBlockService {
       this.stripConnections(b);
       affectedBlocks.push(...this.normalizeBlockOrder(b));
     });
-    const remainingBlocks = blocks.filter((b) => !includesBlock(affectedBlocks, b));
+    const remainingBlocks = this._blockRepository.findAllExcept(affectedBlocks);
     this._blockRepository.clear();
     this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
   }
@@ -167,9 +171,10 @@ export class BlockService implements IBlockService {
 
   private isIndirectChild(b: Block, cs: Block[]): boolean {
     if (b.parentNodeId === null) return false;
+    const childrenSet = new Set(cs.map((c) => c.id));
     let parentBlockOpt = this._blockRepository.findById(b.parentNodeId);
     while (parentBlockOpt.isPresent) {
-      if (includesBlock(cs, parentBlockOpt.value)) return true;
+      if (childrenSet.has(parentBlockOpt.value.id)) return true;
       if (parentBlockOpt.value.parentNodeId === null) return false;
       parentBlockOpt = this._blockRepository.findById(parentBlockOpt.value.parentNodeId);
     }
@@ -178,7 +183,7 @@ export class BlockService implements IBlockService {
 
   private normalizeBlockOrder(block: Block, result: Block[] = []): Block[] {
     result.push(block);
-    const children = this._blockRepository.getDirectChildren(block.id);
+    const children = this._blockRepository.findAllByParentNodeId(block.id);
     children.forEach((child) => this.normalizeBlockOrder(child, result));
     return result;
   }

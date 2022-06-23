@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { useAppContext } from '../../providers/AppProvider';
 import Block from '../../model/Block';
 import { useServiceContext } from '../../providers/ServiceProvider';
-import { NodeData } from '../../types';
+import { GlowTypes, NodeData } from '../../types';
 import { CreateConnectionDto } from '../../dto/CreateConnectionDto';
 import { throwErrorIfNull } from '../../util/common';
 import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
@@ -49,6 +49,11 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
       } else if (nc.type === 'dimensions') {
         const dto: UpdateBlockDto = { width: nc.dimensions.width, height: nc.dimensions.height };
         blockService.update(nc.id, dto);
+      } else if (nc.type === 'select') {
+        if (nc.selected) {
+          connectionService.highlightByBlockId(nc.id, GlowTypes.NORMAL);
+        }
+        changes.push(nc);
       } else {
         changes.push(nc);
       }
