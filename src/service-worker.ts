@@ -78,3 +78,5 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+
+console.log('👍 FlowerApp ' + process.env.REACT_APP_VERSION + ' is running.');
