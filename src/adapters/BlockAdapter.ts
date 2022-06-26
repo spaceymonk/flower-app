@@ -1,6 +1,6 @@
 import { Node } from 'react-flow-renderer';
 import Block from '../model/Block';
-import { NodeData } from '../types';
+import { GlowTypes, NodeData } from '../types';
 
 class BlockAdapter {
   public static toNode(block: Block): Node<NodeData> {
@@ -12,6 +12,7 @@ class BlockAdapter {
       extent: block.parentNodeId ? 'parent' : undefined,
       data: { block },
       dragHandle: '.node',
+      selected: block.glow === GlowTypes.SELECTED,
     };
   }
 }

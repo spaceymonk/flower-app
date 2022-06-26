@@ -7,16 +7,18 @@ import BlockOption from '../../blocks/BlockOption';
 import React from 'react';
 import { useServiceContext } from '../../../providers/ServiceProvider';
 import Block from '../../../model/Block';
+import { GlowTypes } from '../../../types';
 
 export function FindModal({ show, onClose }: FindModalProps) {
   const { blockService, blockRepository } = useServiceContext();
 
   const blockCount = React.useMemo(() => blockRepository.countAll(), [blockRepository]);
-  const blockIter = React.useMemo(() => blockRepository.getAll(), [blockRepository]);
+  const blockList = React.useMemo(() => Array.from(blockRepository.getAll()), [blockRepository]);
 
   function handleSelect(b: Block) {
     onClose();
     blockService.focus(b);
+    blockService.highlight([b.id], GlowTypes.SELECTED);
   }
 
   return (
@@ -33,7 +35,7 @@ export function FindModal({ show, onClose }: FindModalProps) {
           <>
             <h5>Block List</h5>
             <ListGroup variant="flush">
-              {Array.from(blockIter, (b) => (
+              {blockList.map((b) => (
                 <ListGroup.Item key={b.id} action onClick={() => handleSelect(b)}>
                   <BlockOption block={b} />
                 </ListGroup.Item>
