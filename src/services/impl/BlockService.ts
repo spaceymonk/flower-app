@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import { CreateBlockDto } from '../../dto/CreateBlockDto';
 import { UpdateBlockDto } from '../../dto/UpdateBlockDto';
 import Block from '../../model/Block';
@@ -44,6 +43,7 @@ export class BlockService implements IBlockService {
     if (dto.glow) b.glow = dto.glow;
     if (dto.subroutine && b instanceof FunctionBlock) b.subroutine = dto.subroutine;
     this._blockRepository.save(b);
+    if (dto.children) this.updateChildren(b, dto.children);
     return b;
   }
 
@@ -109,48 +109,40 @@ export class BlockService implements IBlockService {
     return result;
   }
 
-  public addParentTo(parentBlock: Block, childrenToBeAdded: Block[]): void {
+  private updateChildren(parentBlock: Block, children: Block[]): void {
     if (!parentBlock.isContainer()) {
-      toast.error('Can only add children to container blocks');
-      return;
+      throw new Error('Parent block is not a container');
     }
-    if (childrenToBeAdded.length === 0) return;
-    if (this.isIndirectChild(parentBlock, childrenToBeAdded)) {
-      toast.error('Cannot add parent block as child');
-      return;
+    if (this.isIndirectChild(parentBlock, children)) {
+      throw new Error('Cannot add parent block as child');
     }
-    const positionGen = new PositionGenerator({ x: 0, y: 0 }, 15);
+    const viewport = this._canvasService.getViewport();
+    const position = { x: -viewport.x / viewport.zoom, y: -viewport.y / viewport.zoom };
+    const childrenIdSet = new Set(children.map((b) => b.id));
+    const addPosGen = new PositionGenerator({ x: 0, y: 0 }, 15);
+    const removePosGen = new PositionGenerator(position, 15);
+    const initialChildren = this._blockRepository.findAllByParentNodeId(parentBlock.id);
+    const affectedBlocks = [] as Block[];
 
-    const affectedBlocks: Block[] = [];
-    childrenToBeAdded.forEach((childToBeAdded) => {
+    children.forEach((child) => {
       // if block is not already a child of the parent
-      if (childToBeAdded.parentNodeId !== parentBlock.id) {
-        childToBeAdded.parentNodeId = parentBlock.id;
-        childToBeAdded.position = positionGen.nextPosition();
-        this.stripConnections(childToBeAdded);
-        affectedBlocks.push(...this.normalizeBlockOrder(childToBeAdded));
+      if (child.parentNodeId !== parentBlock.id) {
+        child.parentNodeId = parentBlock.id;
+        child.position = addPosGen.nextPosition();
+        this.stripConnections(child);
+        affectedBlocks.push(...this.normalizeBlockOrder(child));
       }
     });
-    const remainingBlocks = this._blockRepository.findAllExcept(affectedBlocks);
-    this._blockRepository.clear();
-    this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
-  }
 
-  public removeParentFrom(parentBlock: Block, childrenToBeRemoved: Block[]): void {
-    if (!parentBlock.isContainer()) {
-      toast.error('Can only remove children from container blocks');
-      return;
-    }
-    if (childrenToBeRemoved.length === 0) return;
-    const positionGen = new PositionGenerator({ x: parentBlock.position.x, y: parentBlock.position.y }, -15);
-
-    const affectedBlocks: Block[] = [];
-    childrenToBeRemoved.forEach((b) => {
-      b.parentNodeId = null;
-      b.position = positionGen.nextPosition();
-      this.stripConnections(b);
-      affectedBlocks.push(...this.normalizeBlockOrder(b));
+    initialChildren.forEach((child) => {
+      // if block is not in the new children list
+      if (!childrenIdSet.has(child.id)) {
+        child.parentNodeId = null;
+        child.position = removePosGen.nextPosition();
+        this.stripConnections(child);
+      }
     });
+
     const remainingBlocks = this._blockRepository.findAllExcept(affectedBlocks);
     this._blockRepository.clear();
     this._blockRepository.saveAll([...remainingBlocks, ...affectedBlocks]);
