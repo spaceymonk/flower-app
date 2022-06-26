@@ -9,8 +9,6 @@ export interface IBlockService {
   delete(id: string): void;
   highlight(ids: string[] | null, glowType: GlowTypes): void;
   focus(b: Block): void;
-  addParentTo(p: Block, acs: Block[]): void;
-  removeParentFrom(p: Block, rcs: Block[]): void;
   getAllAvailableChildren(id: string, excludeList: Block[]): Block[];
   getOutgoers(block: Block): Block[];
 }

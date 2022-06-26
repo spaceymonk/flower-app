@@ -10,38 +10,52 @@ import PropTypes from 'prop-types';
 import BlockOption from '../BlockOption';
 import Block from '../../../model/Block';
 import { useServiceContext } from '../../../providers/ServiceProvider';
+import { toast } from 'react-toastify';
+
+type SelectOption = { value: string; block: Block };
 
 export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
   const { blockService, blockRepository } = useServiceContext();
 
   const [text, setText] = React.useState(block.text);
-  const [childNodes, setChildNodes] = React.useState<Block[]>([]);
-  const [removedChildren, setRemovedChildren] = React.useState<Block[]>([]);
-  const availableNodes = React.useMemo(() => blockService.getAllAvailableChildren(block.id, childNodes), [blockService, block, childNodes]);
+  const initialChildren = React.useMemo(() => blockRepository.findAllByParentNodeId(block.id), [block.id, blockRepository]);
+  const [updatedChildren, setUpdatedChildren] = React.useState<Block[]>(initialChildren);
+  const availableNodes = React.useMemo(
+    () => blockService.getAllAvailableChildren(block.id, updatedChildren),
+    [blockService, block.id, updatedChildren]
+  );
 
+  /* -------------------------------------------------------------------------- */
+  /*                                Side Effects                                */
+  /* -------------------------------------------------------------------------- */
   React.useEffect(() => {
     if (show) {
-      setChildNodes(blockRepository.findAllByParentNodeId(block.id));
-      setRemovedChildren([]);
+      setUpdatedChildren(initialChildren);
       setText(block.text);
     }
-  }, [show, block, blockRepository]);
+  }, [show, blockRepository, initialChildren, block.text]);
 
+  /* -------------------------------------------------------------------------- */
+  /*                                  Handlers                                  */
+  /* -------------------------------------------------------------------------- */
   const handleSave = () => {
-    blockService.update(block.id, { text });
-    blockService.addParentTo(block, childNodes);
-    blockService.removeParentFrom(block, removedChildren);
+    try {
+      blockService.update(block.id, { text, children: updatedChildren });
+    } catch (e: any) {
+      toast.error(e.message);
+    }
     onClose();
   };
-  const handleRemoveChild = (child: Block) => {
-    setRemovedChildren((children) => children.concat(child));
-    setChildNodes(childNodes.filter((n) => n.id !== child.id));
+  const handleRemoveChild = (block: Block) => {
+    setUpdatedChildren((state) => state.filter((c) => c.id !== block.id));
   };
-  const handleAddChild = React.useCallback((child: { value: string; block: Block }) => {
-    setRemovedChildren(removedChildren.filter((n) => n.id !== child.block.id));
-    setChildNodes((children) => children.concat(child.block));
-  }, [removedChildren]);
+  const handleAddChild = ({ block }: SelectOption) => {
+    setUpdatedChildren((state) => state.concat(block));
+  };
 
+  /* -------------------------------------------------------------------------- */
+  /*                                 JSX return                                 */
+  /* -------------------------------------------------------------------------- */
   return (
     <BaseModal show={show} onSave={handleSave} onClose={onClose} block={block}>
       <Form.Group className="mb-3">
@@ -76,17 +90,17 @@ export function ContainerModal({ block, onClose, show }: ContainerModalProps) {
           />
         </div>
         <ListGroup>
-          {childNodes.length === 0 && <em className="text-muted text-center mt-2">No children</em>}
-          {childNodes.map((n) => (
-            <ListGroup.Item key={n.id}>
+          {updatedChildren.length === 0 && <em className="text-muted text-center mt-2">No children</em>}
+          {updatedChildren.map((b) => (
+            <ListGroup.Item key={b.id}>
               <Container fluid className="px-1">
                 <Row>
                   <Col sm={11} className="d-flex align-items-center justify-content-center">
-                    <BlockOption block={n} />
+                    <BlockOption block={b} />
                   </Col>
                   <CustomOverlay placement="top" overlay={<Tooltip>Remove from container</Tooltip>}>
                     <Col sm={1} className="d-flex align-items-center justify-content-center">
-                      <Button variant="outline-danger" size="sm" className="my-auto" onClick={() => handleRemoveChild(n)}>
+                      <Button variant="outline-danger" size="sm" className="my-auto" onClick={() => handleRemoveChild(b)}>
                         <FontAwesomeIcon icon={faRemove} />
                       </Button>
                     </Col>

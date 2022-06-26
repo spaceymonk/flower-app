@@ -12,7 +12,7 @@ export function ContainerBlockView({ block, ...props }: ContainerNodeProps) {
   const zoom = React.useMemo(() => canvasFacade.getViewport().zoom, [canvasFacade]);
 
   const calcMinSize = React.useCallback((): [number, number] => {
-    let [minWidth, minHeight] = [200, 200];
+    let [minWidth, minHeight] = [225, 225];
     childBlocks.forEach((childBlock) => {
       minWidth = Math.max(minWidth, childBlock.position.x + childBlock.width + 15);
       minHeight = Math.max(minHeight, childBlock.position.y + childBlock.height + 15);

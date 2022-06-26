@@ -3,4 +3,5 @@ export enum GlowTypes {
   NORMAL,
   ANIMATE,
   ERROR,
+  SELECTED,
 }

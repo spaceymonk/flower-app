@@ -1,3 +1,4 @@
+import Block from '../model/Block';
 import { GlowTypes, Point2D, ProjectData } from '../types';
 
 export interface UpdateBlockDto {
@@ -8,4 +9,5 @@ export interface UpdateBlockDto {
   name?: string;
   glow?: GlowTypes;
   subroutine?: ProjectData;
+  children?: Block[];
 }

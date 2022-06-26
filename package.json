@@ -57,6 +57,7 @@
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
     "joi": "^17.6.0",
+    "js-base64": "^3.7.2",
     "mini-css-extract-plugin": "^2.4.5",
     "moment": "^2.29.1",
     "postcss": "^8.4.4",
@@ -99,7 +100,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "generate-toc": "node scripts/generate-toc.js"
+    "generate-toc": "node scripts/generate-toc.js",
+    "generate-howto": "node scripts/generate-howto.js"
   },
   "eslintConfig": {
     "extends": [
