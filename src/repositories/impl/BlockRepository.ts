@@ -13,7 +13,8 @@ export class BlockRepository implements IBlockRepository {
     this._blockMap = _blockMap;
     this._setNodes = setNodes;
   }
-  updateHighlightedByIdList(ids: string[], glowType: GlowTypes): void {
+
+  public updateHighlightedByIdList(ids: string[], glowType: GlowTypes): void {
     const result = [] as Block[];
     const idSet = new Set<string>(ids);
     this._blockMap.forEach((b) => {
@@ -37,6 +38,7 @@ export class BlockRepository implements IBlockRepository {
     });
     return result;
   }
+
   public findAllByIds(ids: string[]): Block[] {
     const result = [] as Block[];
     ids.forEach((id) => {
@@ -47,12 +49,15 @@ export class BlockRepository implements IBlockRepository {
     });
     return result;
   }
+
   public getAll(): IterableIterator<Block> {
     return this._blockMap.values();
   }
+
   public countAll(): number {
     return this._blockMap.size;
   }
+
   public countByTypes(): { [type in BlockTypes]?: number } {
     const counts: { [type in BlockTypes]?: number } = {};
     this._blockMap.forEach((b) => {
@@ -77,10 +82,12 @@ export class BlockRepository implements IBlockRepository {
     });
     this._blockMap.set(block.id, block);
   }
+
   public delete(block: Block): void {
     this._setNodes((nodes) => nodes.filter((n) => n.id !== block.id));
     this._blockMap.delete(block.id);
   }
+
   public findAllByParentNodeId(pid: string): Block[] {
     const result = [] as Block[];
     this._blockMap.forEach((b) => {
@@ -90,9 +97,11 @@ export class BlockRepository implements IBlockRepository {
     });
     return result;
   }
+
   public existsById(id: string): boolean {
     return this._blockMap.has(id);
   }
+
   public saveAll(bs: Block[]): void {
     if (this._blockMap.size === 0) {
       this._setNodes(() => bs.map((b) => BlockAdapter.toNode(b)));
@@ -101,15 +110,18 @@ export class BlockRepository implements IBlockRepository {
       bs.forEach((b) => this.save(b));
     }
   }
+
   public deleteAll(bs: Block[]): void {
     const blockIds = new Set(bs.map((b) => b.id));
     this._setNodes((nodes) => nodes.filter((n) => !blockIds.has(n.id)));
     blockIds.forEach((id) => this._blockMap.delete(id));
   }
+
   public clear(): void {
     this._setNodes(() => []);
     this._blockMap.clear();
   }
+
   public findById(id: string): Optional<Block> {
     return new Optional(this._blockMap.get(id));
   }
