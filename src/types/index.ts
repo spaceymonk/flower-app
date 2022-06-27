@@ -16,3 +16,4 @@ export * from './Point2D';
 export * from './ProjectData';
 export * from './SimulationActions';
 export * from './SimulationContextType';
+export * from './ValidationOptions';

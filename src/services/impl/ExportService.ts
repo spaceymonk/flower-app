@@ -43,7 +43,7 @@ export class ExportService implements IExportService {
   public toCode(): string {
     type Scope = { scopeof: string; end: string };
 
-    const [startBlock, stopBlock] = this._flowService.validate();
+    const [startBlock] = this._flowService.validate({ startMustPresent: true });
     const stack: Block[] = [startBlock];
     let mapping: PathMapping = {};
     let scope: Scope[] = [];
@@ -75,7 +75,7 @@ export class ExportService implements IExportService {
       let nextBlocks = Array.of(outgoers[0]);
 
       if (iter.type === BlockTypes.START_BLOCK) {
-        scope.push({ scopeof: iter.type, end: stopBlock.id });
+        scope.push({ scopeof: iter.type, end: '' });
       } else if (iter.type === BlockTypes.STOP_BLOCK) {
         break;
       } else if (iter.isContainer()) {

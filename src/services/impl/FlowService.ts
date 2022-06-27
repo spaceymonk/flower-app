@@ -2,7 +2,7 @@ import { InvalidDecisionError, MultipleStartError, MultipleStopError, NoStartErr
 import Block from '../../model/Block';
 import { IBlockRepository } from '../../repositories/IBlockRepository';
 import { IConnectionRepository } from '../../repositories/IConnectionRepository';
-import { BlockTypes, PathMapping } from '../../types';
+import { BlockTypes, PathMapping, ValidationOptions } from '../../types';
 import { throwErrorIfUndefined } from '../../util/common';
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
@@ -47,7 +47,7 @@ export class FlowService implements IFlowService {
     throw new InvalidDecisionError(start.id);
   }
 
-  public validate(): [Block, Block] {
+  public validate(options?: ValidationOptions): [Block, Block] {
     const blockIter = this._blockRepository.getAll();
     const startBlocks: Block[] = [];
     const stopBlocks: Block[] = [];
@@ -72,8 +72,8 @@ export class FlowService implements IFlowService {
 
     if (startBlocks.length > 1) throw new MultipleStartError(startBlocks.map((b) => b.id));
     if (stopBlocks.length > 1) throw new MultipleStopError(stopBlocks.map((b) => b.id));
-    if (startBlocks.length === 0) throw new NoStartError();
-    if (stopBlocks.length === 0) throw new NoStopError();
+    if (options?.startMustPresent && startBlocks.length === 0) throw new NoStartError();
+    if (options?.stopMustPresent && stopBlocks.length === 0) throw new NoStopError();
 
     return [startBlocks[0], stopBlocks[0]];
   }
