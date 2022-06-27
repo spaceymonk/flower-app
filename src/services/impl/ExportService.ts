@@ -60,7 +60,7 @@ export class ExportService implements IExportService {
     if (visiting.has(block)) throw new Error('Cyclic dependency detected');
     visiting.add(block);
 
-    const next = this._blockService.getOutgoers(block);
+    const next = this.sortNext(block, this._blockService.getOutgoers(block));
     for (const nextBlock of next) {
       this.visitNodes(nextBlock, path, processed, visiting);
     }
@@ -68,6 +68,28 @@ export class ExportService implements IExportService {
     path.push({ block, indent: 0, ref: block.id });
     processed.add(block);
     visiting.delete(block);
+  }
+
+  private sortNext(block: Block, outgoers: Block[]): Block[] {
+    if (block.type === BlockTypes.DECISION_BLOCK) {
+      let falseBlockId = null;
+      const connectedEdgeList = this._connectionRepository.findByBlocks(Array.of(block));
+      for (const edge of connectedEdgeList) {
+        if (edge.sourceHandle === DecisionBlockHandle.FALSE) falseBlockId = edge.targetId;
+      }
+      if (falseBlockId === outgoers[0].id) {
+        return Array.of(outgoers[0], outgoers[1]);
+      } else {
+        return Array.of(outgoers[1], outgoers[0]);
+      }
+    } else if (block.isContainer()) {
+      if (outgoers[0].parentNodeId === block.id) {
+        return Array.of(outgoers[1], outgoers[0]);
+      } else {
+        return Array.of(outgoers[0], outgoers[1]);
+      }
+    }
+    return outgoers;
   }
 }
 
