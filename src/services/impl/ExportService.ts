@@ -1,5 +1,5 @@
 import FileSaver from 'file-saver';
-import { BlockTypes, DecisionBlockHandle, PathMapping } from '../../types';
+import { BlockTypes, DecisionBlockHandle } from '../../types';
 import { throwErrorIfNull } from '../../util/common';
 import { IExportService } from '../IExportService';
 import domtoimage from 'dom-to-image';
@@ -8,6 +8,7 @@ import { IConnectionRepository } from '../../repositories/IConnectionRepository'
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 import { IProjectService } from '../IProjectService';
+import DecisionBlock from '../../model/block/DecisionBlock';
 
 export class ExportService implements IExportService {
   private _flowService: IFlowService;
@@ -47,25 +48,58 @@ export class ExportService implements IExportService {
     const visiting = new Set<Block>();
 
     this.visitNodes(startBlock, path, processed, visiting);
-
+    console.log(path);
     const code = path
       .reverse()
-      .map((u) => u.block.toCode(u.indent))
+      .map((u) => {
+        if (u.type === 'end-container') {
+          return `end ${u.block.id.slice(0, 4)}`;
+        } else if (u.type === 'else') {
+          return `${u.block.id.slice(0, 4)}: else`;
+        } else if (u.type === 'goto') {
+          return `goto ${u.next.slice(0, 4)}`;
+        } else if (u.type === 'end-decision') {
+          return `endif: goto ${u.block.id.slice(0, 4)}`;
+        }
+        return `${u.block.id.slice(0, 4)}: ${u.block.toCode(0)}`;
+      })
       .join('\n');
     return code;
   }
 
   private visitNodes(block: Block, path: Unit[], processed: Set<Block>, visiting: Set<Block>): void {
-    if (processed.has(block)) return;
-    if (visiting.has(block)) throw new Error('Cyclic dependency detected');
+    if (processed.has(block)) {
+      path.push({ block, type: 'end-decision', next: block.id });
+      return;
+    }
+    if (visiting.has(block)) {
+      const lastUnit = path.at(-1);
+      if (!lastUnit || lastUnit.block.id !== block.id || lastUnit.type !== 'end-container') {
+        path.push({ block, type: 'goto', next: block.id });
+      }
+      return;
+    }
     visiting.add(block);
 
+    let ref = '';
     const next = this.sortNext(block, this._blockService.getOutgoers(block));
+    let handleBranch = true;
     for (const nextBlock of next) {
       this.visitNodes(nextBlock, path, processed, visiting);
+      if (processed.has(nextBlock)) {
+        ref = nextBlock.id;
+      }
+      if (handleBranch && block instanceof DecisionBlock) {
+        path.push({ block, next: nextBlock.id, type: 'else' });
+        handleBranch = false;
+      }
+      if (handleBranch && block.isContainer()) {
+        path.push({ block, next: nextBlock.id, type: 'end-container' });
+        handleBranch = false;
+      }
     }
 
-    path.push({ block, indent: 0, ref: block.id });
+    path.push({ block, next: ref, type: block.type });
     processed.add(block);
     visiting.delete(block);
   }
@@ -95,6 +129,6 @@ export class ExportService implements IExportService {
 
 type Unit = {
   block: Block;
-  indent: number;
-  ref: string;
+  next: string;
+  type: 'end-decision' | 'end-container' | 'else' | 'goto' | BlockTypes;
 };
