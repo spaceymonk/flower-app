@@ -41,68 +41,38 @@ export class ExportService implements IExportService {
   }
 
   public toCode(): string {
-    type Scope = { scopeof: string; end: string };
-
+    const path = [] as Unit[];
     const [startBlock] = this._flowService.validate({ startMustPresent: true });
-    const stack: Block[] = [startBlock];
-    let mapping: PathMapping = {};
-    let scope: Scope[] = [];
-    let code = '';
+    const processed = new Set<Block>();
+    const visiting = new Set<Block>();
 
-    while (stack.length !== 0) {
-      const iter: Block = stack.pop() as Block;
-      const outgoers: Block[] = this._blockService.getOutgoers(iter);
+    this.visitNodes(startBlock, path, processed, visiting);
 
-      if (scope.at(-1)?.end === iter.id) {
-        let currentScope = scope.pop() as Scope;
-
-        while (currentScope.scopeof === 'else') {
-          currentScope = scope.pop() as Scope;
-        }
-
-        if (currentScope.scopeof === BlockTypes.DECISION_BLOCK) {
-          if (stack.at(-1)?.id !== currentScope.end) {
-            code += `${'  '.repeat(scope.length)}else\n`;
-            scope.push({ scopeof: 'else', end: currentScope.end });
-          }
-          continue;
-        } else if (currentScope.scopeof === 'CONTAINER') {
-          continue;
-        }
-      }
-
-      code += iter.toCode(scope.length);
-      let nextBlocks = Array.of(outgoers[0]);
-
-      if (iter.type === BlockTypes.START_BLOCK) {
-        scope.push({ scopeof: iter.type, end: '' });
-      } else if (iter.type === BlockTypes.STOP_BLOCK) {
-        break;
-      } else if (iter.isContainer()) {
-        scope.push({ scopeof: 'CONTAINER', end: iter.id });
-        if (outgoers[0].parentNodeId === iter.id) {
-          nextBlocks = Array.of(outgoers[1], outgoers[0]);
-        } else {
-          nextBlocks = Array.of(outgoers[0], outgoers[1]);
-        }
-      } else if (iter.type === BlockTypes.DECISION_BLOCK) {
-        let falseBlockId = null;
-        const connectedEdgeList = this._connectionRepository.findByBlocks(Array.of(iter));
-        for (const edge of connectedEdgeList) {
-          if (edge.sourceHandle === DecisionBlockHandle.FALSE) falseBlockId = edge.targetId;
-        }
-        if (falseBlockId === outgoers[0].id) {
-          nextBlocks = Array.of(outgoers[0], outgoers[1]);
-        } else {
-          nextBlocks = Array.of(outgoers[1], outgoers[0]);
-        }
-        if (!mapping[iter.id]) this._flowService.mapDecisionPaths(iter, mapping);
-        scope.push({ scopeof: iter.type, end: mapping[iter.id].id });
-      }
-
-      stack.push(...nextBlocks);
-    }
-
+    const code = path
+      .reverse()
+      .map((u) => u.block.toCode(u.indent))
+      .join('\n');
     return code;
   }
+
+  private visitNodes(block: Block, path: Unit[], processed: Set<Block>, visiting: Set<Block>): void {
+    if (processed.has(block)) return;
+    if (visiting.has(block)) throw new Error('Cyclic dependency detected');
+    visiting.add(block);
+
+    const next = this._blockService.getOutgoers(block);
+    for (const nextBlock of next) {
+      this.visitNodes(nextBlock, path, processed, visiting);
+    }
+
+    path.push({ block, indent: 0, ref: block.id });
+    processed.add(block);
+    visiting.delete(block);
+  }
 }
+
+type Unit = {
+  block: Block;
+  indent: number;
+  ref: string;
+};
