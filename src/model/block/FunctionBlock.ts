@@ -22,7 +22,7 @@ class FunctionBlock extends Block {
       throw new Error(`Invalid subroutine call: ${this._text}`);
     }
     const [, args, retVal] = functionMatch;
-    return `${'  '.repeat(indent)}${retVal} = ${this._subroutine?.title}(${args})\n`;
+    return `${'  '.repeat(indent)}${retVal} = ${this._subroutine?.title}(${args})`;
   }
 
   public override async eval(memory: Memory) {

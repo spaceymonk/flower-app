@@ -13,7 +13,7 @@ class StartBlock extends Block {
     return true;
   }
   public override toCode(): string {
-    return 'begin\n';
+    return 'begin';
   }
 }
 

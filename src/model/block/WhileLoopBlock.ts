@@ -8,7 +8,7 @@ class WhileLoopBlock extends Block {
   }
 
   public override toCode(indent: number): string {
-    return `${'  '.repeat(indent)}while (${this._text})\n`;
+    return `${'  '.repeat(indent)}while (${this._text})`;
   }
 
   public override isContainer(): boolean {

@@ -21,7 +21,7 @@ class DecisionBlock extends Block {
   }
 
   public override toCode(indent: number): string {
-    return `${'  '.repeat(indent)}if (${this._text})\n`;
+    return `${'  '.repeat(indent)}if (${this._text})`;
   }
 }
 
