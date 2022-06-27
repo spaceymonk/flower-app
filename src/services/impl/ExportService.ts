@@ -8,7 +8,6 @@ import { IConnectionRepository } from '../../repositories/IConnectionRepository'
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 import { IProjectService } from '../IProjectService';
-import DecisionBlock from '../../model/block/DecisionBlock';
 
 export class ExportService implements IExportService {
   private _flowService: IFlowService;
@@ -48,22 +47,32 @@ export class ExportService implements IExportService {
     const visiting = new Set<Block>();
 
     this.visitNodes(startBlock, path, processed, visiting);
-    console.log(path);
-    const code = path
-      .reverse()
-      .map((u) => {
-        if (u.type === 'end-container') {
-          return `end ${u.block.id.slice(0, 4)}`;
-        } else if (u.type === 'else') {
-          return `${u.block.id.slice(0, 4)}: else`;
-        } else if (u.type === 'goto') {
-          return `goto ${u.next.slice(0, 4)}`;
-        } else if (u.type === 'end-decision') {
-          return `endif: goto ${u.block.id.slice(0, 4)}`;
+    const code = this.generateCode(path);
+
+    return code;
+  }
+
+  private generateCode(path: Unit[]): string {
+    let code = '';
+    let indent = 0;
+    for (let i = path.length - 1; i >= 0; i--) {
+      const unit = path[i];
+
+      if (unit.type === 'goto') {
+        code += `    : ${'  '.repeat(indent)}goto ${unit.next.slice(0, 4)};\n`;
+      } else if (unit.type === 'end-container') {
+        indent--;
+        code += `    : ${'  '.repeat(indent)}end-container ${unit.next.slice(0, 4)};\n`;
+      } else if (unit.type === 'end-decision') {
+        code += `    : ${'  '.repeat(indent)}goto ${unit.next.slice(0, 4)};\n`;
+        indent--;
+      } else {
+        code += `${unit.block.id.slice(0, 4)}: ${unit.block.toCode(indent)};\n`;
+        if (unit.type === BlockTypes.DECISION_BLOCK || unit.block.isContainer() || unit.block.type === BlockTypes.START_BLOCK) {
+          indent++;
         }
-        return `${u.block.id.slice(0, 4)}: ${u.block.toCode(0)}`;
-      })
-      .join('\n');
+      }
+    }
     return code;
   }
 
@@ -88,10 +97,6 @@ export class ExportService implements IExportService {
       this.visitNodes(nextBlock, path, processed, visiting);
       if (processed.has(nextBlock)) {
         ref = nextBlock.id;
-      }
-      if (handleBranch && block instanceof DecisionBlock) {
-        path.push({ block, next: nextBlock.id, type: 'else' });
-        handleBranch = false;
       }
       if (handleBranch && block.isContainer()) {
         path.push({ block, next: nextBlock.id, type: 'end-container' });
