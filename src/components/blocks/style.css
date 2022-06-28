@@ -18,7 +18,7 @@
   transition: 0.2s;
 }
 .selected .node::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -28,7 +28,7 @@
   border-radius: inherit;
 }
 .node.glow__normal::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -39,7 +39,7 @@
   background-color: #00f3;
 }
 .node.glow__error::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -55,6 +55,15 @@
   width: 7px;
   height: 7px;
   background-color: blueviolet !important;
+}
+@media (max-width: 768px) {
+  .handle {
+    width: 10px;
+    height: 10px;
+  }
+}
+.handle:active {
+  background-color: red !important;
 }
 
 /* ------------------------------- header part ------------------------------ */
