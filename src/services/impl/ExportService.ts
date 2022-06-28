@@ -53,27 +53,35 @@ export class ExportService implements IExportService {
   }
 
   private generateCode(path: Unit[]): string {
-    let code = '';
+    const code = [] as string[];
     let indent = 0;
+
     for (let i = path.length - 1; i >= 0; i--) {
       const unit = path[i];
-
       if (unit.type === 'goto') {
-        code += `    : ${'  '.repeat(indent)}goto ${unit.next.slice(0, 4)};\n`;
+        code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)};`);
       } else if (unit.type === 'end-container') {
         indent--;
-        code += `    : ${'  '.repeat(indent)}end-container ${unit.next.slice(0, 4)};\n`;
+        code.push(`${'  '.repeat(indent)}wend`);
       } else if (unit.type === 'end-decision') {
-        code += `    : ${'  '.repeat(indent)}goto ${unit.next.slice(0, 4)};\n`;
+        code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)}`);
         indent--;
       } else {
-        code += `${unit.block.id.slice(0, 4)}: ${unit.block.toCode(indent)};\n`;
+        code.push(`${unit.block.toCode(indent)}`);
         if (unit.type === BlockTypes.DECISION_BLOCK || unit.block.isContainer() || unit.block.type === BlockTypes.START_BLOCK) {
           indent++;
         }
       }
     }
-    return code;
+
+    function findLineNumber(blockId: string): string {
+      for (let i = 0; i < path.length; i++) {
+        if (path[i].block.id === blockId) return `L${path.length - i}`;
+      }
+      return '';
+    }
+
+    return code.join('\n');
   }
 
   private visitNodes(block: Block, path: Unit[], processed: Set<Block>, visiting: Set<Block>): void {
@@ -135,5 +143,5 @@ export class ExportService implements IExportService {
 type Unit = {
   block: Block;
   next: string;
-  type: 'end-decision' | 'end-container' | 'else' | 'goto' | BlockTypes;
+  type: 'end-decision' | 'end-container' | 'goto' | BlockTypes;
 };

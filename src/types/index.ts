@@ -11,7 +11,6 @@ export * from './GlowTypes';
 export * from './Memory';
 export * from './NodeData';
 export * from './OutputEntry';
-export * from './PathMapping';
 export * from './Point2D';
 export * from './ProjectData';
 export * from './SimulationActions';
