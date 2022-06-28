@@ -1,9 +1,10 @@
 import { IBlockRepository } from '../IBlockRepository';
 import Block from '../../model/Block';
 import { Optional } from '../../util/Optional';
-import { NodeData, BlockTypes, GlowTypes } from '../../types';
+import { NodeData, BlockTypes, GlowTypes, Point2D } from '../../types';
 import { Node } from 'react-flow-renderer';
 import BlockAdapter from '../../adapters/BlockAdapter';
+import { throwErrorIfUndefined } from '../../util/common';
 
 export class BlockRepository implements IBlockRepository {
   private _blockMap: Map<string, Block>;
@@ -12,6 +13,19 @@ export class BlockRepository implements IBlockRepository {
   constructor(_blockMap: Map<string, Block>, setNodes: React.Dispatch<React.SetStateAction<Node<NodeData>[]>>) {
     this._blockMap = _blockMap;
     this._setNodes = setNodes;
+  }
+
+  public updateDimensions(id: string, dimensions: { width: number; height: number }): Block {
+    const block = throwErrorIfUndefined(this._blockMap.get(id), `Block with id ${id} not found`);
+    block.width = dimensions.width;
+    block.height = dimensions.height;
+    return block;
+  }
+
+  public updatePosition(id: string, position: Point2D): Block {
+    const block = throwErrorIfUndefined(this._blockMap.get(id), `Block with id ${id} not found`);
+    block.position = position;
+    return block;
   }
 
   public updateHighlightedByIdList(ids: string[], glowType: GlowTypes): void {

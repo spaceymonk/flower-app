@@ -35,25 +35,25 @@ const SimulationControls = () => {
     <>
       <ButtonGroup size="sm">
         <CustomOverlay overlay={<Tooltip>Run/Debug</Tooltip>}>
-          <Button variant="success" disabled={isRunning()} onClick={handlePlayBtn}>
+          <Button variant="success" disabled={isRunning()} onClick={handlePlayBtn} aria-label="Play">
             <FontAwesomeIcon icon={faPlay} />
           </Button>
         </CustomOverlay>
 
         <CustomOverlay overlay={<Tooltip>Continue/Pause</Tooltip>}>
-          <Button variant="secondary" disabled={!isRunning()} onClick={handleContinueBtn}>
+          <Button variant="secondary" disabled={!isRunning()} onClick={handleContinueBtn} aria-label="Continue / Pause">
             <FontAwesomeIcon icon={pauseIcon ? faPause : faForwardStep} />
           </Button>
         </CustomOverlay>
 
         <CustomOverlay overlay={<Tooltip>Next Block</Tooltip>}>
-          <Button variant="secondary" disabled={!isRunning() || pauseIcon} onClick={handleNextBtn}>
+          <Button variant="secondary" disabled={!isRunning() || pauseIcon} onClick={handleNextBtn} aria-label="Next">
             <FontAwesomeIcon icon={faArrowDown} />
           </Button>
         </CustomOverlay>
 
         <CustomOverlay overlay={<Tooltip>Stop</Tooltip>}>
-          <Button variant="danger" disabled={!isRunning()} onClick={handleStopBtn}>
+          <Button variant="danger" disabled={!isRunning()} onClick={handleStopBtn} aria-label="stop">
             <FontAwesomeIcon icon={faStop} />
           </Button>
         </CustomOverlay>

@@ -15,7 +15,7 @@ function BlockSidebar() {
   return (
     <>
       <CustomOverlay overlay={<Tooltip>{T.blockSidebar.tooltip}</Tooltip>}>
-        <Button onClick={toggleSidebar} disabled={isRunning()}>
+        <Button onClick={toggleSidebar} disabled={isRunning()} aria-label='Add block'>
           <FontAwesomeIcon icon={faAdd} />
         </Button>
       </CustomOverlay>

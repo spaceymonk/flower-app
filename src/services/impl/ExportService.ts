@@ -9,6 +9,7 @@ import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 import { IProjectService } from '../IProjectService';
 import DecisionBlock from '../../model/block/DecisionBlock';
+import StopBlock from '../../model/block/StopBlock';
 
 export class ExportService implements IExportService {
   private _flowService: IFlowService;
@@ -126,7 +127,13 @@ export class ExportService implements IExportService {
       }
     }
 
-    path.push({ block, next: ref, type: block.type });
+    const lastUnit = path.at(-1);
+    if (block instanceof StopBlock && lastUnit && lastUnit.type === 'end-decision') {
+      path.push({ block, next: block.id, type: 'goto' });
+      path.unshift({ block, next: ref, type: block.type });
+    } else {
+      path.push({ block, next: ref, type: block.type });
+    }
     processed.add(block);
     visiting.delete(block);
   }
