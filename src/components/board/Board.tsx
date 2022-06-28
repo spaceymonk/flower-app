@@ -159,8 +159,8 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
         >
           <Background />
           {minimapToggled && <MiniMap />}
-          <Controls showInteractive={false} showZoom={false}>
-            <ControlButton onClick={handleMinimapVisibility}>
+          <Controls showInteractive={true} showZoom={true}>
+            <ControlButton onClick={handleMinimapVisibility} title="toggle minimap" aria-label="toggle minimap">
               <FontAwesomeIcon icon={minimapIcon}></FontAwesomeIcon>
             </ControlButton>
           </Controls>

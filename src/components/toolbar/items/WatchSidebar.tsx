@@ -15,7 +15,7 @@ function WatchSidebar() {
   return (
     <>
       <CustomOverlay placement="bottom" overlay={<Tooltip>{T.watchesSidebar.tooltip}</Tooltip>}>
-        <Button onClick={toggleSidebar}>
+        <Button onClick={toggleSidebar} aria-label='toggle watches'>
           <FontAwesomeIcon icon={faGlasses} />
         </Button>
       </CustomOverlay>
