@@ -14,7 +14,6 @@ import { GlowTypes, NodeData } from '../../types';
 import { CreateConnectionDto } from '../../dto/CreateConnectionDto';
 import { throwErrorIfNull } from '../../util/common';
 import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
-import { UpdateBlockDto } from '../../dto/UpdateBlockDto';
 import { InputModal } from './InputModal';
 import { useSimulationContext } from '../../providers/SimulationProvider';
 import { useDeferredPromise } from '../../hooks/useDefferedPromise';
@@ -41,14 +40,14 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
   const handleNodeChange = (nodeChanges: NodeChange[]) => {
     const changes: NodeChange[] = [];
     for (const nc of nodeChanges) {
-      if (nc.type === 'position') {
-        const dto: UpdateBlockDto = { position: nc.position };
-        blockService.update(nc.id, dto);
+      if (nc.type === 'position' && nc.position) {
+        blockRepository.updatePosition(nc.id, nc.position);
+        changes.push(nc);
       } else if (nc.type === 'remove') {
         blockService.delete(nc.id);
       } else if (nc.type === 'dimensions') {
-        const dto: UpdateBlockDto = { width: nc.dimensions.width, height: nc.dimensions.height };
-        blockService.update(nc.id, dto);
+        blockRepository.updateDimensions(nc.id, nc.dimensions);
+        changes.push(nc);
       } else if (nc.type === 'select') {
         if (nc.selected) {
           connectionService.highlightByBlockId(nc.id, GlowTypes.NORMAL);
