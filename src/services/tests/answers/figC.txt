@@ -1,0 +1,8 @@
+begin
+  if (expr1)
+    stmt2
+    goto L7
+  fi
+  stmt1
+  stmt3
+end

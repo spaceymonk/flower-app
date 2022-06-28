@@ -1,0 +1,167 @@
+{
+  "blocks": [
+    {
+      "id": "b6515aff-ab47-4099-964d-2f30a66eb29f",
+      "type": "stop",
+      "position": {
+        "x": -2140,
+        "y": -710
+      },
+      "text": "",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 50
+    },
+    {
+      "id": "5538c06a-cef8-4dd3-aa89-e07025ccb553",
+      "type": "start",
+      "position": {
+        "x": -2120,
+        "y": -1170
+      },
+      "text": "",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 50
+    },
+    {
+      "id": "9d815293-6a8c-4b8b-b849-f5beea904025",
+      "type": "statement",
+      "position": {
+        "x": -2140,
+        "y": -780
+      },
+      "text": "stmt3",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 40
+    },
+    {
+      "id": "245bf8be-11e8-40de-8507-5d38daa20e95",
+      "type": "statement",
+      "position": {
+        "x": -1810,
+        "y": -900
+      },
+      "text": "stmt2",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 40
+    },
+    {
+      "id": "cf8abe72-3bde-4f5a-8b12-8d24e34d2171",
+      "type": "statement",
+      "position": {
+        "x": -2230,
+        "y": -900
+      },
+      "text": "stmt1",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 40
+    },
+    {
+      "id": "eeff1b92-def3-4ae6-a908-09eaec0333cc",
+      "type": "decision",
+      "position": {
+        "x": -2120,
+        "y": -1070
+      },
+      "text": "expr1",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 57
+    },
+    {
+      "id": "058c3e71-c08f-443b-be71-8225a070a860",
+      "type": "decision",
+      "position": {
+        "x": -1910,
+        "y": -1010
+      },
+      "text": "expr2",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 57
+    },
+    {
+      "id": "63edffda-f122-45c9-9554-c66ac5cf790c",
+      "type": "statement",
+      "position": {
+        "x": -2020,
+        "y": -900
+      },
+      "text": "stmt4",
+      "parentNodeId": null,
+      "width": 150,
+      "height": 40
+    }
+  ],
+  "connections": [
+    {
+      "id": "fb25344d-a2d6-4b7b-b298-355d5224b62d",
+      "sourceId": "5538c06a-cef8-4dd3-aa89-e07025ccb553",
+      "targetId": "eeff1b92-def3-4ae6-a908-09eaec0333cc",
+      "sourceHandle": null,
+      "targetHandle": null
+    },
+    {
+      "id": "93fb3f5f-a53d-4c1e-b8bc-479786cbd02c",
+      "sourceId": "eeff1b92-def3-4ae6-a908-09eaec0333cc",
+      "targetId": "cf8abe72-3bde-4f5a-8b12-8d24e34d2171",
+      "sourceHandle": "false",
+      "targetHandle": null
+    },
+    {
+      "id": "ed99444e-d066-4e55-88d9-d07855a776ca",
+      "sourceId": "245bf8be-11e8-40de-8507-5d38daa20e95",
+      "targetId": "9d815293-6a8c-4b8b-b849-f5beea904025",
+      "sourceHandle": null,
+      "targetHandle": null
+    },
+    {
+      "id": "40040d38-9cb9-40aa-b3da-b8e3010c9925",
+      "sourceId": "cf8abe72-3bde-4f5a-8b12-8d24e34d2171",
+      "targetId": "9d815293-6a8c-4b8b-b849-f5beea904025",
+      "sourceHandle": null,
+      "targetHandle": null
+    },
+    {
+      "id": "d5737747-1719-4c19-b8fe-824541b163b2",
+      "sourceId": "9d815293-6a8c-4b8b-b849-f5beea904025",
+      "targetId": "b6515aff-ab47-4099-964d-2f30a66eb29f",
+      "sourceHandle": null,
+      "targetHandle": null
+    },
+    {
+      "id": "0dd97ac1-f69a-4881-8c3f-f660ac84c1b6",
+      "sourceId": "eeff1b92-def3-4ae6-a908-09eaec0333cc",
+      "targetId": "058c3e71-c08f-443b-be71-8225a070a860",
+      "sourceHandle": "true",
+      "targetHandle": null
+    },
+    {
+      "id": "56c32835-455e-4d0e-9942-5713702dfdb8",
+      "sourceId": "058c3e71-c08f-443b-be71-8225a070a860",
+      "targetId": "245bf8be-11e8-40de-8507-5d38daa20e95",
+      "sourceHandle": "true",
+      "targetHandle": null
+    },
+    {
+      "id": "81ef1815-0ae5-4674-a33c-cc02bca7bf34",
+      "sourceId": "058c3e71-c08f-443b-be71-8225a070a860",
+      "targetId": "63edffda-f122-45c9-9554-c66ac5cf790c",
+      "sourceHandle": "false",
+      "targetHandle": null
+    },
+    {
+      "id": "cf59b513-5d0d-4719-a024-3753548dd60e",
+      "sourceId": "63edffda-f122-45c9-9554-c66ac5cf790c",
+      "targetId": "9d815293-6a8c-4b8b-b849-f5beea904025",
+      "sourceHandle": null,
+      "targetHandle": null
+    }
+  ],
+  "title": "figX",
+  "inputParams": ""
+}

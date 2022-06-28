@@ -1,7 +1,6 @@
 import Block from '../model/Block';
-import { PathMapping } from '../types';
+import { ValidationOptions } from '../types';
 
 export interface IFlowService {
-  validate(): [Block, Block];
-  mapDecisionPaths(start: Block, mapping: PathMapping): PathMapping;
+  validate(options?: ValidationOptions): [Block, Block];
 }

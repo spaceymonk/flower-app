@@ -16,13 +16,13 @@ class FunctionBlock extends Block {
     this._subroutine = null;
   }
 
-  public override toCode(indent: number): string {
+  public override toCode(): string {
     const functionMatch = this._text.trim().match(functionRegex);
     if (!functionMatch) {
       throw new Error(`Invalid subroutine call: ${this._text}`);
     }
     const [, args, retVal] = functionMatch;
-    return `${'  '.repeat(indent)}${retVal} = ${this._subroutine?.title}(${args})\n`;
+    return `${retVal} = ${this._subroutine?.title}(${args})`;
   }
 
   public override async eval(memory: Memory) {
