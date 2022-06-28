@@ -59,7 +59,7 @@ export class ExportService implements IExportService {
     for (let i = path.length - 1; i >= 0; i--) {
       const unit = path[i];
       if (unit.type === 'goto') {
-        code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)};`);
+        code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)}`);
       } else if (unit.type === 'end-container') {
         indent--;
         code.push(`${'  '.repeat(indent)}wend`);
@@ -67,7 +67,11 @@ export class ExportService implements IExportService {
         code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)}`);
         indent--;
       } else {
-        code.push(`${unit.block.toCode(indent)}`);
+        if (unit.type === BlockTypes.STOP_BLOCK) {
+          indent--;
+          if (indent !== 0) throw Error('Invalid code occurred!');
+        }
+        code.push(`${'  '.repeat(indent)}${unit.block.toCode()}`);
         if (unit.type === BlockTypes.DECISION_BLOCK || unit.block.isContainer() || unit.block.type === BlockTypes.START_BLOCK) {
           indent++;
         }
@@ -77,11 +81,10 @@ export class ExportService implements IExportService {
     function findLineNumber(blockId: string): string {
       for (let i = 0; i < path.length; i++) {
         if (path[i].block.id === blockId && Object.values(BlockTypes).includes(path[i].type as any)) {
-          console.log(path[i].block);
           return `L${path.length - i}`;
         }
       }
-      return '';
+      return '??';
     }
 
     return code.join('\n');

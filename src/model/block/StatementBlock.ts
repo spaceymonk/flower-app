@@ -9,8 +9,8 @@ class StatementBlock extends Block {
     super(BlockTypes.STATEMENT_BLOCK, position);
   }
 
-  public override toCode(indent: number): string {
-    return `${'  '.repeat(indent)}${this._text}`;
+  public override toCode(): string {
+    return `${this._text}`;
   }
 
   public override async eval(memory: Memory) {

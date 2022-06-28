@@ -20,8 +20,8 @@ class DecisionBlock extends Block {
     return result === true ? DecisionBlockHandle.TRUE : DecisionBlockHandle.FALSE;
   }
 
-  public override toCode(indent: number): string {
-    return `${'  '.repeat(indent)}if (${this._text})`;
+  public override toCode(): string {
+    return `if (${this._text})`;
   }
 }
 
