@@ -1,0 +1,7 @@
+begin
+  a
+  if (x)
+    b
+    goto L2
+  c
+end

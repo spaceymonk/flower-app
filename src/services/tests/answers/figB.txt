@@ -1,0 +1,6 @@
+begin
+  if (expr1)
+    stmt2
+    goto L6
+  stmt1
+end

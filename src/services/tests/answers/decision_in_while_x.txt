@@ -1,0 +1,7 @@
+begin
+  while (expr)
+    if (x)
+      goto L5
+    a
+  wend
+  goto L2
