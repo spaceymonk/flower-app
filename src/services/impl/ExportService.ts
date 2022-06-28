@@ -8,6 +8,7 @@ import { IConnectionRepository } from '../../repositories/IConnectionRepository'
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 import { IProjectService } from '../IProjectService';
+import DecisionBlock from '../../model/block/DecisionBlock';
 
 export class ExportService implements IExportService {
   private _flowService: IFlowService;
@@ -64,12 +65,12 @@ export class ExportService implements IExportService {
         indent--;
         code.push(`${'  '.repeat(indent)}wend`);
       } else if (unit.type === 'end-decision') {
-        code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)}`);
+        // code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)}`);
         indent--;
+        code.push(`${'  '.repeat(indent)}fi`);
       } else {
         if (unit.type === BlockTypes.STOP_BLOCK) {
           indent--;
-          if (indent !== 0) throw Error('Invalid code occurred!');
         }
         code.push(`${'  '.repeat(indent)}${unit.block.toCode()}`);
         if (unit.type === BlockTypes.DECISION_BLOCK || unit.block.isContainer() || unit.block.type === BlockTypes.START_BLOCK) {
@@ -90,15 +91,17 @@ export class ExportService implements IExportService {
     return code.join('\n');
   }
 
-  private visitNodes(block: Block, path: Unit[], processed: Set<Block>, visiting: Set<Block>): void {
+  private visitNodes(block: Block, path: Unit[], processed: Set<Block>, visiting: Set<Block>, prevBlock?: Block): void {
     if (processed.has(block)) {
-      path.push({ block, type: 'end-decision', next: block.id });
+      path.push({ block, type: 'goto', next: block.id });
       return;
     }
     if (visiting.has(block)) {
       const lastUnit = path.at(-1);
-      if (!lastUnit || lastUnit.block.id !== block.id || lastUnit.type !== 'end-container') {
-        path.push({ block, type: 'goto', next: block.id });
+      if (!lastUnit || lastUnit.block.id !== block.id || !['end-container'].includes(lastUnit.type)) {
+        if (prevBlock?.parentNodeId !== block.id) {
+          path.push({ block, next: block.id, type: 'goto' });
+        }
       }
       return;
     }
@@ -108,9 +111,14 @@ export class ExportService implements IExportService {
     const next = this.sortNext(block, this._blockService.getOutgoers(block));
     let handleBranch = true;
     for (const nextBlock of next) {
-      this.visitNodes(nextBlock, path, processed, visiting);
-      if (processed.has(nextBlock)) {
-        ref = nextBlock.id;
+      ref = nextBlock.id;
+      this.visitNodes(nextBlock, path, processed, visiting, block);
+      if (handleBranch && block instanceof DecisionBlock) {
+        const lastUnit = path[path.length - 1];
+        let nextId = lastUnit.next || lastUnit.block.id;
+        if (lastUnit.type === 'end-container') nextId = lastUnit.block.id;
+        if (nextBlock.id === lastUnit.block.id) path.push({ block, next: nextId, type: 'end-decision' });
+        handleBranch = false;
       }
       if (handleBranch && block.isContainer()) {
         path.push({ block, next: nextBlock.id, type: 'end-container' });

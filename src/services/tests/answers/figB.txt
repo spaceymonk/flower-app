@@ -1,6 +1,7 @@
 begin
   if (expr1)
     stmt2
-    goto L6
+    goto L7
+  fi
   stmt1
 end

@@ -3,5 +3,6 @@ begin
   if (x)
     b
     goto L2
+  fi
   c
 end

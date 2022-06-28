@@ -2,8 +2,10 @@ begin
   if (expr1)
     if (expr2)
       stmt2
-      goto L8
+      goto L10
+    fi
     stmt4
-    goto L8
+    goto L10
+  fi
   stmt3
 end

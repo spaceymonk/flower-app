@@ -1,7 +1,8 @@
 begin
   while (expr)
     if (x)
-      goto L5
+      goto L6
+    fi
     a
   wend
   goto L2

@@ -2,7 +2,7 @@ begin
   while (expr)
     if (x)
       b
-      goto L2
+    fi
     a
   wend
   goto L2

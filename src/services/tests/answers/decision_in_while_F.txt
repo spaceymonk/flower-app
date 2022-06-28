@@ -1,7 +1,7 @@
 begin
   while (expr)
     if (x)
-      goto L2
+    fi
     b
   wend
   goto L2

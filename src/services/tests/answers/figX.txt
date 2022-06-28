@@ -2,9 +2,11 @@ begin
   if (expr1)
     if (expr2)
       stmt2
-      goto L9
+      goto L11
+    fi
     stmt4
-      goto L9
+    goto L11
+  fi
   stmt1
   stmt3
 end
