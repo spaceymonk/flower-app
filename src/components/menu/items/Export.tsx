@@ -53,15 +53,13 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
       <Modal.Body className="pb-4">
         <Container>
           <Row>
-            <div className="d-flex align-items-center">
-              <h4 className="me-3">Pseudocode</h4>
-              {code ? <></> : (
-                <CustomOverlay overlay={<Tooltip>Generate</Tooltip>}>
-                  <Button size="sm" onClick={() => handleExport(ExportType.CODE)} variant="info">
-                    <FontAwesomeIcon icon={faGears} />
-                  </Button>
-                </CustomOverlay>
-              )}
+            <div className="d-flex align-items-center mb-2">
+              <h4 className="me-3 my-auto">Pseudocode</h4>
+              <CustomOverlay overlay={<Tooltip>Generate</Tooltip>}>
+                <Button size="sm" onClick={() => handleExport(ExportType.CODE)} variant="info">
+                  <FontAwesomeIcon icon={faGears} />
+                </Button>
+              </CustomOverlay>
             </div>
           </Row>
           {code && (
@@ -86,7 +84,9 @@ export function ExportModal({ show, onClose }: ExportModalProps) {
           )}
           <Row className="mt-5">
             <Col className="">
-              <Button variant='info' onClick={() => handleExport(ExportType.PNG)}>Export Current View to PNG</Button>
+              <Button variant="info" onClick={() => handleExport(ExportType.PNG)}>
+                Export Current View to PNG
+              </Button>
             </Col>
           </Row>
         </Container>
