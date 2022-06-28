@@ -1,5 +1,5 @@
 import FileSaver from 'file-saver';
-import { BlockTypes, DecisionBlockHandle, PathMapping } from '../../types';
+import { BlockTypes, DecisionBlockHandle } from '../../types';
 import { throwErrorIfNull } from '../../util/common';
 import { IExportService } from '../IExportService';
 import domtoimage from 'dom-to-image';
@@ -8,6 +8,7 @@ import { IConnectionRepository } from '../../repositories/IConnectionRepository'
 import { IBlockService } from '../IBlockService';
 import { IFlowService } from '../IFlowService';
 import { IProjectService } from '../IProjectService';
+import DecisionBlock from '../../model/block/DecisionBlock';
 
 export class ExportService implements IExportService {
   private _flowService: IFlowService;
@@ -41,68 +42,120 @@ export class ExportService implements IExportService {
   }
 
   public toCode(): string {
-    type Scope = { scopeof: string; end: string };
+    const path = [] as Unit[];
+    const [startBlock] = this._flowService.validate({ startMustPresent: true });
+    const processed = new Set<Block>();
+    const visiting = new Set<Block>();
 
-    const [startBlock, stopBlock] = this._flowService.validate();
-    const stack: Block[] = [startBlock];
-    let mapping: PathMapping = {};
-    let scope: Scope[] = [];
-    let code = '';
-
-    while (stack.length !== 0) {
-      const iter: Block = stack.pop() as Block;
-      const outgoers: Block[] = this._blockService.getOutgoers(iter);
-
-      if (scope.at(-1)?.end === iter.id) {
-        let currentScope = scope.pop() as Scope;
-
-        while (currentScope.scopeof === 'else') {
-          currentScope = scope.pop() as Scope;
-        }
-
-        if (currentScope.scopeof === BlockTypes.DECISION_BLOCK) {
-          if (stack.at(-1)?.id !== currentScope.end) {
-            code += `${'  '.repeat(scope.length)}else\n`;
-            scope.push({ scopeof: 'else', end: currentScope.end });
-          }
-          continue;
-        } else if (currentScope.scopeof === 'CONTAINER') {
-          continue;
-        }
-      }
-
-      code += iter.toCode(scope.length);
-      let nextBlocks = Array.of(outgoers[0]);
-
-      if (iter.type === BlockTypes.START_BLOCK) {
-        scope.push({ scopeof: iter.type, end: stopBlock.id });
-      } else if (iter.type === BlockTypes.STOP_BLOCK) {
-        break;
-      } else if (iter.isContainer()) {
-        scope.push({ scopeof: 'CONTAINER', end: iter.id });
-        if (outgoers[0].parentNodeId === iter.id) {
-          nextBlocks = Array.of(outgoers[1], outgoers[0]);
-        } else {
-          nextBlocks = Array.of(outgoers[0], outgoers[1]);
-        }
-      } else if (iter.type === BlockTypes.DECISION_BLOCK) {
-        let falseBlockId = null;
-        const connectedEdgeList = this._connectionRepository.findByBlocks(Array.of(iter));
-        for (const edge of connectedEdgeList) {
-          if (edge.sourceHandle === DecisionBlockHandle.FALSE) falseBlockId = edge.targetId;
-        }
-        if (falseBlockId === outgoers[0].id) {
-          nextBlocks = Array.of(outgoers[0], outgoers[1]);
-        } else {
-          nextBlocks = Array.of(outgoers[1], outgoers[0]);
-        }
-        if (!mapping[iter.id]) this._flowService.mapDecisionPaths(iter, mapping);
-        scope.push({ scopeof: iter.type, end: mapping[iter.id].id });
-      }
-
-      stack.push(...nextBlocks);
-    }
+    this.visitNodes(startBlock, path, processed, visiting);
+    const code = this.generateCode(path);
 
     return code;
   }
+
+  private generateCode(path: Unit[]): string {
+    const code = [] as string[];
+    let indent = 0;
+
+    for (let i = path.length - 1; i >= 0; i--) {
+      const unit = path[i];
+      if (unit.type === 'goto') {
+        code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)}`);
+      } else if (unit.type === 'end-container') {
+        indent--;
+        code.push(`${'  '.repeat(indent)}wend`);
+      } else if (unit.type === 'end-decision') {
+        // code.push(`${'  '.repeat(indent)}goto ${findLineNumber(unit.next)}`);
+        indent--;
+        code.push(`${'  '.repeat(indent)}fi`);
+      } else {
+        if (unit.type === BlockTypes.STOP_BLOCK) {
+          indent--;
+        }
+        code.push(`${'  '.repeat(indent)}${unit.block.toCode()}`);
+        if (unit.type === BlockTypes.DECISION_BLOCK || unit.block.isContainer() || unit.block.type === BlockTypes.START_BLOCK) {
+          indent++;
+        }
+      }
+    }
+
+    function findLineNumber(blockId: string): string {
+      for (let i = 0; i < path.length; i++) {
+        if (path[i].block.id === blockId && Object.values(BlockTypes).includes(path[i].type as any)) {
+          return `L${path.length - i}`;
+        }
+      }
+      return '??';
+    }
+
+    return code.join('\n');
+  }
+
+  private visitNodes(block: Block, path: Unit[], processed: Set<Block>, visiting: Set<Block>, prevBlock?: Block): void {
+    if (processed.has(block)) {
+      path.push({ block, type: 'goto', next: block.id });
+      return;
+    }
+    if (visiting.has(block)) {
+      const lastUnit = path.at(-1);
+      if (!lastUnit || lastUnit.block.id !== block.id || !['end-container'].includes(lastUnit.type)) {
+        if (prevBlock?.parentNodeId !== block.id) {
+          path.push({ block, next: block.id, type: 'goto' });
+        }
+      }
+      return;
+    }
+    visiting.add(block);
+
+    let ref = '';
+    const next = this.sortNext(block, this._blockService.getOutgoers(block));
+    let handleBranch = true;
+    for (const nextBlock of next) {
+      ref = nextBlock.id;
+      this.visitNodes(nextBlock, path, processed, visiting, block);
+      if (handleBranch && block instanceof DecisionBlock) {
+        const lastUnit = path[path.length - 1];
+        let nextId = lastUnit.next || lastUnit.block.id;
+        if (lastUnit.type === 'end-container') nextId = lastUnit.block.id;
+        if (nextBlock.id === lastUnit.block.id) path.push({ block, next: nextId, type: 'end-decision' });
+        handleBranch = false;
+      }
+      if (handleBranch && block.isContainer()) {
+        path.push({ block, next: nextBlock.id, type: 'end-container' });
+        handleBranch = false;
+      }
+    }
+
+    path.push({ block, next: ref, type: block.type });
+    processed.add(block);
+    visiting.delete(block);
+  }
+
+  private sortNext(block: Block, outgoers: Block[]): Block[] {
+    if (block.type === BlockTypes.DECISION_BLOCK) {
+      let falseBlockId = null;
+      const connectedEdgeList = this._connectionRepository.findByBlocks(Array.of(block));
+      for (const edge of connectedEdgeList) {
+        if (edge.sourceHandle === DecisionBlockHandle.FALSE) falseBlockId = edge.targetId;
+      }
+      if (falseBlockId === outgoers[0].id) {
+        return Array.of(outgoers[0], outgoers[1]);
+      } else {
+        return Array.of(outgoers[1], outgoers[0]);
+      }
+    } else if (block.isContainer()) {
+      if (outgoers[0].parentNodeId === block.id) {
+        return Array.of(outgoers[1], outgoers[0]);
+      } else {
+        return Array.of(outgoers[0], outgoers[1]);
+      }
+    }
+    return outgoers;
+  }
 }
+
+type Unit = {
+  block: Block;
+  next: string;
+  type: 'end-decision' | 'end-container' | 'goto' | BlockTypes;
+};

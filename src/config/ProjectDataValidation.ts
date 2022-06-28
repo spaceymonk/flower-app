@@ -2,17 +2,6 @@ import Joi from 'joi';
 import { titleRegex } from '../components/project-title/ProjectTitle.service';
 import { BlockTypes } from '../types';
 
-const blockTypeList = [
-  BlockTypes.DECISION_BLOCK,
-  BlockTypes.STATEMENT_BLOCK,
-  BlockTypes.LOAD_BLOCK,
-  BlockTypes.STORE_BLOCK,
-  BlockTypes.START_BLOCK,
-  BlockTypes.STOP_BLOCK,
-  BlockTypes.WHILE_LOOP_BLOCK,
-  BlockTypes.FUNCTION_BLOCK,
-];
-
 export const EdgeSchema = Joi.object({
   id: Joi.string().required(),
   sourceId: Joi.string().required(),
@@ -26,7 +15,7 @@ export const EdgeSchema = Joi.object({
 export const BlockSchema = Joi.object({
   id: Joi.string().required(),
   type: Joi.string()
-    .valid(...blockTypeList)
+    .valid(...Object.values(BlockTypes))
     .required(),
   position: Joi.object({
     x: Joi.number().required(),

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactFlow, { Connection, ConnectionMode, Edge, EdgeChange, Node, NodeChange } from 'react-flow-renderer';
+import ReactFlow, { Connection, Edge, EdgeChange, Node, NodeChange } from 'react-flow-renderer';
 import { Background, MiniMap, Controls, ControlButton } from 'react-flow-renderer';
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
@@ -154,7 +154,6 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           connectionLineComponent={CustomConnectionLine}
           onEdgeUpdateStart={handleEdgeUpdateStart}
           onEdgeUpdateEnd={handleEdgeUpdateEnd}
-          connectionMode={ConnectionMode.Loose}
           fitView
           snapToGrid
           {...paneLockConfigs}

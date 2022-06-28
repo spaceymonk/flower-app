@@ -1,0 +1,9 @@
+begin
+  stmt1
+  while (expr2)
+    while (expr1)
+      stmt2
+    wend
+  wend
+  stmt3
+end
