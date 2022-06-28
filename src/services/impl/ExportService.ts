@@ -76,7 +76,10 @@ export class ExportService implements IExportService {
 
     function findLineNumber(blockId: string): string {
       for (let i = 0; i < path.length; i++) {
-        if (path[i].block.id === blockId) return `L${path.length - i}`;
+        if (path[i].block.id === blockId && Object.values(BlockTypes).includes(path[i].type as any)) {
+          console.log(path[i].block);
+          return `L${path.length - i}`;
+        }
       }
       return '';
     }

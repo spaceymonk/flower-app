@@ -63,10 +63,10 @@ export class ConnectionService implements IConnectionService {
   }
 
   public isValidConnection(c: Connection): boolean {
-    // refuse self connection
-    if (c.sourceId === c.targetId) {
-      return false;
-    }
+    // // refuse self connection
+    // if (c.sourceId === c.targetId) {
+    //   return false;
+    // }
 
     const source = this._blockRepository.findById(c.sourceId).orElseThrow(new Error('Source not found'));
     const target = this._blockRepository.findById(c.targetId).orElseThrow(new Error('Target not found'));
@@ -93,7 +93,7 @@ export class ConnectionService implements IConnectionService {
   public isValidOnUpdate(oldConnection: Connection, newConnection: Connection): boolean {
     return (
       this._connectionRepository.existsById(oldConnection.id) &&
-      !this._connectionRepository.existsBySourceIdAndSourceHandle(newConnection.sourceId, newConnection.sourceHandle) &&
+      // !this._connectionRepository.existsBySourceIdAndSourceHandle(newConnection.sourceId, newConnection.sourceHandle) &&
       !this._connectionRepository.existsBySourceIdAndSourceHandleAndTargetIdAndTargetHandle(
         newConnection.sourceId,
         newConnection.sourceHandle,
