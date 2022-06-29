@@ -52,14 +52,14 @@
 
 /* --------------------------------- handle --------------------------------- */
 .handle {
-  width: 7px;
-  height: 7px;
+  width: 7px!important;
+  height: 7px!important;
   background-color: blueviolet !important;
 }
 @media (max-width: 768px) {
   .handle {
-    width: 10px;
-    height: 10px;
+    width: 10px!important;
+    height: 10px!important;
   }
 }
 .handle:active {
@@ -166,6 +166,20 @@
   border-width: 0.4rem 0.4rem 0 0.4rem;
   border-color: violet transparent transparent transparent;
 }
+
+@media screen and (max-width: 768px) {
+  .handle-container.target {
+    top: calc(100% - 15px);
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent violet transparent;
+  }
+  .handle-container.source {
+    bottom: calc(100% - 57px);
+    border-width: 10px 10px 0 10px;
+    border-color: violet transparent transparent transparent;
+  }
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    MODAL                                   */
