@@ -7,6 +7,10 @@ import { GlowTypes } from '../../types';
 import { Optional } from '../../util/Optional';
 import { IConnectionRepository } from '../IConnectionRepository';
 
+const cache = {
+  dirtyHighlight: false,
+};
+
 export class ConnectionRepository implements IConnectionRepository {
   private _connectionMap: Map<string, Connection>;
   private _setEdges: React.Dispatch<React.SetStateAction<Edge<any>[]>>;
@@ -27,6 +31,13 @@ export class ConnectionRepository implements IConnectionRepository {
   }
 
   public updateHighlightedByIdList(ids: string[], glow: GlowTypes): void {
+    if (ids.length === 0) {
+      if (!cache.dirtyHighlight) return;
+      cache.dirtyHighlight = false;
+    } else {
+      cache.dirtyHighlight = true;
+    }
+
     const result = [] as Connection[];
     const idSet = new Set<string>(ids);
     this._connectionMap.forEach((c) => {

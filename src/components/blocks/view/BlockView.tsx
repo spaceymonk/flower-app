@@ -4,8 +4,8 @@ import Block from '../../../model/Block';
 
 export function BlockView({ block, className, ...props }: BlockNodeProps) {
   let glowClass = '';
-  if (block.glow === GlowTypes.NORMAL) glowClass = 'glow__normal';
-  if (block.glow === GlowTypes.ERROR) glowClass = 'glow__error';
+  if (block.glow === GlowTypes.NORMAL) glowClass = 'glow glow__normal';
+  if (block.glow === GlowTypes.ERROR) glowClass = 'glow glow__error';
 
   return <div {...props} className={`d-flex node ${glowClass} ${className || ''}`} />;
 }
