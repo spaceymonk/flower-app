@@ -159,18 +159,19 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           onEdgesChange={handleEdgeChange}
           onConnect={handleConnectionCreate}
           onEdgeUpdate={handleConnectionUpdate}
-          snapGrid={[10, 10]}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
           onNodeDoubleClick={handleNodeDoubleClick}
-          connectionLineComponent={CustomConnectionLine}
           onEdgeUpdateStart={handleEdgeUpdateStart}
           onEdgeUpdateEnd={handleEdgeUpdateEnd}
+          onPaneClick={handlePaneClick}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          connectionLineComponent={CustomConnectionLine}
+          snapGrid={[10, 10]}
           multiSelectionKeyCode="Control"
           deleteKeyCode="Delete"
           fitView
           snapToGrid
-          onPaneClick={handlePaneClick}
+          onlyRenderVisibleElements
           {...paneLockProps}
         >
           <Background />
