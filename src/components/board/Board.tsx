@@ -44,7 +44,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
         blockRepository.updatePosition(nc.id, nc.position);
         changes.push(nc);
       } else if (nc.type === 'remove') {
-        blockService.delete(nc.id);
+        if (!showModal.block) blockService.delete(nc.id);
       } else if (nc.type === 'dimensions') {
         blockRepository.updateDimensions(nc.id, nc.dimensions);
         changes.push(nc);
@@ -63,7 +63,7 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     const changes: EdgeChange[] = [];
     for (const ec of edgeChanges) {
       if (ec.type === 'remove') {
-        connectionService.delete(ec.id);
+        if (!showModal.block) connectionService.delete(ec.id);
       } else {
         changes.push(ec);
       }
