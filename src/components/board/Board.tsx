@@ -3,7 +3,6 @@ import ReactFlow, { Connection, Edge, EdgeChange, Node, NodeChange } from 'react
 import { Background, MiniMap, Controls, ControlButton } from 'react-flow-renderer';
 import { nodeTypes, BlockModalContainer } from '../blocks';
 import useMinimapToggle from '../../hooks/useMinimapToggle';
-import usePaneLock from '../../hooks/usePaneLock';
 import { CustomConnectionLine, edgeTypes } from '../edges';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
@@ -17,18 +16,21 @@ import { UpdateConnectionDto } from '../../dto/UpdateConnectionDto';
 import { InputModal } from './InputModal';
 import { useSimulationContext } from '../../providers/SimulationProvider';
 import { useDeferredPromise } from '../../hooks/useDefferedPromise';
+import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import { faMap as filledMap } from '@fortawesome/free-solid-svg-icons';
+import { faMap as emptyMap } from '@fortawesome/free-regular-svg-icons';
+import usePaneLockToggle from '../../hooks/usePaneLockToggle';
 
 function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
-  const paneLockConfigs = usePaneLock();
-  const { minimapToggled, minimapIcon, handleMinimapVisibility } = useMinimapToggle();
+  const { paneLocked, togglePaneLock, paneLockProps } = usePaneLockToggle();
+  const { minimapToggled, handleMinimapVisibility } = useMinimapToggle();
   const { connectionService, blockRepository, blockService } = useServiceContext();
-  const { inputHandler } = useSimulationContext();
+  const { inputHandler, isRunning } = useSimulationContext();
   const { nodesState, edgesState } = useAppContext();
   const [nodes, , onNodesChange] = nodesState;
   const [edges, , onEdgesChange] = edgesState;
 
-  const [edgeToRemove, setEdgeToRemove] = React.useState<{ id: string | null; dragging: boolean }>({ id: null, dragging: false });
-
+  const updatingEdge = React.useRef<string>('');
   const [dblClkNode, setDblClkNode] = React.useState<Block | null>(null);
   const [showModal, setShowModal] = React.useState({ block: false, input: false });
   const [inputForVariable, setInputForVariable] = React.useState<string>('');
@@ -71,23 +73,27 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     onEdgesChange(changes);
   };
   const handleConnectionCreate = (connection: Connection) => {
-    const dto: CreateConnectionDto = {
-      sourceId: throwErrorIfNull(connection.source),
-      targetId: throwErrorIfNull(connection.target),
-      sourceHandle: connection.sourceHandle,
-      targetHandle: connection.targetHandle,
-    };
-    connectionService.create(dto);
+    if (!paneLocked) {
+      const dto: CreateConnectionDto = {
+        sourceId: throwErrorIfNull(connection.source),
+        targetId: throwErrorIfNull(connection.target),
+        sourceHandle: connection.sourceHandle,
+        targetHandle: connection.targetHandle,
+      };
+      connectionService.create(dto);
+    }
   };
   const handleConnectionUpdate = (oldEdge: Edge<any>, newConnection: Connection) => {
-    setEdgeToRemove((prev) => ({ ...prev, id: null }));
-    const dto: UpdateConnectionDto = {
-      sourceId: throwErrorIfNull(newConnection.source),
-      targetId: throwErrorIfNull(newConnection.target),
-      sourceHandle: newConnection.sourceHandle,
-      targetHandle: newConnection.targetHandle,
-    };
-    connectionService.update(oldEdge.id, dto);
+    if (!paneLocked) {
+      updatingEdge.current = '';
+      const dto: UpdateConnectionDto = {
+        sourceId: throwErrorIfNull(newConnection.source),
+        targetId: throwErrorIfNull(newConnection.target),
+        sourceHandle: newConnection.sourceHandle,
+        targetHandle: newConnection.targetHandle,
+      };
+      connectionService.update(oldEdge.id, dto);
+    }
   };
 
   /* -------------------------------------------------------------------------- */
@@ -108,22 +114,23 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
     setShowModal((prev) => ({ ...prev, input: false }));
   };
   const handleEdgeUpdateStart = (e: React.MouseEvent, edge: Edge) => {
-    setEdgeToRemove((prev) => ({ ...prev, id: edge.id, dragging: true }));
+    updatingEdge.current = edge.id;
   };
   const handleEdgeUpdateEnd = (e: MouseEvent, edge: Edge) => {
-    setEdgeToRemove((prev) => ({ ...prev, dragging: false }));
+    if (!paneLocked && updatingEdge.current === edge.id) {
+      connectionService.delete(updatingEdge.current);
+    }
   };
+  const handlePaneClick = React.useCallback(() => {
+    if (!isRunning()) {
+      blockService.highlight(null, GlowTypes.NONE); // clear highlighs
+      connectionService.highlightByBlockId(null, GlowTypes.NONE);
+    }
+  }, [blockService, connectionService, isRunning]);
 
   /* -------------------------------------------------------------------------- */
   /*                                Side Effects                                */
   /* -------------------------------------------------------------------------- */
-
-  React.useEffect(() => {
-    if (!edgeToRemove.dragging && edgeToRemove.id) {
-      connectionService.delete(edgeToRemove.id);
-      setEdgeToRemove((prev) => ({ ...prev, id: null }));
-    }
-  }, [connectionService, edgeToRemove.dragging, edgeToRemove.id]);
 
   React.useEffect(() => {
     inputHandler.fetcher = async (name: string) => {
@@ -132,6 +139,12 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
       return defer().promise;
     };
   }, [defer, inputHandler]);
+
+  React.useEffect(() => {
+    if (isRunning() && !paneLocked) {
+      togglePaneLock();
+    }
+  }, [isRunning, paneLocked, togglePaneLock]);
 
   /* -------------------------------------------------------------------------- */
   /*                                 JSX Return                                 */
@@ -153,15 +166,21 @@ function Board({ height }: PropTypes.InferProps<typeof Board.propTypes>) {
           connectionLineComponent={CustomConnectionLine}
           onEdgeUpdateStart={handleEdgeUpdateStart}
           onEdgeUpdateEnd={handleEdgeUpdateEnd}
+          multiSelectionKeyCode="Control"
+          deleteKeyCode="Delete"
           fitView
           snapToGrid
-          {...paneLockConfigs}
+          onPaneClick={handlePaneClick}
+          {...paneLockProps}
         >
           <Background />
           {minimapToggled && <MiniMap />}
-          <Controls showInteractive={true} showZoom={true}>
+          <Controls showInteractive={false}>
             <ControlButton onClick={handleMinimapVisibility} title="toggle minimap" aria-label="toggle minimap">
-              <FontAwesomeIcon icon={minimapIcon}></FontAwesomeIcon>
+              <FontAwesomeIcon icon={minimapToggled ? filledMap : emptyMap}></FontAwesomeIcon>
+            </ControlButton>
+            <ControlButton onClick={togglePaneLock} disabled={isRunning()} title="lock pane" aria-label="lock pane">
+              <FontAwesomeIcon icon={paneLocked ? faLock : faLockOpen}></FontAwesomeIcon>
             </ControlButton>
           </Controls>
         </ReactFlow>
