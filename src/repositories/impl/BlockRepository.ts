@@ -6,6 +6,10 @@ import { Node } from 'react-flow-renderer';
 import BlockAdapter from '../../adapters/BlockAdapter';
 import { throwErrorIfUndefined } from '../../util/common';
 
+const cache = {
+  dirtyHighlight: false,
+};
+
 export class BlockRepository implements IBlockRepository {
   private _blockMap: Map<string, Block>;
   private _setNodes: React.Dispatch<React.SetStateAction<Node<NodeData>[]>>;
@@ -29,6 +33,13 @@ export class BlockRepository implements IBlockRepository {
   }
 
   public updateHighlightedByIdList(ids: string[], glowType: GlowTypes): void {
+    if (ids.length === 0) {
+      if (!cache.dirtyHighlight) return;
+      cache.dirtyHighlight = false;
+    } else {
+      cache.dirtyHighlight = true;
+    }
+
     const result = [] as Block[];
     const idSet = new Set<string>(ids);
     this._blockMap.forEach((b) => {
