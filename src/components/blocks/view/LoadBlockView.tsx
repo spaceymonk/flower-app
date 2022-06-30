@@ -8,16 +8,17 @@ export function LoadBlockView(node: NodeProps<NodeData>) {
 
   const processed = block.text; //todo: handle special keywords by bolding them etc.
   return (
-    <BlockView block={block}>
-      <Handle type="target" position={Position.Top} className="handle" />
-      <div className="w-100">
-        <div className="header">LOAD</div>
-        <div className="p-2 text-center">
-          {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}
-          {processed}
-        </div>
+    <BlockView className="node-io" block={block}>
+      <div className="handle-wrap">
+        <Handle type="target" position={Position.Top} className="handle" />
       </div>
-      <Handle type="source" position={Position.Bottom} className="handle" />
+      <div className="header">
+        <div className="text">INPUT</div>
+      </div>
+      <div className="text p-1">{processed ? processed : <em className="text-muted">{T.blocks.defaultTxt}</em>}</div>
+      <div className="handle-wrap">
+        <Handle type="source" position={Position.Bottom} className="handle" />
+      </div>
     </BlockView>
   );
 }

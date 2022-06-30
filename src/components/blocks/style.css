@@ -5,7 +5,7 @@
 /* ---------------------------------- node ---------------------------------- */
 .node {
   min-width: 150px;
-  min-height: 40px;
+  min-height: 45px;
   border: 1px solid #505050;
   border-radius: 0.25rem;
   background: #f7f7f7;
@@ -52,14 +52,14 @@
 
 /* --------------------------------- handle --------------------------------- */
 .handle {
-  width: 7px!important;
-  height: 7px!important;
+  width: 7px !important;
+  height: 7px !important;
   background-color: blueviolet !important;
 }
 @media (max-width: 768px) {
   .handle {
-    width: 10px!important;
-    height: 10px!important;
+    width: 10px !important;
+    height: 10px !important;
   }
 }
 .handle:active {
@@ -99,26 +99,78 @@
   padding: 0.5rem;
 }
 
+/* -------------------------------- node-io ------------------------------- */
+.node-io {
+  transform: skew(-20deg);
+  flex-direction: column;
+}
+.node-io .text {
+  transform: skew(20deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  padding: 0 1em;
+}
+.node-io .handle-wrap {
+  transform: skew(20deg);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+/* ------------------------------ node-function ----------------------------- */
+.node-function {
+  justify-content: center;
+}
+.node-function .field {
+  height: 100%;
+  width: 100%;
+  padding: 0 15px;
+}
+.node-function .field > div {
+  height: 100%;
+  width: 100%;
+  border-left: 1px solid #505050;
+  border-right: 1px solid #505050;
+}
+
 /* ------------------------------ node-decision ----------------------------- */
 .node-decision {
-  padding: 0;
-  min-width: 150px;
+  position: relative;
 }
-.decision-fields {
-  color: white;
-  font-size: 0.9rem;
-  align-items: center;
-  justify-content: center;
+.node-decision .text {
+  padding: 1em;
+  width: 100%;
+  height: 100%;
   display: flex;
-  padding: 0.3rem;
-  font-weight: bold;
-  width: 17%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
 }
 .decision-fields.false {
-  background-color: red;
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 0;
+  left: -15px;
+  border-top: 22px solid transparent;
+  border-right: 15px solid red;
+  border-bottom: 22px solid transparent;
+  border-radius: 3px;
 }
 .decision-fields.true {
-  background-color: green;
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 0;
+  right: -15px;
+  border-top: 22px solid transparent;
+  border-left: 15px solid green;
+  border-bottom: 22px solid transparent;
+  border-radius: 3px;
 }
 
 /* ------------------------------ node-sentinel ----------------------------- */
@@ -179,7 +231,6 @@
     border-color: violet transparent transparent transparent;
   }
 }
-
 
 /* -------------------------------------------------------------------------- */
 /*                                    MODAL                                   */

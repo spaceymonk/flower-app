@@ -8,25 +8,41 @@ export default function CustomEdge({ id, sourceX, sourceY, targetX, targetY, sou
   const nodes = useNodes<NodeData>();
   const targetNode = throwErrorIfUndefined(nodes.find((n) => n.id === target));
   const sourceNode = throwErrorIfUndefined(nodes.find((n) => n.id === source));
-  const filteredNodes = React.useMemo(()=>nodes.filter((node) => node.id !== sourceNode.parentNode && node.id !== targetNode.parentNode), [nodes, sourceNode.parentNode, targetNode.parentNode]);
+  const filteredNodes = React.useMemo(
+    () => nodes.filter((node) => node.id !== sourceNode.parentNode && node.id !== targetNode.parentNode),
+    [nodes, sourceNode.parentNode, targetNode.parentNode]
+  );
 
-  const edgeResponse = getSmartEdge({
-    sourcePosition,
-    targetPosition,
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    nodes: filteredNodes,
-    options: {
-      gridRatio: 5,
-      nodePadding: 30,
-      generatePath: pathfindingJumpPointNoDiagonal,
-    },
-  });
+  let edgePath = React.useMemo(
+    () => getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition }),
+    [sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition]
+  );
 
-  let edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
-  if (edgeResponse) {
+  const edgeResponse = React.useMemo(
+    () =>
+      getSmartEdge({
+        sourcePosition,
+        targetPosition,
+        sourceX,
+        sourceY,
+        targetX,
+        targetY,
+        nodes: filteredNodes,
+        options: {
+          gridRatio: 5,
+          nodePadding: 30,
+          generatePath: pathfindingJumpPointNoDiagonal,
+        },
+      }),
+    [filteredNodes, sourcePosition, sourceX, sourceY, targetPosition, targetX, targetY]
+  );
+
+  const distance = React.useMemo(
+    () => Math.sqrt(Math.pow(sourceX - targetX, 2) + Math.pow(sourceY - targetY, 2)),
+    [sourceX, sourceY, targetX, targetY]
+  );
+
+  if (distance >= 60 && edgeResponse) {
     edgePath = edgeResponse.svgPathString;
   }
 

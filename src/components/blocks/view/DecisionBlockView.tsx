@@ -10,17 +10,13 @@ export function DecisionBlockView(node: NodeProps<NodeData>) {
   return (
     <BlockView className="node-decision" block={block}>
       <Handle type="target" position={Position.Top} className="handle" />
-      <div className="decision-fields false">F</div>
-      <div className="w-100">
-        <div className="header">IF</div>
-        <div className="text-center p-2">
-          {!processed && <em className="text-muted">{T.blocks.defaultTxt}</em>}
-          {processed}
-        </div>
+      <div className="decision-fields false">
+        <Handle id={DecisionBlockHandle.FALSE} type="source" position={Position.Left} className="handle" />
       </div>
-      <div className="decision-fields true">T</div>
-      <Handle id={DecisionBlockHandle.FALSE} type="source" position={Position.Left} className="handle" />
-      <Handle id={DecisionBlockHandle.TRUE} type="source" position={Position.Right} className="handle " />
+      <div className="text">{processed ? processed : <em className="text-muted">{T.blocks.defaultTxt}</em>}</div>
+      <div className="decision-fields true">
+        <Handle id={DecisionBlockHandle.TRUE} type="source" position={Position.Right} className="handle " />
+      </div>
     </BlockView>
   );
 }
